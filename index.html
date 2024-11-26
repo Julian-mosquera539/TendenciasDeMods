@@ -1,133 +1,117 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Registro</title>
-    <style>
-        /* Estilos globales */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #141414;
-            color: white;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            width: 100%;
-            max-width: 400px;
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-        }
-        h1 {
-            text-align: center;
-            color: #e50914;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        input {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: none;
-            outline: none;
-            font-size: 1em;
-        }
-        button {
-            padding: 10px;
-            background-color: #e50914;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-size: 1.1em;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #b20610;
-        }
-        p {
-            text-align: center;
-            margin: 10px 0;
-        }
-        a {
-            color: #e50914;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cine Calidad</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    header {
+      background-color: #00b894;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 20px;
+      gap: 20px;
+      justify-content: center;
+    }
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      width: 200px;
+      text-align: center;
+    }
+    .card img {
+      width: 100%;
+      height: auto;
+    }
+    .card h3 {
+      margin: 10px 0;
+      font-size: 16px;
+      color: #333;
+    }
+    .card p {
+      font-size: 14px;
+      color: #666;
+      padding: 0 10px 10px;
+    }
+    .categories {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .categories button {
+      background-color: #00b894;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      margin: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .categories button:hover {
+      background-color: #01976d;
+    }
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Sistema de Registro</h1>
 
-        <!-- Sección de Registro -->
-        <form action="https://formsubmit.co/julianmosquera333@gmail.com" method="POST" id="signup-form">
-            <h2>Registrarse</h2>
-            <input type="email" name="email" placeholder="Correo electrónico" required>
-            <input type="password" name="password" placeholder="Contraseña" required>
-            <input type="hidden" name="_subject" value="Nuevo Registro">
-            <input type="hidden" name="_autoresponse" value="Gracias por registrarte. Te enviaremos un código de verificación.">
-            <button type="submit">Registrarse</button>
-        </form>
+<header>
+  <h1>Cine Calidad</h1>
+  <p>Películas en excelente calidad Full HD. Sin registro, gratis.</p>
+</header>
 
-        <p>¿Ya tienes una cuenta? <a href="#login-section" onclick="mostrarLogin()">Inicia sesión</a></p>
+<div class="categories">
+  <button>Acción</button>
+  <button>Animación</button>
+  <button>Aventura</button>
+  <button>Comedia</button>
+  <button>Familia</button>
+</div>
 
-        <!-- Sección de Verificación de Código -->
-        <form action="https://formsubmit.co/julianmosquera333@gmail.com" method="POST" id="verify-form" style="display: none;">
-            <h2>Verificar Código</h2>
-            <input type="text" name="code" placeholder="Ingresa el código de verificación" required>
-            <input type="hidden" name="_subject" value="Código de Verificación">
-            <button type="submit">Verificar</button>
-        </form>
+<div class="container">
+  <div class="card">
+    <img src="https://via.placeholder.com/200x300" alt="Lightyear">
+    <h3>Lightyear</h3>
+    <p>Película de animación y aventuras.</p>
+  </div>
+  <div class="card">
+    <img src="https://via.placeholder.com/200x300" alt="Elemental">
+    <h3>Elemental</h3>
+    <p>Un mundo donde conviven seres elementales.</p>
+  </div>
+  <div class="card">
+    <img src="https://via.placeholder.com/200x300" alt="Gru 4">
+    <h3>Gru 4</h3>
+    <p>Una divertida aventura familiar.</p>
+  </div>
+  <div class="card">
+    <img src="https://via.placeholder.com/200x300" alt="Transformers">
+    <h3>Transformers</h3>
+    <p>Una nueva batalla entre Autobots y Decepticons.</p>
+  </div>
+</div>
 
-        <p id="regresar-registro" style="display: none;">¿No tienes un código? <a href="#signup-section" onclick="mostrarRegistro()">Registrarse</a></p>
+<footer>
+  <p>&copy; 2024 Cine Calidad - Todos los derechos reservados.</p>
+</footer>
 
-        <!-- Sección de Login -->
-        <form action="https://formsubmit.co/julianmosquera333@gmail.com" method="POST" id="login-form" style="display: none;">
-            <h2>Iniciar Sesión</h2>
-            <input type="email" name="email" placeholder="Correo electrónico" required>
-            <input type="password" name="password" placeholder="Contraseña" required>
-            <input type="hidden" name="_subject" value="Inicio de Sesión">
-            <button type="submit">Iniciar Sesión</button>
-        </form>
-
-        <p id="regresar-login" style="display: none;">¿No tienes cuenta? <a href="#signup-section" onclick="mostrarRegistro()">Registrarse</a></p>
-    </div>
-
-    <script>
-        // Funciones para alternar entre las secciones
-        function mostrarRegistro() {
-            document.getElementById('signup-form').style.display = 'block';
-            document.getElementById('verify-form').style.display = 'none';
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('regresar-registro').style.display = 'none';
-            document.getElementById('regresar-login').style.display = 'none';
-        }
-
-        function mostrarVerificar() {
-            document.getElementById('signup-form').style.display = 'none';
-            document.getElementById('verify-form').style.display = 'block';
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('regresar-registro').style.display = 'block';
-            document.getElementById('regresar-login').style.display = 'none';
-        }
-
-        function mostrarLogin() {
-            document.getElementById('signup-form').style.display = 'none';
-            document.getElementById('verify-form').style.display = 'none';
-            document.getElementById('login-form').style.display = 'block';
-            document.getElementById('regresar-login').style.display = 'block';
-            document.getElementById('regresar-registro').style.display = 'none';
-        }
-    </script>
 </body>
 </html>
