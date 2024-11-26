@@ -3,301 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TendenciasDeMods</title>
+    <title>Canela TV</title>
     <style>
-        /* Reset básico */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Diseño general */
         body {
+            margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+            background-color: #000;
+            color: #fff;
         }
-
         header {
-            background-color: #ff5733; /* Color de fondo vibrante */
+            background: linear-gradient(90deg, #8b0000, #ff0000);
             padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        header h1 {
-            font-size: 28px;
-            color: #ffffff;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-        }
-
-        nav ul li a {
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 16px;
-            transition: color 0.3s ease;
-        }
-
-        nav ul li a:hover {
-            color: #ffd700; /* Color dorado al pasar el ratón */
-        }
-
-        /* Hero section */
-        .hero {
             text-align: center;
-            padding: 50px 20px;
-            background: linear-gradient(135deg, #ff6f61, #d9534f); /* Degradado vibrante */
         }
-
-        .hero h2 {
-            font-size: 36px;
-            margin-bottom: 10px;
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
         }
-
-        .hero p {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
-        /* Búsqueda */
-        .search-box {
+        nav {
             display: flex;
             justify-content: center;
-            margin: 20px auto;
-            max-width: 600px;
+            background: #222;
+            padding: 10px 0;
         }
-
-        .search-box input {
-            padding: 10px 15px;
-            width: 80%;
-            border-radius: 25px 0 0 25px;
-            border: none;
-            outline: none;
-        }
-
-        .search-box button {
-            padding: 10px 15px;
-            border-radius: 0 25px 25px 0;
-            border: none;
-            background-color: #007bff;
+        nav a {
             color: #fff;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .search-box button:hover {
-            background-color: #0056b3; /* Efecto hover más oscuro */
-        }
-
-        /* Sección de categorías */
-        .section {
-            padding: 30px 20px;
-        }
-
-        .section h3 {
-            margin-bottom: 20px;
-            font-size: 24px;
-            color: #ffd700;
-            text-align: center;
-        }
-
-        .category {
-            margin-bottom: 40px;
-        }
-
-        .category h4 {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: #ffd700;
-        }
-
-        /* Tarjetas de aplicaciones */
-        .app-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        .app-card {
-            background-color: #2b2e38;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .app-card:hover {
-            transform: scale(1.05); /* Efecto de hover */
-        }
-
-        .app-card img {
-            max-width: 100px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-        }
-
-        .app-card h4 {
-            margin: 10px 0;
-            font-size: 16px;
-            color: #ffffff;
-        }
-
-        .app-card p {
-            font-size: 12px;
-            color: #bbb;
-        }
-
-        .app-card .rating {
-            font-size: 12px;
-            color: #ffd700;
-            margin-top: 5px;
-        }
-
-        .download-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-top: 15px;
-            background-color: #ff5733;
-            color: #fff;
+            margin: 0 15px;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            font-size: 1.2rem;
         }
-
-        .download-btn:hover {
-            background-color: #c0392b;
+        nav a:hover {
+            color: #ff0000;
+        }
+        .container {
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .live-button {
+            background-color: #ff0000;
+            color: #fff;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        .live-button:hover {
+            background-color: #b30000;
+        }
+        .slider {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 50px;
+        }
+        .slider img {
+            width: 200px;
+            height: 150px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+        footer {
+            background: #111;
+            color: #666;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 50px;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
-
-<header>
-    <h1>TendenciasDeMods</h1>
+    <header>
+        <h1>CANELA.TV</h1>
+    </header>
     <nav>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Apps</a></li>
-            <li><a href="#">Games</a></li>
-            <li><a href="#">DMCA</a></li>
-        </ul>
+        <a href="#">Inicio</a>
+        <a href="#">Guía de TV</a>
+        <a href="#">Películas</a>
+        <a href="#">Series</a>
+        <a href="#">Deportes</a>
+        <a href="#">Música</a>
+        <a href="#">Kids</a>
     </nav>
-</header>
-
-<section class="hero">
-    <h2>The Best Apps & Mods</h2>
-    <p>Discover the most trending apps and games. Download them now!</p>
-    <div class="search-box">
-        <input type="text" id="search-input" placeholder="Search apps and games...">
-        <button onclick="searchApp()">Search</button>
-    </div>
-</section>
-
-<section class="section">
-    <h3>Our Categories</h3>
-    
-    <!-- Apps Populares -->
-    <div class="category">
-        <h4>Popular Apps</h4>
-        <div class="app-grid">
-            <div class="app-card">
-                <img src="https://via.placeholder.com/100" alt="Instagram">
-                <h4>Instagram</h4>
-                <p>Instagram LLC</p>
-                <div class="rating">★★★★☆</div>
-                <a href="https://example.com/instagram" target="_blank" class="download-btn">Download</a>
-            </div>
-            <div class="app-card">
-                <img src="https://via.placeholder.com/100" alt="Spotify">
-                <h4>Spotify</h4>
-                <p>Spotify Ltd.</p>
-                <div class="rating">★★★★★</div>
-                <a href="https://example.com/spotify" target="_blank" class="download-btn">Download</a>
-            </div>
-            <div class="app-card">
-                <img src="https://via.placeholder.com/100" alt="YouTube Premium">
-                <h4>YouTube Premium</h4>
-                <p>YouTube LLC</p>
-                <div class="rating">★★★★★</div>
-                <a href="https://example.com/youtube" target="_blank" class="download-btn">Download</a>
-            </div>
+    <div class="container">
+        <h2>Canela TV</h2>
+        <p>24/7 Series, Películas, Noticias y Deportes en Vivo y más.</p>
+        <button class="live-button">Ver en vivo</button>
+        <div class="slider">
+            <img src="https://via.placeholder.com/200x150" alt="Contenido 1">
+            <img src="https://via.placeholder.com/200x150" alt="Contenido 2">
+            <img src="https://via.placeholder.com/200x150" alt="Contenido 3">
+            <img src="https://via.placeholder.com/200x150" alt="Contenido 4">
         </div>
     </div>
-
-    <!-- Juegos -->
-    <div class="category">
-        <h4>Trending Games</h4>
-        <div class="app-grid">
-            <div class="app-card">
-                <img src="https://via.placeholder.com/100" alt="Minecraft">
-                <h4>Minecraft</h4>
-                <p>Mojang Studios</p>
-                <div class="rating">★★★★☆</div>
-                <a href="https://example.com/minecraft" target="_blank" class="download-btn">Download</a>
-            </div>
-            <div class="app-card">
-                <img src="https://via.placeholder.com/100" alt="Fortnite">
-                <h4>Fortnite</h4>
-                <p>Epic Games</p>
-                <div class="rating">★★★★★</div>
-                <a href="https://example.com/fortnite" target="_blank" class="download-btn">Download</a>
-            </div>
-            <div class="app-card">
-                <img src="https://via.placeholder.com/100" alt="PUBG Mobile">
-                <h4>PUBG Mobile</h4>
-                <p>Tencent Games</p>
-                <div class="rating">★★★★☆</div>
-                <a href="https://example.com/pubg" target="_blank" class="download-btn">Download</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Redes Sociales -->
-    <div class="category">
-        <h4>Social Media Apps</h4>
-        <div class="app-grid">
-            <div class="app-card">
-                <img src="https://via.placeholder.com/100" alt="Telegram">
-                <h4>Telegram</h4>
-                <p>Telegram Messenger</p>
-                <div class="rating">★★★★☆</div>
-                <a href="https://example.com/telegram" target="_blank" class="download-btn">Download</a>
-            </div>
-            <div class="app-card">
-                <img src="https://via.placeholder.com/100" alt="WhatsApp">
-                <h4>WhatsApp</h4>
-                <p>WhatsApp Inc.</p>
-                <div class="rating">★★★★★</div>
-                <a href="https://example.com/whatsapp" target="_blank" class="download-btn">Download</a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<script>
-    function searchApp() {
-        const query = document.getElementById('search-input').value.toLowerCase();
-        const apps = document.querySelectorAll('.app-card');
-        apps.forEach(app => {
-            const name = app.querySelector('h4').textContent.toLowerCase();
-            if (name.includes(query)) {
-                app.style.display = 'block'; // Show the app
-            } else {
-                app.style.display = 'none'; // Hide the app
-            }
-        });
-    }
-</script>
-
+    <footer>
+        &copy; 2024 Canela TV. Todos los derechos reservados.
+    </footer>
 </body>
 </html>
