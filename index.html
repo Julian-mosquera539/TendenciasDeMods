@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mods Julian</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1c1e26;
+            color: #ffffff;
+        }
+        header {
+            background-color: #23262e;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        header h1 {
+            font-size: 24px;
+            color: #ffd700;
+        }
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 15px;
+        }
+        nav ul li {
+            display: inline;
+        }
+        nav ul li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        nav ul li a:hover {
+            color: #ffd700;
+        }
+        .hero {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(135deg, #2b2e38, #1c1e26);
+        }
+        .hero h2 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .search-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        .search-box input {
+            padding: 10px 15px;
+            width: 80%;
+            border-radius: 25px 0 0 25px;
+            border: none;
+            outline: none;
+        }
+        .search-box button {
+            padding: 10px 15px;
+            border-radius: 0 25px 25px 0;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        .search-box button:hover {
+            background-color: #0056b3;
+        }
+        .section {
+            padding: 30px 20px;
+        }
+        .section h3 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .app-card {
+            background-color: #2b2e38;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+        }
+        .app-card img {
+            max-width: 100px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+        .app-card h4 {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .app-card p {
+            font-size: 14px;
+            color: #bbb;
+        }
+        .app-card .rating {
+            font-size: 12px;
+            color: #ffd700;
+            margin-top: 5px;
+        }
+        .app-card .download-btn {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .app-card .download-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Mods Julian</h1>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Apps</a></li>
+            <li><a href="#">Games</a></li>
+            <li><a href="#">DMCA</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="hero">
+    <h2>Discover the Best Apps & Games!</h2>
+    <p>Download your favorite apps and games with ease.</p>
+    <div class="search-box">
+        <input type="text" placeholder="Search apps and games...">
+        <button>Search</button>
+    </div>
+</section>
+
+<section class="section">
+    <h3>Popular Apps</h3>
+    <div class="app-grid">
+        <!-- WhatsApp -->
+        <div class="app-card">
+            <img src="https://via.placeholder.com/100" alt="WhatsApp">
+            <h4>WhatsApp</h4>
+            <p>WhatsApp Inc.</p>
+            <div class="rating">★★★★★</div>
+            <a href="https://example.com/whatsapp" target="_blank" class="download-btn">Download</a>
+        </div>
+        <!-- Spotify -->
+        <div class="app-card">
+            <img src="https://via.placeholder.com/100" alt="Spotify">
+            <h4>Spotify Premium</h4>
+            <p>Spotify Ltd.</p>
+            <div class="rating">★★★★☆</div>
+            <a href="https://example.com/spotify" target="_blank" class="download-btn">Download</a>
+        </div>
+        <!-- TikTok -->
+        <div class="app-card">
+            <img src="https://via.placeholder.com/100" alt="TikTok">
+            <h4>TikTok Premium</h4>
+            <p>TikTok Inc.</p>
+            <div class="rating">★★★★★</div>
+            <a href="https://example.com/tiktok" target="_blank" class="download-btn">Download</a>
+        </div>
+        <!-- Instagram -->
+        <div class="app-card">
+            <img src="https://via.placeholder.com/100" alt="Instagram">
+            <h4>Instagram</h4>
+            <p>Instagram LLC</p>
+            <div class="rating">★★★★☆</div>
+            <a href="https://example.com/instagram" target="_blank" class="download-btn">Download</a>
+        </div>
+        <!-- YouTube Premium -->
+        <div class="app-card">
+            <img src="https://via.placeholder.com/100" alt="YouTube Premium">
+            <h4>YouTube Premium</h4>
+            <p>YouTube LLC</p>
+            <div class="rating">★★★★★</div>
+            <a href="https://example.com/youtube" target="_blank" class="download-btn">Download</a>
+        </div>
+        <!-- Telegram -->
+        <div class="app-card">
+            <img src="https://via.placeholder.com/100" alt="Telegram">
+            <h4>Telegram</h4>
+            <p>Telegram Messenger</p>
+            <div class="rating">★★★★☆</div>
+            <a href="https://example.com/telegram" target="_blank" class="download-btn">Download</a>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
