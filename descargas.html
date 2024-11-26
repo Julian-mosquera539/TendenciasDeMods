@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descargar Película - Tu Sitio de Películas</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <style>
+        /* Estilos para la página de descarga */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .content {
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .movie-details {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .movie-details img {
+            max-width: 300px;
+            border-radius: 10px;
+        }
+
+        .download-links {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 15px;
+        }
+
+        .download-links a {
+            padding: 10px;
+            background-color: #ff9800;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        .download-links a:hover {
+            background-color: #e68900;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .back-btn:hover {
+            background-color: #444;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .movie-details {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .download-links {
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Película - Título de la Película</h1>
+    </header>
+
+    <div class="content">
+        <div class="movie-details">
+            <img src="assets/images/movie-poster.jpg" alt="Poster de la película">
+            <div class="movie-description">
+                <h2>Descripción de la Película</h2>
+                <p>Sinopsis de la película...</p>
+                <p><strong>Año de estreno:</strong> 2023</p>
+                <p><strong>Género:</strong> Acción, Aventura</p>
+                <p><strong>Duración:</strong> 120 minutos</p>
+                <p><strong>Calificación:</strong> 8.5/10</p>
+            </div>
+        </div>
+
+        <div class="download-links">
+            <h3>Enlaces de descarga</h3>
+            <a href="https://www.mediafire.com/file/abcd1234/720p_pelicula.rar" target="_blank">720p (Mediafire)</a>
+            <a href="https://www.mediafire.com/file/abcd5678/1080p_pelicula.rar" target="_blank">1080p (Mediafire)</a>
+            <a href="https://www.mediafire.com/file/abcd91011/4k_pelicula.rar" target="_blank">4K (Mediafire)</a>
+        </div>
+
+        <a href="index.html" class="back-btn">Volver a la página principal</a>
+    </div>
+</body>
+</html>
