@@ -4,18 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cine, Series y Novelas</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    /* General */
+    /* General Styles */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
       background-color: #f4f4f4;
       color: #333;
-      transition: background-color 0.3s, color 0.3s;
+      transition: all 0.3s;
     }
     body.dark-mode {
-      background-color: #1c1c1c;
+      background-color: #1e1e1e;
       color: #f4f4f4;
     }
     header {
@@ -40,97 +41,64 @@
       border-radius: 5px;
       cursor: pointer;
     }
-
-    /* Navegación */
     nav {
-      background-color: #01976d;
       display: flex;
       justify-content: space-between;
       padding: 10px;
-    }
-    nav .category-btn {
-      background-color: #00b894;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      margin: 0 5px;
-      border-radius: 5px;
-    }
-    nav .dark-mode-toggle {
-      background-color: #fff;
-      color: #333;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    /* Sección de contenido */
-    .content-section {
-      display: none;
-      margin: 20px;
-    }
-    .content-section.active {
-      display: block;
-    }
-    .content-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-    }
-    .content-card {
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      width: 200px;
-      overflow: hidden;
-      text-align: center;
-      position: relative;
-    }
-    .content-card img {
-      width: 100%;
-      height: auto;
-    }
-    .content-card h3 {
-      margin: 10px 0;
-      font-size: 16px;
-      color: #333;
-    }
-    .content-card p {
-      padding: 0 10px;
-      font-size: 14px;
-      color: #555;
-    }
-    .content-card .rating {
-      position: absolute;
-      top: 5px;
-      left: 5px;
-      background-color: rgba(0, 0, 0, 0.7);
-      color: white;
-      padding: 5px;
-      border-radius: 3px;
-      font-size: 14px;
-    }
-    .view-details {
-      background-color: #00b894;
-      color: white;
-      padding: 10px;
-      text-decoration: none;
-      display: inline-block;
-      margin: 10px 0;
-      border-radius: 5px;
-    }
-    .view-details:hover {
       background-color: #01976d;
     }
-
-    footer {
+    nav .dark-mode-toggle {
+      background-color: white;
+      color: black;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 20px;
+      justify-content: center;
+    }
+    .movie-card {
+      width: 200px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .movie-card:hover {
+      transform: scale(1.05);
+    }
+    .movie-card img {
+      width: 100%;
+    }
+    .movie-card h3 {
+      font-size: 16px;
+      margin: 10px 0;
+    }
+    .movie-card p {
+      font-size: 14px;
+      color: gray;
+      margin: 0 10px 10px;
+    }
+    .movie-card .view-details {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
       background-color: #00b894;
       color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    footer {
       text-align: center;
       padding: 20px;
+      background-color: #00b894;
+      color: white;
     }
   </style>
 </head>
@@ -138,117 +106,76 @@
 
 <header>
   <h1>Cine, Series y Novelas</h1>
-  <p>Explora contenido en diferentes categorías y disfruta de lo mejor en calidad.</p>
-  <input type="text" id="search-bar" placeholder="Buscar películas, series o novelas...">
-  <button onclick="searchContent()">Buscar</button>
+  <p>Descubre lo último en películas, series y novelas.</p>
+  <input type="text" id="search-input" placeholder="Buscar contenido...">
+  <button onclick="searchMovies()">Buscar</button>
 </header>
 
 <nav>
-  <div>
-    <button class="category-btn" data-category="peliculas">Películas</button>
-    <button class="category-btn" data-category="series">Series</button>
-    <button class="category-btn" data-category="novelas">Novelas</button>
-  </div>
   <button class="dark-mode-toggle" onclick="toggleDarkMode()">Modo Oscuro</button>
 </nav>
 
-<section id="peliculas" class="content-section active">
-  <h2>Películas</h2>
-  <div class="content-container">
-    <div class="content-card">
-      <img src="https://via.placeholder.com/200x300" alt="Película 1">
-      <div class="rating">⭐ 4.5</div>
-      <h3>Transformers</h3>
-      <p>Acción / Aventura</p>
-      <a href="#" class="view-details">+ Ver más</a>
-    </div>
-    <div class="content-card">
-      <img src="https://via.placeholder.com/200x300" alt="Película 2">
-      <div class="rating">⭐ 4.8</div>
-      <h3>Mi Villano Favorito</h3>
-      <p>Animación / Comedia</p>
-      <a href="#" class="view-details">+ Ver más</a>
-    </div>
-  </div>
-</section>
-
-<section id="series" class="content-section">
-  <h2>Series</h2>
-  <div class="content-container">
-    <div class="content-card">
-      <img src="https://via.placeholder.com/200x300" alt="Serie 1">
-      <div class="rating">⭐ 4.7</div>
-      <h3>Breaking Bad</h3>
-      <p>Drama / Crimen</p>
-      <a href="#" class="view-details">+ Ver más</a>
-    </div>
-    <div class="content-card">
-      <img src="https://via.placeholder.com/200x300" alt="Serie 2">
-      <div class="rating">⭐ 4.9</div>
-      <h3>Game of Thrones</h3>
-      <p>Fantasía / Aventura</p>
-      <a href="#" class="view-details">+ Ver más</a>
-    </div>
-  </div>
-</section>
-
-<section id="novelas" class="content-section">
-  <h2>Novelas</h2>
-  <div class="content-container">
-    <div class="content-card">
-      <img src="https://via.placeholder.com/200x300" alt="Novela 1">
-      <div class="rating">⭐ 4.2</div>
-      <h3>Betty La Fea</h3>
-      <p>Comedia / Drama</p>
-      <a href="#" class="view-details">+ Ver más</a>
-    </div>
-    <div class="content-card">
-      <img src="https://via.placeholder.com/200x300" alt="Novela 2">
-      <div class="rating">⭐ 4.5</div>
-      <h3>Pasión de Gavilanes</h3>
-      <p>Romance / Drama</p>
-      <a href="#" class="view-details">+ Ver más</a>
-    </div>
-  </div>
-</section>
+<section class="content" id="content"></section>
 
 <footer>
-  <p>&copy; 2024 Cine, Series y Novelas - Todos los derechos reservados.</p>
+  <p>&copy; 2024 Cine, Series y Novelas. Todos los derechos reservados.</p>
 </footer>
 
 <script>
-  const buttons = document.querySelectorAll(".category-btn");
-  const sections = document.querySelectorAll(".content-section");
+  const API_KEY = 'TU_API_KEY_AQUI'; // Reemplaza con tu clave de TMDb
+  const API_URL = 'https://api.themoviedb.org/3';
+  const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
-  buttons.forEach(button => {
-    button.addEventListener("click", () => {
-      buttons.forEach(btn => btn.classList.remove("active"));
-      button.classList.add("active");
+  const content = document.getElementById('content');
+  const searchInput = document.getElementById('search-input');
 
-      const category = button.getAttribute("data-category");
-      sections.forEach(section => {
-        section.classList.remove("active");
-        if (section.id === category) {
-          section.classList.add("active");
-        }
-      });
+  // Función para cargar películas populares
+  async function loadPopularMovies() {
+    const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es`);
+    const data = await response.json();
+    displayMovies(data.results);
+  }
+
+  // Función para mostrar películas
+  function displayMovies(movies) {
+    content.innerHTML = '';
+    movies.forEach(movie => {
+      const movieCard = document.createElement('div');
+      movieCard.classList.add('movie-card');
+      movieCard.innerHTML = `
+        <img src="${IMAGE_BASE_URL}${movie.poster_path}" alt="${movie.title}">
+        <h3>${movie.title}</h3>
+        <p>${movie.release_date}</p>
+        <a href="#" class="view-details" onclick="viewDetails(${movie.id})">+ Ver más</a>
+      `;
+      content.appendChild(movieCard);
     });
-  });
+  }
 
+  // Función para buscar películas
+  async function searchMovies() {
+    const query = searchInput.value;
+    if (query) {
+      const response = await fetch(`${API_URL}/search/movie?api_key=${API_KEY}&query=${query}&language=es`);
+      const data = await response.json();
+      displayMovies(data.results);
+    }
+  }
+
+  // Función para ver detalles de una película
+  async function viewDetails(movieId) {
+    const response = await fetch(`${API_URL}/movie/${movieId}?api_key=${API_KEY}&language=es`);
+    const movie = await response.json();
+    alert(`Detalles de "${movie.title}":\n\n${movie.overview}`);
+  }
+
+  // Función para alternar modo oscuro
   function toggleDarkMode() {
-    document.body.classList.toggle("dark-mode");
-    const button = document.querySelector(".dark-mode-toggle");
-    button.textContent = document.body.classList.contains("dark-mode") ? "Modo Claro" : "Modo Oscuro";
+    document.body.classList.toggle('dark-mode');
   }
 
-  function searchContent() {
-    const query = document.getElementById("search-bar").value.toLowerCase();
-    const cards = document.querySelectorAll(".content-card");
-    cards.forEach(card => {
-      const title = card.querySelector("h3").textContent.toLowerCase();
-      card.style.display = title.includes(query) ? "block" : "none";
-    });
-  }
+  // Cargar películas populares al inicio
+  loadPopularMovies();
 </script>
 
 </body>
