@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mods Julian</title>
+    <title>TendenciasDeMods</title>
     <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #1c1e26;
+            background-color: #121212;
             color: #ffffff;
         }
         header {
-            background-color: #23262e;
+            background-color: #ff5733; /* Color de fondo vibrante */
             padding: 20px;
             display: flex;
             justify-content: space-between;
@@ -20,10 +20,11 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
         }
         header h1 {
-            font-size: 24px;
-            color: #ffd700;
+            font-size: 28px;
+            color: #ffffff;
         }
         nav ul {
             list-style: none;
@@ -32,18 +33,19 @@
             display: flex;
             gap: 15px;
         }
-        nav ul li {
-            display: inline;
-        }
         nav ul li a {
             color: #ffffff;
             text-decoration: none;
             font-size: 16px;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover {
+            color: #ffd700; /* Color dorado al pasar el ratón */
         }
         .hero {
             text-align: center;
             padding: 50px 20px;
-            background: linear-gradient(135deg, #2b2e38, #1c1e26);
+            background: linear-gradient(135deg, #ff6f61, #d9534f); /* Degradado vibrante */
         }
         .hero h2 {
             font-size: 36px;
@@ -74,6 +76,10 @@
             background-color: #007bff;
             color: #fff;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .search-box button:hover {
+            background-color: #0056b3; /* Efecto hover más oscuro */
         }
         .section {
             padding: 30px 20px;
@@ -81,23 +87,7 @@
         .section h3 {
             margin-bottom: 20px;
             font-size: 24px;
-        }
-        .category {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            gap: 20px;
-        }
-        .category button {
-            padding: 10px 20px;
-            background-color: #444;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .category button:hover {
-            background-color: #555;
+            color: #ffd700;
         }
         .app-grid {
             display: grid;
@@ -109,7 +99,10 @@
             padding: 15px;
             border-radius: 8px;
             text-align: center;
-            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .app-card:hover {
+            transform: scale(1.05); /* Efecto de hover */
         }
         .app-card img {
             max-width: 80px;
@@ -118,7 +111,8 @@
         }
         .app-card h4 {
             margin: 10px 0;
-            font-size: 14px;
+            font-size: 16px;
+            color: #ffffff;
         }
         .app-card p {
             font-size: 12px;
@@ -131,22 +125,23 @@
         }
         .download-btn {
             display: inline-block;
-            padding: 8px 20px;
-            background-color: #007bff;
+            padding: 10px 20px;
+            margin-top: 15px;
+            background-color: #ff5733;
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
-            margin-top: 10px;
+            transition: background-color 0.3s ease;
         }
         .download-btn:hover {
-            background-color: #0056b3;
+            background-color: #c0392b;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Mods Julian</h1>
+    <h1>TendenciasDeMods</h1>
     <nav>
         <ul>
             <li><a href="#">Home</a></li>
@@ -158,90 +153,53 @@
 </header>
 
 <section class="hero">
-    <h2>The Best Apps for Android!</h2>
-    <p>Your favorite apps and games are here. Download them for free!</p>
+    <h2>The Best Apps & Mods</h2>
+    <p>Discover the most trending apps and games. Download them now!</p>
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Find apps and games...">
-        <button onclick="searchApps()">Search</button>
+        <input type="text" id="search-input" placeholder="Search apps and games...">
+        <button onclick="searchApp()">Search</button>
     </div>
 </section>
 
 <section class="section">
-    <h3>Categories</h3>
-    <div class="category">
-        <button onclick="filterCategory('social')">Social</button>
-        <button onclick="filterCategory('entertainment')">Entertainment</button>
-        <button onclick="filterCategory('messaging')">Messaging</button>
-    </div>
-    
-    <h3>Featured Apps</h3>
-    <div class="app-grid" id="appGrid">
-        <!-- App Cards -->
-        <div class="app-card" data-category="social" id="instagram">
+    <h3>Most Popular Apps</h3>
+    <div class="app-grid">
+        <div class="app-card">
             <img src="https://via.placeholder.com/100" alt="Instagram">
             <h4>Instagram</h4>
             <p>Instagram LLC</p>
             <div class="rating">★★★★☆</div>
             <a href="https://example.com/instagram" target="_blank" class="download-btn">Download</a>
         </div>
-        <!-- YouTube Premium -->
-        <div class="app-card" data-category="entertainment" id="youtube">
+        <div class="app-card">
             <img src="https://via.placeholder.com/100" alt="YouTube Premium">
             <h4>YouTube Premium</h4>
             <p>YouTube LLC</p>
             <div class="rating">★★★★★</div>
             <a href="https://example.com/youtube" target="_blank" class="download-btn">Download</a>
         </div>
-        <!-- Telegram -->
-        <div class="app-card" data-category="messaging" id="telegram">
+        <div class="app-card">
             <img src="https://via.placeholder.com/100" alt="Telegram">
             <h4>Telegram</h4>
             <p>Telegram Messenger</p>
             <div class="rating">★★★★☆</div>
             <a href="https://example.com/telegram" target="_blank" class="download-btn">Download</a>
         </div>
-        <!-- Add more apps here -->
     </div>
 </section>
 
 <script>
-    function searchApps() {
-        var input = document.getElementById('searchInput').value.toUpperCase();
-        var appGrid = document.getElementById('appGrid');
-        var appCards = appGrid.getElementsByClassName('app-card');
-        var found = false;
-        
-        for (var i = 0; i < appCards.length; i++) {
-            var title = appCards[i].getElementsByTagName("h4")[0].innerText;
-            if (title.toUpperCase().indexOf(input) > -1) {
-                appCards[i].style.display = "block";
-                if (!found) {
-                    appCards[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    found = true;  // Solo hacer scroll a la primera coincidencia
-                }
+    function searchApp() {
+        const query = document.getElementById('search-input').value.toLowerCase();
+        const apps = document.querySelectorAll('.app-card');
+        apps.forEach(app => {
+            const name = app.querySelector('h4').textContent.toLowerCase();
+            if (name.includes(query)) {
+                app.style.display = 'block'; // Show the app
             } else {
-                appCards[i].style.display = "none";
+                app.style.display = 'none'; // Hide the app
             }
-        }
-        
-        if (!found) {
-            alert("No apps found!");
-        }
-    }
-
-    // Filtrar por categoría
-    function filterCategory(category) {
-        var appGrid = document.getElementById('appGrid');
-        var appCards = appGrid.getElementsByClassName('app-card');
-
-        for (var i = 0; i < appCards.length; i++) {
-            var cardCategory = appCards[i].getAttribute('data-category');
-            if (category === 'all' || cardCategory === category) {
-                appCards[i].style.display = "block";
-            } else {
-                appCards[i].style.display = "none";
-            }
-        }
+        });
     }
 </script>
 
