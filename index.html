@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Películas y Series</title>
+    <title>Películas y Series Interactivas</title>
     <style>
+        /* Estilos generales */
         body {
             font-family: Arial, sans-serif;
             background-color: #f1f1f1;
             color: #333;
             margin: 0;
             padding: 0;
+            transition: background-color 0.3s ease;
         }
 
         header {
@@ -18,6 +20,7 @@
             color: white;
             padding: 10px 20px;
             text-align: center;
+            position: relative;
         }
 
         #dark-mode-btn {
@@ -26,6 +29,9 @@
             padding: 5px 10px;
             border: none;
             cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 20px;
         }
 
         #content {
@@ -34,21 +40,33 @@
             justify-content: center;
             gap: 20px;
             padding: 20px;
+            transition: transform 0.3s ease;
         }
 
         .movie-card {
             background-color: white;
-            width: 200px;
+            width: 220px;
             padding: 10px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             text-align: center;
             cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
         }
 
         .movie-card img {
             width: 100%;
             border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .movie-card img:hover {
+            transform: scale(1.1);
         }
 
         .movie-card h4 {
@@ -60,11 +78,15 @@
             color: #555;
         }
 
-        #pagination {
-            text-align: center;
-            margin: 20px 0;
+        /* Parallax scrolling effect */
+        .parallax {
+            background: url('https://via.placeholder.com/1500') no-repeat center center fixed;
+            background-size: cover;
+            height: 300px;
+            position: relative;
         }
 
+        /* Comments and other sections */
         #comments-section {
             margin-top: 20px;
         }
@@ -76,25 +98,7 @@
             margin-top: 10px;
         }
 
-        #comment-input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-
-        .filters {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .filters select, .filters button {
-            margin: 0 10px;
-            padding: 5px 10px;
-        }
-
+        /* Modo oscuro */
         .dark-mode {
             background-color: #333;
             color: white;
@@ -112,6 +116,12 @@
             border: 1px solid #ddd;
         }
 
+        /* 360° interactive movie images */
+        .movie-card img {
+            cursor: pointer;
+        }
+
+        /* Social media links */
         .social-media {
             text-align: center;
             margin-top: 20px;
@@ -127,27 +137,20 @@
 </head>
 <body>
     <header>
-        <h1>Bienvenido a Películas y Series</h1>
+        <h1>Películas y Series Interactivas</h1>
         <button id="dark-mode-btn" onclick="toggleDarkMode()">Modo Oscuro</button>
     </header>
+
+    <!-- Parallax Background -->
+    <div class="parallax"></div>
 
     <div class="search-bar">
         <input type="text" id="search-input" placeholder="Buscar película o serie..." onkeyup="searchMovies()">
     </div>
 
-    <div class="filters">
-        <select id="genre-filter">
-            <option value="">Género</option>
-            <option value="28">Acción</option>
-            <option value="12">Aventura</option>
-            <option value="16">Animación</option>
-        </select>
-        <button onclick="filterMovies()">Filtrar</button>
-    </div>
-
     <div id="content"></div>
-    <div id="pagination"></div>
 
+    <!-- Comment Section -->
     <div id="comments-section">
         <textarea id="comment-input" placeholder="Escribe tu comentario..."></textarea>
         <button onclick="submitComment()">Enviar comentario</button>
@@ -169,7 +172,6 @@
             const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es&page=${page}`);
             const data = await response.json();
             displayMovies(data.results);
-            updatePagination(data.page, data.total_pages);
         }
 
         // Función para mostrar las películas en el DOM
@@ -180,42 +182,14 @@
             movies.forEach(movie => {
                 const movieCard = document.createElement('div');
                 movieCard.classList.add('movie-card');
-                movieCard.onclick = () => openDownloadPage(movie.id); // Agrega el evento para abrir la página de descarga
+                movieCard.onclick = () => openDownloadPage(movie.id);
                 movieCard.innerHTML = `
-                    <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}" alt="${movie.title}">
+                    <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}" alt="${movie.title}" class="movie-image">
                     <h4>${movie.title}</h4>
                     <p>${movie.release_date}</p>
                 `;
                 content.appendChild(movieCard);
             });
-        }
-
-        // Función para mostrar los botones de paginación
-        function updatePagination(current, total) {
-            const pagination = document.getElementById('pagination');
-            pagination.innerHTML = '';
-            if (current > 1) {
-                const prevBtn = document.createElement('button');
-                prevBtn.innerText = 'Anterior';
-                prevBtn.onclick = () => loadPopularMovies(current - 1);
-                pagination.appendChild(prevBtn);
-            }
-            if (current < total) {
-                const nextBtn = document.createElement('button');
-                nextBtn.innerText = 'Siguiente';
-                nextBtn.onclick = () => loadPopularMovies(current + 1);
-                pagination.appendChild(nextBtn);
-            }
-        }
-
-        // Función para buscar películas
-        async function searchMovies() {
-            const query = document.getElementById('search-input').value;
-            if (query.length >= 3) {
-                const response = await fetch(`${API_URL}/search/movie?api_key=${API_KEY}&query=${query}`);
-                const data = await response.json();
-                displayMovies(data.results);
-            }
         }
 
         // Función para abrir la página de descargas
@@ -229,8 +203,7 @@
                     const releaseDate = movie.release_date;
 
                     const downloadLinks = {
-                        1: ["https://www.mediafire.com/file/link1_720p", "https://www.mediafire.com/file/link2_1080p", "https://www.mediafire.com/file/link3_4k"],
-                         // Agregar más links si es necesario
+                        1: ["https://www.mediafire.com/file/link1_720p", "https://www.mediafire.com/file/link2_1080p", "https://www.mediafire.com/file/link3_4k"]
                     };
 
                     const movieLinks = downloadLinks[movieId] || [];
