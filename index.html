@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cine Calidad</title>
+  <title>Cine y Series</title>
   <style>
     /* Estilo general */
     body {
@@ -23,131 +23,64 @@
       margin: 0;
     }
 
-    /* Barra de búsqueda */
-    .search-bar {
-      text-align: center;
+    /* Navegación */
+    nav {
+      background-color: #01976d;
+      display: flex;
+      justify-content: center;
+      padding: 10px 0;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    /* Secciones */
+    section {
       margin: 20px;
     }
-    .search-bar input {
-      padding: 10px;
-      width: 50%;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    /* Categorías */
-    .categories {
+    section h2 {
       text-align: center;
-      margin: 20px 0;
+      margin-bottom: 20px;
     }
-    .categories button {
-      background-color: #00b894;
-      border: none;
-      color: white;
-      padding: 10px 15px;
-      margin: 5px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .categories button:hover {
-      background-color: #01976d;
-    }
-
-    /* Contenedor de tarjetas */
-    .container {
+    .content-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
-      margin: 20px;
     }
-    .card {
+    .content-card {
       background-color: white;
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
       width: 200px;
+      overflow: hidden;
       text-align: center;
-      cursor: pointer;
     }
-    .card img {
+    .content-card img {
       width: 100%;
       height: auto;
     }
-    .card h3 {
+    .content-card h3 {
       margin: 10px 0;
       font-size: 16px;
       color: #333;
     }
-    .card p {
-      font-size: 14px;
-      color: #666;
-      padding: 0 10px 10px;
-    }
-
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
+    .content-card .view-details {
+      display: flex;
       justify-content: center;
       align-items: center;
-    }
-    .modal-content {
-      background-color: white;
-      padding: 20px;
-      border-radius: 10px;
-      width: 80%;
-      max-width: 500px;
-      text-align: center;
-      position: relative;
-    }
-    .modal .close {
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      cursor: pointer;
-      font-size: 20px;
-    }
-
-    /* Carrusel */
-    .carousel {
-      overflow: hidden;
-      width: 100%;
-      margin: 20px auto;
-    }
-    .carousel-track {
-      display: flex;
-      animation: scroll 10s linear infinite;
-    }
-    .carousel-track img {
-      width: 150px;
-      margin: 0 10px;
-    }
-    @keyframes scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
-    }
-
-    /* Paginación */
-    .pagination {
-      text-align: center;
-      margin: 20px 0;
-    }
-    .pagination button {
-      padding: 10px 15px;
       background-color: #00b894;
       color: white;
-      border: none;
-      margin: 0 5px;
-      border-radius: 5px;
+      padding: 10px 0;
       cursor: pointer;
     }
-    .pagination button:hover {
+    .content-card .view-details:hover {
       background-color: #01976d;
     }
 
@@ -156,126 +89,140 @@
       background-color: #333;
       color: white;
     }
-    body.dark-mode .card {
+    body.dark-mode .content-card {
       background-color: #444;
+    }
+
+    footer {
+      background-color: #00b894;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Cine Calidad</h1>
-  <p>Películas en excelente calidad Full HD. Sin registro, gratis.</p>
+  <h1>Cine y Series</h1>
+  <p>Explora películas, series y novelas en excelente calidad.</p>
 </header>
 
-<div class="search-bar">
-  <input type="text" id="search" placeholder="Buscar películas..." oninput="filterMovies()">
-</div>
+<nav>
+  <a href="#peliculas">Películas</a>
+  <a href="#series">Series</a>
+  <a href="#novelas">Novelas</a>
+</nav>
 
-<div class="categories">
-  <button>Acción</button>
-  <button>Animación</button>
-  <button>Aventura</button>
-  <button>Comedia</button>
-  <button>Familia</button>
-</div>
+<section id="peliculas">
+  <h2>Películas</h2>
+  <div class="content-container">
+    <div class="content-card">
+      <img src="https://via.placeholder.com/200x300" alt="Lightyear">
+      <h3>Lightyear</h3>
+      <div class="view-details" onclick="openDetails('Lightyear', 'Descripción de la película Lightyear.')">
+        + Ver detalles
+      </div>
+    </div>
+    <div class="content-card">
+      <img src="https://via.placeholder.com/200x300" alt="Elemental">
+      <h3>Elemental</h3>
+      <div class="view-details" onclick="openDetails('Elemental', 'Descripción de la película Elemental.')">
+        + Ver detalles
+      </div>
+    </div>
+  </div>
+</section>
 
-<div class="carousel">
-  <div class="carousel-track">
-    <img src="https://via.placeholder.com/150x200" alt="Popular 1">
-    <img src="https://via.placeholder.com/150x200" alt="Popular 2">
-    <img src="https://via.placeholder.com/150x200" alt="Popular 3">
+<section id="series">
+  <h2>Series</h2>
+  <div class="content-container">
+    <div class="content-card">
+      <img src="https://via.placeholder.com/200x300" alt="Stranger Things">
+      <h3>Stranger Things</h3>
+      <div class="view-details" onclick="openDetails('Stranger Things', 'Descripción de la serie Stranger Things.')">
+        + Ver detalles
+      </div>
+    </div>
+    <div class="content-card">
+      <img src="https://via.placeholder.com/200x300" alt="Breaking Bad">
+      <h3>Breaking Bad</h3>
+      <div class="view-details" onclick="openDetails('Breaking Bad', 'Descripción de la serie Breaking Bad.')">
+        + Ver detalles
+      </div>
+    </div>
   </div>
-</div>
+</section>
 
-<div class="container">
-  <div class="card">
-    <img src="https://via.placeholder.com/200x300" alt="Lightyear">
-    <h3>Lightyear</h3>
-    <p>Película de animación y aventuras.</p>
+<section id="novelas">
+  <h2>Novelas</h2>
+  <div class="content-container">
+    <div class="content-card">
+      <img src="https://via.placeholder.com/200x300" alt="Pasión de Gavilanes">
+      <h3>Pasión de Gavilanes</h3>
+      <div class="view-details" onclick="openDetails('Pasión de Gavilanes', 'Descripción de la novela Pasión de Gavilanes.')">
+        + Ver detalles
+      </div>
+    </div>
+    <div class="content-card">
+      <img src="https://via.placeholder.com/200x300" alt="Yo Soy Betty, La Fea">
+      <h3>Yo Soy Betty, La Fea</h3>
+      <div class="view-details" onclick="openDetails('Yo Soy Betty, La Fea', 'Descripción de la novela Yo Soy Betty, La Fea.')">
+        + Ver detalles
+      </div>
+    </div>
   </div>
-  <div class="card">
-    <img src="https://via.placeholder.com/200x300" alt="Elemental">
-    <h3>Elemental</h3>
-    <p>Un mundo donde conviven seres elementales.</p>
-  </div>
-  <div class="card">
-    <img src="https://via.placeholder.com/200x300" alt="Gru 4">
-    <h3>Gru 4</h3>
-    <p>Una divertida aventura familiar.</p>
-  </div>
-  <div class="card">
-    <img src="https://via.placeholder.com/200x300" alt="Transformers">
-    <h3>Transformers</h3>
-    <p>Una nueva batalla entre Autobots y Decepticons.</p>
-  </div>
-</div>
-
-<div class="pagination">
-  <button onclick="changePage(-1)">Anterior</button>
-  <span id="page-info"></span>
-  <button onclick="changePage(1)">Siguiente</button>
-</div>
-
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <h2 id="movie-title">Título de la Película</h2>
-    <p id="movie-description">Descripción de la película...</p>
-  </div>
-</div>
+</section>
 
 <footer>
-  <p>&copy; 2024 Cine Calidad - Todos los derechos reservados.</p>
+  <p>&copy; 2024 Cine y Series - Todos los derechos reservados.</p>
 </footer>
 
 <script>
-  function filterMovies() {
-    const searchInput = document.getElementById('search').value.toLowerCase();
-    const cards = document.querySelectorAll('.card');
-    cards.forEach(card => {
-      const title = card.querySelector('h3').textContent.toLowerCase();
-      card.style.display = title.includes(searchInput) ? 'block' : 'none';
-    });
+  function openDetails(title, description) {
+    const newWindow = window.open("", "_blank");
+    newWindow.document.write(`
+      <!DOCTYPE html>
+      <html lang="es">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${title}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+          }
+          h1 {
+            text-align: center;
+          }
+          .links {
+            margin-top: 20px;
+            text-align: center;
+          }
+          .links a {
+            display: block;
+            margin: 10px 0;
+            text-decoration: none;
+            color: #00b894;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>${title}</h1>
+        <p>${description}</p>
+        <div class="links">
+          <a href="#">Descargar en 720p</a>
+          <a href="#">Descargar en 1080p</a>
+          <a href="#">Descargar en 4K</a>
+        </div>
+      </body>
+      </html>
+    `);
   }
-
-  function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-  }
-
-  function showModal(title, description) {
-    document.getElementById('movie-title').textContent = title;
-    document.getElementById('movie-description').textContent = description;
-    document.getElementById('modal').style.display = 'flex';
-  }
-
-  function closeModal() {
-    document.getElementById('modal').style.display = 'none';
-  }
-
-  const moviesPerPage = 4;
-  let currentPage = 1;
-
-  function showPage(page) {
-    const cards = document.querySelectorAll('.card');
-    const totalPages = Math.ceil(cards.length / moviesPerPage);
-    currentPage = page;
-
-    cards.forEach((card, index) => {
-      card.style.display = (index >= (page - 1) * moviesPerPage && index < page * moviesPerPage) ? 'block' : 'none';
-    });
-
-    document.getElementById('page-info').textContent = `Página ${currentPage} de ${totalPages}`;
-  }
-
-  function changePage(step) {
-    const totalPages = Math.ceil(document.querySelectorAll('.card').length / moviesPerPage);
-    if (currentPage + step > 0 && currentPage + step <= totalPages) {
-      showPage(currentPage + step);
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', () => showPage(1));
 </script>
 
 </body>
