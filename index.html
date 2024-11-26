@@ -187,22 +187,37 @@
 
         // Función para abrir la página de descargas con enlaces de Mediafire
         function openDownloadPage(movieId) {
-            // Aquí deberías tener los enlaces de descarga. Los voy a simular con Mediafire.
-            const downloadLinks = {
-                1: ["https://www.mediafire.com/file/link1", "https://www.mediafire.com/file/link2"],
-                2: ["https://www.mediafire.com/file/link3", "https://www.mediafire.com/file/link4"],
-                // Aquí agregarías los links reales por movieId.
-            };
+            // Llamar a la API de TMDb para obtener detalles de la película
+            fetch(`${API_URL}/movie/${movieId}?api_key=${API_KEY}&language=es`)
+                .then(response => response.json())
+                .then(movie => {
+                    // Aquí extraemos la información de la película
+                    const title = movie.title;
+                    const description = movie.overview;
+                    const posterPath = movie.poster_path;
+                    const releaseDate = movie.release_date;
 
-            const movieLinks = downloadLinks[movieId] || [];
+                    // Enlaces de descarga simulados
+                    const downloadLinks = {
+                        1: ["https://www.mediafire.com/file/link1_720p", "https://www.mediafire.com/file/link2_1080p", "https://www.mediafire.com/file/link3_4k"],
+                        2: ["https://www.mediafire.com/file/link4_720p", "https://www.mediafire.com/file/link5_1080p", "https://www.mediafire.com/file/link6_4k"],
+                        // Aquí agregarías los links reales por movieId.
+                    };
 
-            const downloadWindow = window.open("", "_blank");
-            downloadWindow.document.write(`
-                <h1>Descargar ${movieId}</h1>
-                <ul>
-                    ${movieLinks.map(link => `<li><a href="${link}" target="_blank">${link}</a></li>`).join("")}
-                </ul>
-            `);
+                    const movieLinks = downloadLinks[movieId] || [];
+
+                    const downloadWindow = window.open("", "_blank");
+                    downloadWindow.document.write(`
+                        <h1>${title}</h1>
+                        <img src="https://image.tmdb.org/t/p/w500/${posterPath}" alt="${title}" width="300">
+                        <p><strong>Estreno:</strong> ${releaseDate}</p>
+                        <p><strong>Descripción:</strong> ${description}</p>
+                        <h3>Enlaces de descarga:</h3>
+                        <ul>
+                            ${movieLinks.map(link => `<li><a href="${link}" target="_blank">${link}</a></li>`).join("")}
+                        </ul>
+                    `);
+                });
         }
 
         // Función para agregar comentarios
@@ -228,4 +243,3 @@
     </script>
 </body>
 </html>
-
