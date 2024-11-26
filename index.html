@@ -214,6 +214,45 @@
             color: #333;
         }
 
+        /* Formulario de contacto */
+        #contact-section {
+            background-color: #333;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        #contact-section h2 {
+            margin-bottom: 20px;
+            color: #ff9800;
+        }
+
+        #contact-section form input,
+        #contact-section form textarea {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        #contact-section form button {
+            background-color: #ff9800;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #contact-section a {
+            display: block;
+            color: #ff9800;
+            margin-top: 20px;
+            font-size: 18px;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -243,75 +282,58 @@
         <a href="#" target="_blank">Twitter</a>
     </div>
 
+    <!-- Formulario de contacto y Telegram -->
+    <div id="contact-section">
+        <h2>Contáctanos</h2>
+        <form action="https://formspree.io/f/{YOUR_FORM_ID}" method="POST">
+            <input type="text" name="name" placeholder="Tu nombre" required>
+            <input type="email" name="email" placeholder="Tu correo electrónico" required>
+            <textarea name="message" rows="5" placeholder="Tu mensaje..." required></textarea>
+            <button type="submit">Enviar mensaje</button>
+        </form>
+        <a href="https://t.me/tu_grupo_telegram" target="_blank">Únete a nuestro grupo de Telegram</a>
+    </div>
+
     <script>
         const API_URL = "https://api.themoviedb.org/3";
         const API_KEY = "9e9698108533009ffe2584455b931f5a"; // Reemplaza con tu clave API de TMDb
         let currentPage = 1;
 
         // Función para cargar películas populares
-        async function loadPopularMovies(page = 1) {
-            const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es&page=${page}`);
+        async function loadPopularMovies() {
+            const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es&page=${currentPage}`);
             const data = await response.json();
             displayMovies(data.results);
         }
 
-        // Función para mostrar las películas en el DOM
+        // Función para mostrar películas
         function displayMovies(movies) {
-            const content = document.getElementById('content');
-            content.innerHTML = '';
-
+            const contentDiv = document.getElementById('content');
+            contentDiv.innerHTML = '';
             movies.forEach(movie => {
                 const movieCard = document.createElement('div');
                 movieCard.classList.add('movie-card');
-                movieCard.onclick = () => openDownloadPage(movie.id);
                 movieCard.innerHTML = `
-                    <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}" alt="${movie.title}" class="movie-image">
+                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
                     <h4>${movie.title}</h4>
                     <p>${movie.release_date}</p>
                 `;
-                content.appendChild(movieCard);
+                movieCard.addEventListener('click', () => openMoviePage(movie.id));
+                contentDiv.appendChild(movieCard);
             });
         }
 
-        // Función para abrir la página de descargas
-        function openDownloadPage(movieId) {
-            fetch(`${API_URL}/movie/${movieId}?api_key=${API_KEY}&language=es`)
-                .then(response => response.json())
-                .then(movie => {
-                    const title = movie.title;
-                    const description = movie.overview;
-                    const posterPath = movie.poster_path;
-                    const releaseDate = movie.release_date;
-
-                    const downloadLinks = {
-                        1: ["https://www.mediafire.com/file/link1_720p", "https://www.mediafire.com/file/link2_1080p", "https://www.mediafire.com/file/link3_4k"]
-                    };
-
-                    const movieLinks = downloadLinks[movieId] || [];
-                    const downloadWindow = window.open("", "_blank");
-                    downloadWindow.document.write(`
-                        <div class="download-page">
-                            <h1>${title}</h1>
-                            <img src="https://image.tmdb.org/t/p/w500/${posterPath}" alt="${title}" width="300">
-                            <p>${description}</p>
-                            <h3>Enlaces de descarga:</h3>
-                            <ul>
-                                ${movieLinks.map(link => `
-                                    <li><a href="${link}" target="_blank">Descargar desde MediaFire</a></li>
-                                `).join('')}
-                            </ul>
-                            <button onclick="window.close()">Cerrar</button>
-                        </div>
-                    `);
-                });
+        // Función para abrir página de película
+        function openMoviePage(movieId) {
+            window.open(`movie-details.html?id=${movieId}`, '_blank');
         }
 
-        // Función para activar el modo oscuro
+        // Función para alternar el modo oscuro
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
         }
 
-        // Función para buscar películas
+        // Función de búsqueda
         function searchMovies() {
             const query = document.getElementById('search-input').value;
             if (query.length >= 3) {
@@ -321,7 +343,7 @@
             }
         }
 
-        // Función para enviar comentarios
+        // Función para enviar comentario
         function submitComment() {
             const commentInput = document.getElementById('comment-input');
             const commentText = commentInput.value;
@@ -335,7 +357,7 @@
             }
         }
 
-        // Cargar películas populares al inicio
+        // Cargar películas al inicio
         loadPopularMovies();
     </script>
 </body>
