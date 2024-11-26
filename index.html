@@ -40,9 +40,6 @@
             text-decoration: none;
             font-size: 16px;
         }
-        nav ul li a:hover {
-            color: #ffd700;
-        }
         .hero {
             text-align: center;
             padding: 50px 20px;
@@ -78,9 +75,6 @@
             color: #fff;
             cursor: pointer;
         }
-        .search-box button:hover {
-            background-color: #0056b3;
-        }
         .section {
             padding: 30px 20px;
         }
@@ -90,7 +84,7 @@
         }
         .app-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 15px;
         }
         .app-card {
@@ -98,19 +92,18 @@
             padding: 15px;
             border-radius: 8px;
             text-align: center;
-            position: relative;
         }
         .app-card img {
-            max-width: 100px;
+            max-width: 80px;
             margin-bottom: 10px;
             border-radius: 8px;
         }
         .app-card h4 {
             margin: 10px 0;
-            font-size: 16px;
+            font-size: 14px;
         }
         .app-card p {
-            font-size: 14px;
+            font-size: 12px;
             color: #bbb;
         }
         .app-card .rating {
@@ -118,17 +111,17 @@
             color: #ffd700;
             margin-top: 5px;
         }
-        .app-card .download-btn {
-            display: block;
-            margin: 10px auto;
-            padding: 10px 15px;
-            background-color: #28a745;
+        .download-btn {
+            display: inline-block;
+            padding: 8px 20px;
+            background-color: #007bff;
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
+            margin-top: 10px;
         }
-        .app-card .download-btn:hover {
-            background-color: #218838;
+        .download-btn:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -147,42 +140,18 @@
 </header>
 
 <section class="hero">
-    <h2>Discover the Best Apps & Games!</h2>
-    <p>Download your favorite apps and games with ease.</p>
+    <h2>The Best Apps for Android!</h2>
+    <p>Your favorite apps and games are here. Download them for free!</p>
     <div class="search-box">
-        <input type="text" placeholder="Search apps and games...">
+        <input type="text" id="searchInput" placeholder="Find apps and games..." onkeyup="searchApps()">
         <button>Search</button>
     </div>
 </section>
 
 <section class="section">
-    <h3>Popular Apps</h3>
-    <div class="app-grid">
-        <!-- WhatsApp -->
-        <div class="app-card">
-            <img src="https://via.placeholder.com/100" alt="WhatsApp">
-            <h4>WhatsApp</h4>
-            <p>WhatsApp Inc.</p>
-            <div class="rating">★★★★★</div>
-            <a href="https://example.com/whatsapp" target="_blank" class="download-btn">Download</a>
-        </div>
-        <!-- Spotify -->
-        <div class="app-card">
-            <img src="https://via.placeholder.com/100" alt="Spotify">
-            <h4>Spotify Premium</h4>
-            <p>Spotify Ltd.</p>
-            <div class="rating">★★★★☆</div>
-            <a href="https://example.com/spotify" target="_blank" class="download-btn">Download</a>
-        </div>
-        <!-- TikTok -->
-        <div class="app-card">
-            <img src="https://via.placeholder.com/100" alt="TikTok">
-            <h4>TikTok Premium</h4>
-            <p>TikTok Inc.</p>
-            <div class="rating">★★★★★</div>
-            <a href="https://example.com/tiktok" target="_blank" class="download-btn">Download</a>
-        </div>
-        <!-- Instagram -->
+    <h3>Most searched apps</h3>
+    <div class="app-grid" id="appGrid">
+        <!-- App Cards -->
         <div class="app-card">
             <img src="https://via.placeholder.com/100" alt="Instagram">
             <h4>Instagram</h4>
@@ -206,8 +175,51 @@
             <div class="rating">★★★★☆</div>
             <a href="https://example.com/telegram" target="_blank" class="download-btn">Download</a>
         </div>
+        <!-- Add more apps here -->
+        <div class="app-card">
+            <img src="https://via.placeholder.com/100" alt="WhatsApp">
+            <h4>WhatsApp</h4>
+            <p>WhatsApp Inc.</p>
+            <div class="rating">★★★★★</div>
+            <a href="https://example.com/whatsapp" target="_blank" class="download-btn">Download</a>
+        </div>
+        <div class="app-card">
+            <img src="https://via.placeholder.com/100" alt="Spotify">
+            <h4>Spotify</h4>
+            <p>Spotify Ltd.</p>
+            <div class="rating">★★★★★</div>
+            <a href="https://example.com/spotify" target="_blank" class="download-btn">Download</a>
+        </div>
+        <div class="app-card">
+            <img src="https://via.placeholder.com/100" alt="TikTok">
+            <h4>TikTok</h4>
+            <p>TikTok Inc.</p>
+            <div class="rating">★★★★★</div>
+            <a href="https://example.com/tiktok" target="_blank" class="download-btn">Download</a>
+        </div>
     </div>
 </section>
+
+<script>
+    function searchApps() {
+        var input, filter, appGrid, appCards, card, title, i, txtValue;
+        input = document.getElementById('searchInput');
+        filter = input.value.toUpperCase();
+        appGrid = document.getElementById('appGrid');
+        appCards = appGrid.getElementsByClassName('app-card');
+
+        for (i = 0; i < appCards.length; i++) {
+            card = appCards[i];
+            title = card.getElementsByTagName("h4")[0];
+            txtValue = title.textContent || title.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                card.style.display = "";
+            } else {
+                card.style.display = "none";
+            }
+        }
+    }
+</script>
 
 </body>
 </html>
