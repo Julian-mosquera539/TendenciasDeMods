@@ -100,6 +100,29 @@
             color: white;
         }
 
+        .search-bar {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            width: 300px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .social-media {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .social-media a {
+            margin: 0 10px;
+            font-size: 20px;
+            color: #555;
+        }
+
     </style>
 </head>
 <body>
@@ -107,6 +130,10 @@
         <h1>Bienvenido a Películas y Series</h1>
         <button id="dark-mode-btn" onclick="toggleDarkMode()">Modo Oscuro</button>
     </header>
+
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Buscar película o serie..." onkeyup="searchMovies()">
+    </div>
 
     <div class="filters">
         <select id="genre-filter">
@@ -127,10 +154,14 @@
         <div id="comments-list"></div>
     </div>
 
+    <div class="social-media">
+        <a href="#" target="_blank">Facebook</a>
+        <a href="#" target="_blank">Twitter</a>
+    </div>
+
     <script>
         const API_URL = "https://api.themoviedb.org/3";
         const API_KEY = "9e9698108533009ffe2584455b931f5a"; // Reemplaza con tu clave API de TMDb
-
         let currentPage = 1;
 
         // Función para cargar películas populares
@@ -177,35 +208,32 @@
             }
         }
 
-        // Función para buscar películas por género
-        async function filterMovies() {
-            const genre = document.getElementById('genre-filter').value;
-            const response = await fetch(`${API_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genre}`);
-            const data = await response.json();
-            displayMovies(data.results);
+        // Función para buscar películas
+        async function searchMovies() {
+            const query = document.getElementById('search-input').value;
+            if (query.length >= 3) {
+                const response = await fetch(`${API_URL}/search/movie?api_key=${API_KEY}&query=${query}`);
+                const data = await response.json();
+                displayMovies(data.results);
+            }
         }
 
-        // Función para abrir la página de descargas con enlaces de Mediafire
+        // Función para abrir la página de descargas
         function openDownloadPage(movieId) {
-            // Llamar a la API de TMDb para obtener detalles de la película
             fetch(`${API_URL}/movie/${movieId}?api_key=${API_KEY}&language=es`)
                 .then(response => response.json())
                 .then(movie => {
-                    // Aquí extraemos la información de la película
                     const title = movie.title;
                     const description = movie.overview;
                     const posterPath = movie.poster_path;
                     const releaseDate = movie.release_date;
 
-                    // Enlaces de descarga simulados
                     const downloadLinks = {
                         1: ["https://www.mediafire.com/file/link1_720p", "https://www.mediafire.com/file/link2_1080p", "https://www.mediafire.com/file/link3_4k"],
-                        2: ["https://www.mediafire.com/file/link4_720p", "https://www.mediafire.com/file/link5_1080p", "https://www.mediafire.com/file/link6_4k"],
-                        // Aquí agregarías los links reales por movieId.
+                         // Agregar más links si es necesario
                     };
 
                     const movieLinks = downloadLinks[movieId] || [];
-
                     const downloadWindow = window.open("", "_blank");
                     downloadWindow.document.write(`
                         <h1>${title}</h1>
@@ -220,7 +248,7 @@
                 });
         }
 
-        // Función para agregar comentarios
+        // Función para enviar comentarios
         function submitComment() {
             const comment = document.getElementById('comment-input').value;
             if (comment) {
