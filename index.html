@@ -109,6 +109,7 @@
             padding: 15px;
             border-radius: 8px;
             text-align: center;
+            cursor: pointer;
         }
         .app-card img {
             max-width: 80px;
@@ -176,7 +177,7 @@
     <h3>Featured Apps</h3>
     <div class="app-grid" id="appGrid">
         <!-- App Cards -->
-        <div class="app-card" data-category="social">
+        <div class="app-card" data-category="social" id="instagram">
             <img src="https://via.placeholder.com/100" alt="Instagram">
             <h4>Instagram</h4>
             <p>Instagram LLC</p>
@@ -184,7 +185,7 @@
             <a href="https://example.com/instagram" target="_blank" class="download-btn">Download</a>
         </div>
         <!-- YouTube Premium -->
-        <div class="app-card" data-category="entertainment">
+        <div class="app-card" data-category="entertainment" id="youtube">
             <img src="https://via.placeholder.com/100" alt="YouTube Premium">
             <h4>YouTube Premium</h4>
             <p>YouTube LLC</p>
@@ -192,7 +193,7 @@
             <a href="https://example.com/youtube" target="_blank" class="download-btn">Download</a>
         </div>
         <!-- Telegram -->
-        <div class="app-card" data-category="messaging">
+        <div class="app-card" data-category="messaging" id="telegram">
             <img src="https://via.placeholder.com/100" alt="Telegram">
             <h4>Telegram</h4>
             <p>Telegram Messenger</p>
@@ -208,14 +209,23 @@
         var input = document.getElementById('searchInput').value.toUpperCase();
         var appGrid = document.getElementById('appGrid');
         var appCards = appGrid.getElementsByClassName('app-card');
+        var found = false;
         
         for (var i = 0; i < appCards.length; i++) {
             var title = appCards[i].getElementsByTagName("h4")[0].innerText;
             if (title.toUpperCase().indexOf(input) > -1) {
                 appCards[i].style.display = "block";
+                if (!found) {
+                    appCards[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    found = true;  // Solo hacer scroll a la primera coincidencia
+                }
             } else {
                 appCards[i].style.display = "none";
             }
+        }
+        
+        if (!found) {
+            alert("No apps found!");
         }
     }
 
