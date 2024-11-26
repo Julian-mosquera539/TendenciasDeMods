@@ -204,18 +204,21 @@
     function searchApps() {
         var input, filter, appGrid, appCards, card, title, i, txtValue;
         input = document.getElementById('searchInput');
-        filter = input.value.toUpperCase();
+        filter = input.value.toUpperCase();  // Filtrar texto en mayúsculas
         appGrid = document.getElementById('appGrid');
         appCards = appGrid.getElementsByClassName('app-card');
 
+        // Iterar sobre los cards de aplicaciones
         for (i = 0; i < appCards.length; i++) {
             card = appCards[i];
-            title = card.getElementsByTagName("h4")[0];
+            title = card.getElementsByTagName("h4")[0];  // Obtener el título de cada card
             txtValue = title.textContent || title.innerText;
+            
+            // Comparar el texto con la búsqueda
             if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                card.style.display = "";
+                card.style.display = "";  // Mostrar card si coincide
             } else {
-                card.style.display = "none";
+                card.style.display = "none";  // Ocultar card si no coincide
             }
         }
     }
