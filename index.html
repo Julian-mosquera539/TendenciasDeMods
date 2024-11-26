@@ -43,6 +43,7 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            cursor: pointer;
         }
 
         .movie-card img {
@@ -148,11 +149,11 @@
             movies.forEach(movie => {
                 const movieCard = document.createElement('div');
                 movieCard.classList.add('movie-card');
+                movieCard.onclick = () => openDownloadPage(movie.id); // Agrega el evento para abrir la página de descarga
                 movieCard.innerHTML = `
                     <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}" alt="${movie.title}">
                     <h4>${movie.title}</h4>
                     <p>${movie.release_date}</p>
-                    <button onclick="getTrailer(${movie.id})">Ver Trailer</button>
                 `;
                 content.appendChild(movieCard);
             });
@@ -184,17 +185,24 @@
             displayMovies(data.results);
         }
 
-        // Función para obtener y mostrar el trailer
-        async function getTrailer(movieId) {
-            const response = await fetch(`${API_URL}/movie/${movieId}/videos?api_key=${API_KEY}&language=es`);
-            const data = await response.json();
-            const trailer = data.results.find(video => video.type === 'Trailer');
-            if (trailer) {
-                const trailerUrl = `https://www.youtube.com/watch?v=${trailer.key}`;
-                window.open(trailerUrl, '_blank');
-            } else {
-                alert('Trailer no disponible');
-            }
+        // Función para abrir la página de descargas con enlaces de Mediafire
+        function openDownloadPage(movieId) {
+            // Aquí deberías tener los enlaces de descarga. Los voy a simular con Mediafire.
+            const downloadLinks = {
+                1: ["https://www.mediafire.com/file/link1", "https://www.mediafire.com/file/link2"],
+                2: ["https://www.mediafire.com/file/link3", "https://www.mediafire.com/file/link4"],
+                // Aquí agregarías los links reales por movieId.
+            };
+
+            const movieLinks = downloadLinks[movieId] || [];
+
+            const downloadWindow = window.open("", "_blank");
+            downloadWindow.document.write(`
+                <h1>Descargar ${movieId}</h1>
+                <ul>
+                    ${movieLinks.map(link => `<li><a href="${link}" target="_blank">${link}</a></li>`).join("")}
+                </ul>
+            `);
         }
 
         // Función para agregar comentarios
@@ -220,3 +228,4 @@
     </script>
 </body>
 </html>
+
