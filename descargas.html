@@ -4,62 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles de la Película</title>
-    <style>
-        /* Estilos generales */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
-        /* Sección de detalles */
-        #movie-details-section {
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            margin: 20px;
-        }
-
-        .movie-poster img {
-            width: 300px;
-            border-radius: 10px;
-        }
-
-        .download-links a {
-            display: inline-block;
-            margin: 10px 5px;
-            padding: 10px 15px;
-            background-color: #222;
-            color: white;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-
-        .download-links a:hover {
-            background-color: #ff9800;
-        }
-
-        #back-btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 15px;
-            background-color: #222;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-
-        #back-btn:hover {
-            background-color: #ff9800;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
@@ -67,40 +12,66 @@
     </header>
 
     <main>
-        <div id="movie-details-section">
-            <div class="movie-poster">
-                <img id="movie-poster" src="" alt="Póster de la película">
-            </div>
-            <div class="movie-info">
-                <h2 id="movie-title"></h2>
-                <p id="movie-overview"></p>
-                <p><strong>Fecha de lanzamiento:</strong> <span id="movie-release-date"></span></p>
-                <p><strong>Duración:</strong> <span id="movie-runtime"></span> minutos</p>
-                <p><strong>Calificación:</strong> <span id="movie-rating"></span>/10</p>
-                <p><strong>Actores principales:</strong> <span id="movie-cast"></span></p>
-                <div class="download-links">
-                    <h3>Descargas:</h3>
-                    <a href="#" class="download-btn" target="_blank"><img src="icon-480p.png" alt="480p"> 480p</a>
-                    <a href="#" class="download-btn" target="_blank"><img src="icon-720p.png" alt="720p"> 720p</a>
-                    <a href="#" class="download-btn" target="_blank"><img src="icon-1080p.png" alt="1080p"> 1080p</a>
-                    <a href="#" class="download-btn" target="_blank"><img src="icon-4k.png" alt="4K"> 4K</a>
-                </div>
-            </div>
-            <a id="back-btn" href="index.html">Regresar</a>
+        <div id="movie-details">
+            <!-- Detalles de la película se cargarán aquí -->
+        </div>
+        <div id="download-links">
+            <button onclick="downloadMovie('480p')">Descargar 480p</button>
+            <button onclick="downloadMovie('720p')">Descargar 720p</button>
+            <button onclick="downloadMovie('1080p')">Descargar 1080p</button>
+            <button onclick="downloadMovie('4K')">Descargar 4K</button>
         </div>
     </main>
 
+    <footer>
+        <p>&copy; 2024 Tu Sitio de Películas</p>
+    </footer>
+
     <script>
-        const movieId = new URLSearchParams(window.location.search).get('movieId');
         const API_URL = "https://api.themoviedb.org/3";
-        const API_KEY = "9e9698108533009ffe2584455b931f5a";
+        const API_KEY = "9e9698108533009ffe2584455b931f5a"; // Reemplaza con tu API Key
 
-        // Cargar detalles de la película
         async function loadMovieDetails() {
-            const response = await fetch(`${API_URL}/movie/${movieId}?api_key=${API_KEY}&language=es`);
-            const movie = await response.json();
+            const urlParams = new URLSearchParams(window.location.search);
+            const movieId = urlParams.get('movieId');
+            if (!movieId) return;
 
-            // Mostrar los detalles de la película
-            document.getElementById('movie-poster').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-            document.getElementById('movie-title').textContent = movie.title;
-            document.getElementById('movie-overview').textContent = movie.over
+            const response = await fetch(`${API_URL}/movie/${movieId}?api_key=${API_KEY}&language=es`);
+            const data = await response.json();
+            displayMovieDetails(data);
+        }
+
+        function displayMovieDetails(movie) {
+            const container = document.getElementById('movie-details');
+            container.innerHTML = `
+                <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                <h2>${movie.title}</h2>
+                <p>${movie.overview}</p>
+                <p><strong>Duración:</strong> ${movie.runtime} minutos</p>
+                <p><strong>Calificación:</strong> ${movie.vote_average}/10</p>
+                <h3>Actores principales:</h3>
+                <ul id="actors-list"></ul>
+            `;
+            loadActors(movie.id);
+        }
+
+        async function loadActors(movieId) {
+            const response = await fetch(`${API_URL}/movie/${movieId}/credits?api_key=${API_KEY}`);
+            const data = await response.json();
+            const actorsList = document.getElementById('actors-list');
+            data.cast.slice(0, 5).forEach(actor => {
+                const li = document.createElement('li');
+                li.textContent = actor.name;
+                actorsList.appendChild(li);
+            });
+        }
+
+        function downloadMovie(resolution) {
+            alert(`Descargando película en resolución ${resolution}...`);
+            // Lógica para manejar la descarga
+        }
+
+        loadMovieDetails();
+    </script>
+</body>
+</html>
