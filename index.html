@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -86,6 +86,18 @@
             position: relative;
         }
 
+        /* Comments and other sections */
+        #comments-section {
+            margin-top: 20px;
+        }
+
+        .comment {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
         /* Modo oscuro */
         .dark-mode {
             background-color: #333;
@@ -102,6 +114,23 @@
             width: 300px;
             border-radius: 5px;
             border: 1px solid #ddd;
+        }
+
+        /* 360° interactive movie images */
+        .movie-card img {
+            cursor: pointer;
+        }
+
+        /* Social media links */
+        .social-media {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .social-media a {
+            margin: 0 10px;
+            font-size: 20px;
+            color: #555;
         }
 
         /* Estilos para la página de descarga */
@@ -141,36 +170,88 @@
             color: #ff9800;
         }
 
-        .download-links a {
-            display: block;
-            margin: 10px 0;
+        .download-page ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .download-page li {
+            margin-bottom: 15px;
+            background-color: #333;
             padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-page li:hover {
+            background-color: #ff9800;
+            cursor: pointer;
+        }
+
+        .download-page a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        /* Botón para cambiar el modo */
+        .download-page button {
             background-color: #ff9800;
             color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            text-align: center;
-            transition: background-color 0.3s;
-        }
-
-        .download-links a:hover {
-            background-color: #e68900;
-        }
-
-        /* Botón para volver */
-        .back-btn {
-            display: block;
-            margin: 20px auto;
             padding: 10px 20px;
-            background-color: #444;
-            color: white;
-            text-decoration: none;
-            text-align: center;
+            border: none;
             border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+            text-align: center;
         }
 
-        .back-btn:hover {
-            background-color: #555;
+        /* Efecto hover para enlaces */
+        .download-page a:hover {
+            color: #333;
+        }
+
+        /* Formulario de contacto */
+        #contact-section {
+            background-color: #333;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        #contact-section h2 {
+            margin-bottom: 20px;
+            color: #ff9800;
+        }
+
+        #contact-section form input,
+        #contact-section form textarea {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        #contact-section form button {
+            background-color: #ff9800;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #contact-section a {
+            display: block;
+            color: #ff9800;
+            margin-top: 20px;
+            font-size: 18px;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -189,22 +270,95 @@
 
     <div id="content"></div>
 
-    <!-- Página de descarga -->
-    <div class="download-page">
-        <h1>Descargar Película</h1>
-        <img src="assets/images/movie-poster.jpg" alt="Poster de la película">
-        <p>Disfruta de la mejor calidad con esta película disponible en múltiples resoluciones.</p>
-        <h3>Enlaces de descarga:</h3>
-        <div class="download-links">
-            <a href="https://www.mediafire.com/file/abcd1234/720p_pelicula.rar" target="_blank">720p (Mediafire)</a>
-            <a href="https://www.mediafire.com/file/abcd5678/1080p_pelicula.rar" target="_blank">1080p (Mediafire)</a>
-            <a href="https://www.mediafire.com/file/abcd91011/4k_pelicula.rar" target="_blank">4K (Mediafire)</a>
-        </div>
-        <a href="#" class="back-btn">Volver a la página principal</a>
+    <!-- Comment Section -->
+    <div id="comments-section">
+        <textarea id="comment-input" placeholder="Escribe tu comentario..."></textarea>
+        <button onclick="submitComment()">Enviar comentario</button>
+        <div id="comments-list"></div>
+    </div>
+
+    <div class="social-media">
+        <a href="#" target="_blank">Facebook</a>
+        <a href="#" target="_blank">Twitter</a>
+    </div>
+
+    <!-- Formulario de contacto y Telegram -->
+    <div id="contact-section">
+        <h2>Contáctanos</h2>
+        <form action="https://formspree.io/f/{YOUR_FORM_ID}" method="POST">
+            <input type="text" name="name" placeholder="Tu nombre" required>
+            <input type="email" name="email" placeholder="Tu correo electrónico" required>
+            <textarea name="message" rows="5" placeholder="Tu mensaje..." required></textarea>
+            <button type="submit">Enviar mensaje</button>
+        </form>
+        <a href="https://t.me/tu_grupo_telegram" target="_blank">Únete a nuestro grupo de Telegram</a>
     </div>
 
     <script>
-        // Funciones existentes aquí...
+        const API_URL = "https://api.themoviedb.org/3";
+        const API_KEY = "9e9698108533009ffe2584455b931f5a"; // Reemplaza con tu clave API de TMDb
+        let currentPage = 1;
+
+        // Función para cargar películas populares
+        async function loadPopularMovies() {
+            const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es&page=${currentPage}`);
+            const data = await response.json();
+            displayMovies(data.results);
+        }
+
+        // Función para mostrar películas
+        function displayMovies(movies) {
+            const contentDiv = document.getElementById('content');
+            contentDiv.innerHTML = '';
+            movies.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.classList.add('movie-card');
+                movieCard.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                    <h4>${movie.title}</h4>
+                    <p>${movie.release_date}</p>
+                `;
+                movieCard.addEventListener('click', () => openMoviePage(movie.id));
+                contentDiv.appendChild(movieCard);
+            });
+        }
+
+        // Función para abrir página de película
+        function openMoviePage(movieId) {
+            window.open(`movie-details.html?id=${movieId}`, '_blank');
+        }
+
+        // Función para alternar el modo oscuro
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // Función de búsqueda
+        function searchMovies() {
+            const query = document.getElementById('search-input').value;
+            if (query.length >= 3) {
+                fetch(`${API_URL}/search/movie?api_key=${API_KEY}&language=es&query=${query}`)
+                    .then(response => response.json())
+                    .then(data => displayMovies(data.results));
+            }
+        }
+
+        // Función para enviar comentario
+        function submitComment() {
+            const commentInput = document.getElementById('comment-input');
+            const commentText = commentInput.value;
+            if (commentText.trim()) {
+                const commentList = document.getElementById('comments-list');
+                const newComment = document.createElement('div');
+                newComment.classList.add('comment');
+                newComment.innerText = commentText;
+                commentList.appendChild(newComment);
+                commentInput.value = '';
+            }
+        }
+
+        // Cargar películas al inicio
+        loadPopularMovies();
     </script>
 </body>
 </html>
