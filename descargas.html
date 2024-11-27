@@ -15,6 +15,14 @@
         <div id="movie-details">
             <!-- Detalles de la película se cargarán aquí -->
         </div>
+        <div id="recommendations">
+            <h2>Películas Recomendadas</h2>
+            <div id="recommendation-container"></div>
+        </div>
+        <div id="rating-section">
+            <h3>Tu Valoración:</h3>
+            <button id="rate-movie" onclick="rateMovie()">Poner una Estrella</button>
+        </div>
         <div id="download-links">
             <button onclick="downloadMovie('480p')">Descargar 480p</button>
             <button onclick="downloadMovie('720p')">Descargar 720p</button>
@@ -39,6 +47,7 @@
             const response = await fetch(`${API_URL}/movie/${movieId}?api_key=${API_KEY}&language=es`);
             const data = await response.json();
             displayMovieDetails(data);
+            loadRecommendations(data.id);
         }
 
         function displayMovieDetails(movie) {
@@ -55,20 +64,38 @@
             loadActors(movie.id);
         }
 
-        async function loadActors(movieId) {
-            const response = await fetch(`${API_URL}/movie/${movieId}/credits?api_key=${API_KEY}`);
+        async function loadRecommendations(movieId) {
+            const response = await fetch(`${API_URL}/movie/${movieId}/recommendations?api_key=${API_KEY}&language=es`);
             const data = await response.json();
-            const actorsList = document.getElementById('actors-list');
-            data.cast.slice(0, 5).forEach(actor => {
-                const li = document.createElement('li');
-                li.textContent = actor.name;
-                actorsList.appendChild(li);
+            const container = document.getElementById('recommendation-container');
+            data.results.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.classList.add('movie-card');
+                movieCard.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                    <h3>${movie.title}</h3>
+                `;
+                container.appendChild(movieCard);
             });
         }
 
-        function downloadMovie(resolution) {
-            alert(`Descargando película en resolución ${resolution}...`);
-            // Lógica para manejar la descarga
+        function loadActors(movieId) {
+            const response = fetch(`${API_URL}/movie/${movieId}/credits?api_key=${API_KEY}`);
+            response.then(res => res.json())
+                .then(data => {
+                    const actorsList = document.getElementById('actors-list');
+                    data.cast.slice(0, 5).forEach(actor => {
+                        const li = document.createElement('li');
+                        li.textContent = actor.name;
+                        actorsList.appendChild(li);
+                    });
+                });
+        }
+
+        function rateMovie() {
+            const rating = prompt("¿Cuál es tu calificación de 1 a 10?");
+            alert(`Gracias por valorar esta película con ${rating} estrellas!`);
+            // Guardar la valoración o enviar a un servidor.
         }
 
         loadMovieDetails();
