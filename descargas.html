@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles de la Película</title>
     <style>
+        /* Estilos generales */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -12,6 +13,8 @@
             background-color: #f4f4f4;
             color: #333;
         }
+
+        /* Sección de detalles */
         #movie-details-section {
             padding: 20px;
             background-color: white;
@@ -19,10 +22,12 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             margin: 20px;
         }
+
         .movie-poster img {
             width: 300px;
             border-radius: 10px;
         }
+
         .download-links a {
             display: inline-block;
             margin: 10px 5px;
@@ -33,9 +38,11 @@
             text-decoration: none;
             transition: background-color 0.3s;
         }
+
         .download-links a:hover {
             background-color: #ff9800;
         }
+
         #back-btn {
             display: inline-block;
             margin-top: 20px;
@@ -48,53 +55,75 @@
             text-decoration: none;
             transition: background-color 0.3s;
         }
+
         #back-btn:hover {
             background-color: #ff9800;
         }
     </style>
 </head>
 <body>
-    <div id="movie-details-section">
-        <div class="movie-poster">
-            <img id="movie-poster" src="" alt="">
-        </div>
-        <div class="movie-info">
-            <h2 id="movie-title"></h2>
-            <p id="movie-overview"></p>
-            <p><strong>Fecha de lanzamiento:</strong> <span id="movie-release-date"></span></p>
-            <p><strong>Duración:</strong> <span id="movie-runtime"></span> minutos</p>
-            <p><strong>Calificación:</strong> <span id="movie-rating"></span>/10</p>
-            <div class="download-links">
-                <h3>Descargas:</h3>
-                <a href="#" target="_blank">480p</a>
-                <a href="#" target="_blank">720p</a>
-                <a href="#" target="_blank">1080p</a>
-                <a href="#" target="_blank">4K</a>
+    <header>
+        <h1>Detalles de la Película</h1>
+    </header>
+
+    <main>
+        <div id="movie-details-section">
+            <div class="movie-poster">
+                <img id="movie-poster" src="" alt="Póster de la película">
             </div>
+            <div class="movie-info">
+                <h2 id="movie-title"></h2>
+                <p id="movie-overview"></p>
+                <p><strong>Fecha de lanzamiento:</strong> <span id="movie-release-date"></span></p>
+                <p><strong>Duración:</strong> <span id="movie-runtime"></span> minutos</p>
+                <p><strong>Calificación:</strong> <span id="movie-rating"></span>/10</p>
+                <div class="download-links">
+                    <h3>Descargas:</h3>
+                    <a href="#" target="_blank">480p</a>
+                    <a href="#" target="_blank">720p</a>
+                    <a href="#" target="_blank">1080p</a>
+                    <a href="#" target="_blank">4K</a>
+                </div>
+            </div>
+            <a id="back-btn" href="index.html">Regresar</a>
         </div>
-        <a id="back-btn" href="index.html">Regresar</a>
-    </div>
+    </main>
 
     <script>
         const API_URL = "https://api.themoviedb.org/3";
         const API_KEY = "9e9698108533009ffe2584455b931f5a";
 
-        const queryParams = new URLSearchParams(window.location.search);
-        const movieId = queryParams.get("movieId");
-
-        async function showMovieDetails() {
-            const response = await fetch(`${API_URL}/movie/${movieId}?api_key=${API_KEY}&language=es`);
-            const movie = await response.json();
-
-            document.getElementById('movie-poster').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-            document.getElementById('movie-title').innerText = movie.title;
-            document.getElementById('movie-overview').innerText = movie.overview;
-            document.getElementById('movie-release-date').innerText = movie.release_date;
-            document.getElementById('movie-runtime').innerText = movie.runtime;
-            document.getElementById('movie-rating').innerText = movie.vote_average;
+        // Función para obtener el movieId desde la URL
+        function getMovieIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('movieId');
         }
 
-        showMovieDetails();
+        // Función para cargar los detalles de la película
+        async function loadMovieDetails(movieId) {
+            try {
+                const response = await fetch(`${API_URL}/movie/${movieId}?api_key=${API_KEY}&language=es`);
+                const movie = await response.json();
+
+                // Mostrar los detalles
+                document.getElementById('movie-poster').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+                document.getElementById('movie-title').innerText = movie.title;
+                document.getElementById('movie-overview').innerText = movie.overview;
+                document.getElementById('movie-release-date').innerText = movie.release_date;
+                document.getElementById('movie-runtime').innerText = movie.runtime;
+                document.getElementById('movie-rating').innerText = movie.vote_average;
+            } catch (error) {
+                console.error("Error al cargar los detalles de la película:", error);
+            }
+        }
+
+        // Obtener el movieId de la URL
+        const movieId = getMovieIdFromUrl();
+        if (movieId) {
+            loadMovieDetails(movieId);
+        } else {
+            console.error("No se proporcionó un movieId en la URL");
+        }
     </script>
 </body>
 </html>
