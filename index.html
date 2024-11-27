@@ -18,6 +18,23 @@
             padding: 15px;
             text-align: center;
         }
+        nav {
+            text-align: center;
+            margin-top: 10px;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
         #content {
             display: flex;
             flex-wrap: wrap;
@@ -43,23 +60,88 @@
             width: 100%;
             border-radius: 10px;
         }
+        #loading {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            display: none;
+        }
+        select, button {
+            margin: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
     </style>
 </head>
 <body>
     <header>
         <h1>Películas y Series Interactivas</h1>
     </header>
+
+    <!-- Navegación -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="series.html">Series</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <!-- Filtro de Géneros -->
+    <select id="genre-filter" onchange="loadMoviesByGenre(this.value)">
+        <option value="">Seleccionar Género</option>
+        <option value="28">Acción</option>
+        <option value="35">Comedia</option>
+        <option value="18">Drama</option>
+    </select>
+
+    <!-- Contenedor de Películas -->
     <div id="content"></div>
+
+    <!-- Indicador de Carga -->
+    <div id="loading">Cargando...</div>
+
+    <!-- Cargar más películas -->
+    <button id="load-more" onclick="loadPopularMovies()">Cargar más películas</button>
 
     <script>
         const API_URL = "https://api.themoviedb.org/3";
         const API_KEY = "9e9698108533009ffe2584455b931f5a";
-
         const contentDiv = document.getElementById('content');
 
+        // Función para mostrar el indicador de carga
+        function toggleLoading(isLoading) {
+            document.getElementById('loading').style.display = isLoading ? 'block' : 'none';
+        }
+
+        // Cargar películas populares
         async function loadPopularMovies() {
+            toggleLoading(true);
             const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es`);
             const data = await response.json();
+            toggleLoading(false);
+            data.results.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.classList.add('movie-card');
+                movieCard.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                    <h4>${movie.title}</h4>
+                `;
+                movieCard.addEventListener('click', () => {
+                    window.location.href = `descargas.html?movieId=${movie.id}`;
+                });
+                contentDiv.appendChild(movieCard);
+            });
+        }
+
+        // Filtrar por género
+        async function loadMoviesByGenre(genreId) {
+            toggleLoading(true);
+            const response = await fetch(`${API_URL}/discover/movie?api_key=${API_KEY}&language=es&with_genres=${genreId}`);
+            const data = await response.json();
+            toggleLoading(false);
+            contentDiv.innerHTML = ''; // Limpiar el contenido antes de mostrar las películas filtradas
             data.results.forEach(movie => {
                 const movieCard = document.createElement('div');
                 movieCard.classList.add('movie-card');
