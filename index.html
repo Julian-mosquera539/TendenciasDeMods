@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Películas y Series Interactivas</title>
     <style>
-        /* Estilos generales */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -13,27 +12,19 @@
             background-color: #f4f4f4;
             color: #333;
         }
-
         header {
             background-color: #222;
             color: white;
             padding: 15px;
             text-align: center;
         }
-
-        #content, #movie-details-section {
-            display: none;
-            padding: 20px;
-        }
-
-        /* Estilos de la lista de películas */
         #content {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
+            padding: 20px;
         }
-
         .movie-card {
             background-color: white;
             width: 220px;
@@ -44,98 +35,13 @@
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
         .movie-card:hover {
             transform: scale(1.05);
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
         }
-
         .movie-card img {
             width: 100%;
             border-radius: 10px;
-        }
-
-        /* Estilos de detalles de película */
-        #movie-details-section {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-
-        .movie-poster {
-            float: left;
-            margin-right: 20px;
-        }
-
-        .movie-poster img {
-            width: 300px;
-            border-radius: 10px;
-        }
-
-        .movie-info {
-            overflow: hidden;
-        }
-
-        .download-links a {
-            display: inline-block;
-            margin: 10px 5px;
-            padding: 10px 15px;
-            background-color: #222;
-            color: white;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-
-        .download-links a:hover {
-            background-color: #ff9800;
-        }
-
-        /* Estilos para tráiler */
-        #trailer iframe {
-            width: 100%;
-            height: 400px;
-            margin-top: 20px;
-            border: none;
-        }
-
-        /* Estilos para películas relacionadas */
-        .related-movies {
-            margin-top: 30px;
-        }
-
-        .related-movies h2 {
-            margin-bottom: 10px;
-        }
-
-        .related-movies .movie-card {
-            display: inline-block;
-            width: 180px;
-            margin: 10px;
-        }
-
-        .related-movies .movie-card img {
-            width: 100%;
-            border-radius: 5px;
-        }
-
-        /* Botón regresar */
-        #back-btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 15px;
-            background-color: #222;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-
-        #back-btn:hover {
-            background-color: #ff9800;
         }
     </style>
 </head>
@@ -143,50 +49,17 @@
     <header>
         <h1>Películas y Series Interactivas</h1>
     </header>
-
-    <!-- Lista de películas -->
     <div id="content"></div>
-
-    <!-- Detalles de película -->
-    <div id="movie-details-section">
-        <div class="movie-poster">
-            <img id="movie-poster" src="" alt="">
-        </div>
-        <div class="movie-info">
-            <h2 id="movie-title"></h2>
-            <p id="movie-overview"></p>
-            <p><strong>Fecha de lanzamiento:</strong> <span id="movie-release-date"></span></p>
-            <p><strong>Duración:</strong> <span id="movie-runtime"></span> minutos</p>
-            <p><strong>Calificación:</strong> <span id="movie-rating"></span>/10</p>
-            <div class="download-links">
-                <h3>Descargas:</h3>
-                <a href="#" target="_blank">480p</a>
-                <a href="#" target="_blank">720p</a>
-                <a href="#" target="_blank">1080p</a>
-                <a href="#" target="_blank">4K</a>
-            </div>
-        </div>
-        <div id="trailer"></div>
-        <div class="related-movies" id="related-movies">
-            <h2>Películas relacionadas</h2>
-        </div>
-        <a id="back-btn" href="#">Regresar</a>
-    </div>
 
     <script>
         const API_URL = "https://api.themoviedb.org/3";
         const API_KEY = "9e9698108533009ffe2584455b931f5a";
 
         const contentDiv = document.getElementById('content');
-        const movieDetailsSection = document.getElementById('movie-details-section');
-        const backBtn = document.getElementById('back-btn');
 
-        // Función para mostrar la lista de películas
         async function loadPopularMovies() {
             const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es`);
             const data = await response.json();
-            contentDiv.style.display = 'flex';
-            movieDetailsSection.style.display = 'none';
             data.results.forEach(movie => {
                 const movieCard = document.createElement('div');
                 movieCard.classList.add('movie-card');
@@ -194,68 +67,13 @@
                     <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
                     <h4>${movie.title}</h4>
                 `;
-                movieCard.addEventListener('click', () => showMovieDetails(movie.id));
+                movieCard.addEventListener('click', () => {
+                    window.location.href = `descargas.html?movieId=${movie.id}`;
+                });
                 contentDiv.appendChild(movieCard);
             });
         }
 
-        // Función para mostrar detalles de una película
-        async function showMovieDetails(movieId) {
-            const response = await fetch(`${API_URL}/movie/${movieId}?api_key=${API_KEY}&language=es`);
-            const movie = await response.json();
-
-            document.getElementById('movie-poster').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-            document.getElementById('movie-title').innerText = movie.title;
-            document.getElementById('movie-overview').innerText = movie.overview;
-            document.getElementById('movie-release-date').innerText = movie.release_date;
-            document.getElementById('movie-runtime').innerText = movie.runtime;
-            document.getElementById('movie-rating').innerText = movie.vote_average;
-
-            contentDiv.style.display = 'none';
-            movieDetailsSection.style.display = 'block';
-
-            // Mostrar tráiler
-            fetchTrailer(movie.id);
-
-            // Mostrar películas relacionadas
-            fetchRelatedMovies(movie.genres[0].id);
-        }
-
-        // Función para mostrar tráiler
-        async function fetchTrailer(movieId) {
-            const response = await fetch(`${API_URL}/movie/${movieId}/videos?api_key=${API_KEY}&language=es`);
-            const data = await response.json();
-            const trailer = data.results.find(video => video.type === "Trailer");
-            const trailerDiv = document.getElementById('trailer');
-            trailerDiv.innerHTML = trailer ? `
-                <iframe src="https://www.youtube.com/embed/${trailer.key}" allowfullscreen></iframe>
-            ` : '<p>Tráiler no disponible.</p>';
-        }
-
-        // Función para mostrar películas relacionadas
-        async function fetchRelatedMovies(genreId) {
-            const response = await fetch(`${API_URL}/discover/movie?api_key=${API_KEY}&language=es&with_genres=${genreId}`);
-            const data = await response.json();
-            const relatedDiv = document.getElementById('related-movies');
-            relatedDiv.innerHTML = `<h2>Películas relacionadas</h2>`;
-            data.results.forEach(movie => {
-                const movieCard = document.createElement('div');
-                movieCard.classList.add('movie-card');
-                movieCard.innerHTML = `
-                    <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}">
-                    <p>${movie.title}</p>
-                `;
-                relatedDiv.appendChild(movieCard);
-            });
-        }
-
-        // Botón regresar
-        backBtn.addEventListener('click', () => {
-            movieDetailsSection.style.display = 'none';
-            contentDiv.style.display = 'flex';
-        });
-
-        // Cargar películas populares al inicio
         loadPopularMovies();
     </script>
 </body>
