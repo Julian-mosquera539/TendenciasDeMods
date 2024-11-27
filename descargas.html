@@ -112,6 +112,15 @@
                 document.getElementById('movie-release-date').innerText = movie.release_date;
                 document.getElementById('movie-runtime').innerText = movie.runtime;
                 document.getElementById('movie-rating').innerText = movie.vote_average;
+
+                // Lógica para agregar los enlaces de descarga dinámicamente
+                const downloadLinks = document.querySelector('.download-links');
+                downloadLinks.innerHTML += `
+                    <a href="http://example.com/download/${movieId}/480p" target="_blank">480p</a>
+                    <a href="http://example.com/download/${movieId}/720p" target="_blank">720p</a>
+                    <a href="http://example.com/download/${movieId}/1080p" target="_blank">1080p</a>
+                    <a href="http://example.com/download/${movieId}/4k" target="_blank">4K</a>
+                `;
             } catch (error) {
                 console.error("Error al cargar los detalles de la película:", error);
             }
