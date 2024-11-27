@@ -9,6 +9,13 @@
 <body>
     <header>
         <h1>Series Populares</h1>
+        <select id="genre-filter" onchange="filterSeries()">
+            <option value="0">Seleccionar Género</option>
+            <option value="28">Acción</option>
+            <option value="35">Comedia</option>
+            <option value="18">Drama</option>
+            <!-- Agrega más géneros según tus necesidades -->
+        </select>
     </header>
 
     <main>
@@ -33,19 +40,24 @@
 
         function displaySeries(series) {
             const container = document.getElementById('series-container');
-            container.innerHTML = "";
-            series.forEach(serie => {
-                const serieCard = document.createElement('div');
-                serieCard.classList.add('serie-card');
-                serieCard.innerHTML = `
-                    <img src="https://image.tmdb.org/t/p/w500${serie.poster_path}" alt="${serie.name}">
-                    <h3>${serie.name}</h3>
+            series.forEach(tvShow => {
+                const seriesCard = document.createElement('div');
+                seriesCard.classList.add('series-card');
+                seriesCard.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w500${tvShow.poster_path}" alt="${tvShow.name}">
+                    <h3>${tvShow.name}</h3>
                 `;
-                serieCard.addEventListener('click', () => {
-                    window.location.href = `descargas.html?movieId=${serie.id}`;
-                });
-                container.appendChild(serieCard);
+                container.appendChild(seriesCard);
             });
+        }
+
+        function filterSeries() {
+            const genre = document.getElementById('genre-filter').value;
+            const url = genre === "0" ? `${API_URL}/tv/popular?api_key=${API_KEY}&language=es` :
+                `${API_URL}/discover/tv?api_key=${API_KEY}&with_genres=${genre}`;
+            fetch(url)
+                .then(res => res.json())
+                .then(data => displaySeries(data.results));
         }
 
         loadSeries();
