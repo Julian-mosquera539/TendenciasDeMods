@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Series Interactivas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #222;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        nav {
+            text-align: center;
+            margin-top: 10px;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        #content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .series-card {
+            background-color: white;
+            width: 220px;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .series-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+        .series-card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        #back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #222;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        #back-btn:hover {
+            background-color: #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Series Interactivas</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="series.html">Series</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <div id="content">
+        <div class="series-card">
+            <img src="https://via.placeholder.com/220x300.png?text=Serie+1" alt="Serie 1">
+            <h4>Serie 1</h4>
+        </div>
+        <div class="series-card">
+            <img src="https://via.placeholder.com/220x300.png?text=Serie+2" alt="Serie 2">
+            <h4>Serie 2</h4>
+        </div>
+        <div class="series-card">
+            <img src="https://via.placeholder.com/220x300.png?text=Serie+3" alt="Serie 3">
+            <h4>Serie 3</h4>
+        </div>
+    </div>
+
+    <a id="back-btn" href="index.html">Regresar</a>
+
+    <script>
+        // Aquí puedes agregar más lógica si necesitas hacer solicitudes para cargar series desde una API
+    </script>
+</body>
+</html>
