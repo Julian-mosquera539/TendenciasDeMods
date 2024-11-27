@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -8,39 +8,30 @@
         /* Estilos generales */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f1f1f1;
-            color: #333;
             margin: 0;
             padding: 0;
-            transition: background-color 0.3s ease;
+            background-color: #f4f4f4;
+            color: #333;
         }
 
         header {
-            background-color: #333;
+            background-color: #222;
             color: white;
-            padding: 10px 20px;
+            padding: 15px;
             text-align: center;
-            position: relative;
         }
 
-        #dark-mode-btn {
-            background-color: #444;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            cursor: pointer;
-            position: absolute;
-            top: 10px;
-            right: 20px;
+        #content, #movie-details-section {
+            display: none;
+            padding: 20px;
         }
 
+        /* Estilos de la lista de películas */
         #content {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
-            padding: 20px;
-            transition: transform 0.3s ease;
         }
 
         .movie-card {
@@ -62,302 +53,209 @@
         .movie-card img {
             width: 100%;
             border-radius: 10px;
-            transition: transform 0.3s ease;
         }
 
-        .movie-card img:hover {
-            transform: scale(1.1);
+        /* Estilos de detalles de película */
+        #movie-details-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
         }
 
-        .movie-card h4 {
-            margin: 10px 0;
+        .movie-poster {
+            float: left;
+            margin-right: 20px;
         }
 
-        .movie-card p {
-            font-size: 14px;
-            color: #555;
+        .movie-poster img {
+            width: 300px;
+            border-radius: 10px;
         }
 
-        /* Parallax scrolling effect */
-        .parallax {
-            background: url('https://via.placeholder.com/1500') no-repeat center center fixed;
-            background-size: cover;
-            height: 300px;
-            position: relative;
+        .movie-info {
+            overflow: hidden;
         }
 
-        /* Comments and other sections */
-        #comments-section {
-            margin-top: 20px;
-        }
-
-        .comment {
-            background-color: #f1f1f1;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-
-        /* Modo oscuro */
-        .dark-mode {
-            background-color: #333;
+        .download-links a {
+            display: inline-block;
+            margin: 10px 5px;
+            padding: 10px 15px;
+            background-color: #222;
             color: white;
-        }
-
-        .search-bar {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .search-bar input {
-            padding: 10px;
-            width: 300px;
             border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-
-        /* 360° interactive movie images */
-        .movie-card img {
-            cursor: pointer;
-        }
-
-        /* Social media links */
-        .social-media {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .social-media a {
-            margin: 0 10px;
-            font-size: 20px;
-            color: #555;
-        }
-
-        /* Estilos para la página de descarga */
-        .download-page {
-            background-color: #1a1a1a;
-            color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 800px;
-            margin: 20px auto;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        }
-
-        .download-page h1 {
-            font-size: 2em;
-            color: #ff9800;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .download-page img {
-            width: 300px;
-            display: block;
-            margin: 20px auto;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .download-page p {
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        .download-page h3 {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            color: #ff9800;
-        }
-
-        .download-page ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .download-page li {
-            margin-bottom: 15px;
-            background-color: #333;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .download-page li:hover {
-            background-color: #ff9800;
-            cursor: pointer;
-        }
-
-        .download-page a {
-            color: #fff;
             text-decoration: none;
-            font-size: 16px;
+            transition: background-color 0.3s;
         }
 
-        /* Botón para cambiar el modo */
-        .download-page button {
+        .download-links a:hover {
             background-color: #ff9800;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
-            display: block;
+        }
+
+        /* Estilos para tráiler */
+        #trailer iframe {
             width: 100%;
-            text-align: center;
+            height: 400px;
+            margin-top: 20px;
+            border: none;
         }
 
-        /* Efecto hover para enlaces */
-        .download-page a:hover {
-            color: #333;
+        /* Estilos para películas relacionadas */
+        .related-movies {
+            margin-top: 30px;
         }
 
-        /* Formulario de contacto */
-        #contact-section {
-            background-color: #333;
-            color: white;
-            padding: 30px;
-            text-align: center;
+        .related-movies h2 {
+            margin-bottom: 10px;
         }
 
-        #contact-section h2 {
-            margin-bottom: 20px;
-            color: #ff9800;
+        .related-movies .movie-card {
+            display: inline-block;
+            width: 180px;
+            margin: 10px;
         }
 
-        #contact-section form input,
-        #contact-section form textarea {
-            width: 80%;
-            padding: 10px;
-            margin: 10px 0;
+        .related-movies .movie-card img {
+            width: 100%;
             border-radius: 5px;
-            border: 1px solid #ddd;
         }
 
-        #contact-section form button {
-            background-color: #ff9800;
+        /* Botón regresar */
+        #back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #222;
             color: white;
-            padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 20px;
+            text-decoration: none;
+            transition: background-color 0.3s;
         }
 
-        #contact-section a {
-            display: block;
-            color: #ff9800;
-            margin-top: 20px;
-            font-size: 18px;
-            text-decoration: none;
+        #back-btn:hover {
+            background-color: #ff9800;
         }
     </style>
 </head>
 <body>
     <header>
         <h1>Películas y Series Interactivas</h1>
-        <button id="dark-mode-btn" onclick="toggleDarkMode()">Modo Oscuro</button>
     </header>
 
-    <!-- Parallax Background -->
-    <div class="parallax"></div>
-
-    <div class="search-bar">
-        <input type="text" id="search-input" placeholder="Buscar película o serie..." onkeyup="searchMovies()">
-    </div>
-
+    <!-- Lista de películas -->
     <div id="content"></div>
 
-    <!-- Comment Section -->
-    <div id="comments-section">
-        <textarea id="comment-input" placeholder="Escribe tu comentario..."></textarea>
-        <button onclick="submitComment()">Enviar comentario</button>
-        <div id="comments-list"></div>
-    </div>
-
-    <div class="social-media">
-        <a href="#" target="_blank">Facebook</a>
-        <a href="#" target="_blank">Twitter</a>
-    </div>
-
-    <!-- Formulario de contacto y Telegram -->
-    <div id="contact-section">
-        <h2>Contáctanos</h2>
-        <form action="https://formspree.io/f/{YOUR_FORM_ID}" method="POST">
-            <input type="text" name="name" placeholder="Tu nombre" required>
-            <input type="email" name="email" placeholder="Tu correo electrónico" required>
-            <textarea name="message" rows="5" placeholder="Tu mensaje..." required></textarea>
-            <button type="submit">Enviar mensaje</button>
-        </form>
-        <a href="https://t.me/tu_grupo_telegram" target="_blank">Únete a nuestro grupo de Telegram</a>
+    <!-- Detalles de película -->
+    <div id="movie-details-section">
+        <div class="movie-poster">
+            <img id="movie-poster" src="" alt="">
+        </div>
+        <div class="movie-info">
+            <h2 id="movie-title"></h2>
+            <p id="movie-overview"></p>
+            <p><strong>Fecha de lanzamiento:</strong> <span id="movie-release-date"></span></p>
+            <p><strong>Duración:</strong> <span id="movie-runtime"></span> minutos</p>
+            <p><strong>Calificación:</strong> <span id="movie-rating"></span>/10</p>
+            <div class="download-links">
+                <h3>Descargas:</h3>
+                <a href="#" target="_blank">480p</a>
+                <a href="#" target="_blank">720p</a>
+                <a href="#" target="_blank">1080p</a>
+                <a href="#" target="_blank">4K</a>
+            </div>
+        </div>
+        <div id="trailer"></div>
+        <div class="related-movies" id="related-movies">
+            <h2>Películas relacionadas</h2>
+        </div>
+        <a id="back-btn" href="#">Regresar</a>
     </div>
 
     <script>
         const API_URL = "https://api.themoviedb.org/3";
-        const API_KEY = "9e9698108533009ffe2584455b931f5a"; // Reemplaza con tu clave API de TMDb
-        let currentPage = 1;
+        const API_KEY = "9e9698108533009ffe2584455b931f5a";
 
-        // Función para cargar películas populares
+        const contentDiv = document.getElementById('content');
+        const movieDetailsSection = document.getElementById('movie-details-section');
+        const backBtn = document.getElementById('back-btn');
+
+        // Función para mostrar la lista de películas
         async function loadPopularMovies() {
-            const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es&page=${currentPage}`);
+            const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es`);
             const data = await response.json();
-            displayMovies(data.results);
-        }
-
-        // Función para mostrar películas
-        function displayMovies(movies) {
-            const contentDiv = document.getElementById('content');
-            contentDiv.innerHTML = '';
-            movies.forEach(movie => {
+            contentDiv.style.display = 'flex';
+            movieDetailsSection.style.display = 'none';
+            data.results.forEach(movie => {
                 const movieCard = document.createElement('div');
                 movieCard.classList.add('movie-card');
                 movieCard.innerHTML = `
                     <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
                     <h4>${movie.title}</h4>
-                    <p>${movie.release_date}</p>
                 `;
-                movieCard.addEventListener('click', () => openMoviePage(movie.id));
+                movieCard.addEventListener('click', () => showMovieDetails(movie.id));
                 contentDiv.appendChild(movieCard);
             });
         }
 
-        // Función para abrir página de película
-        function openMoviePage(movieId) {
-            window.open(`movie-details.html?id=${movieId}`, '_blank');
+        // Función para mostrar detalles de una película
+        async function showMovieDetails(movieId) {
+            const response = await fetch(`${API_URL}/movie/${movieId}?api_key=${API_KEY}&language=es`);
+            const movie = await response.json();
+
+            document.getElementById('movie-poster').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+            document.getElementById('movie-title').innerText = movie.title;
+            document.getElementById('movie-overview').innerText = movie.overview;
+            document.getElementById('movie-release-date').innerText = movie.release_date;
+            document.getElementById('movie-runtime').innerText = movie.runtime;
+            document.getElementById('movie-rating').innerText = movie.vote_average;
+
+            contentDiv.style.display = 'none';
+            movieDetailsSection.style.display = 'block';
+
+            // Mostrar tráiler
+            fetchTrailer(movie.id);
+
+            // Mostrar películas relacionadas
+            fetchRelatedMovies(movie.genres[0].id);
         }
 
-        // Función para alternar el modo oscuro
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
+        // Función para mostrar tráiler
+        async function fetchTrailer(movieId) {
+            const response = await fetch(`${API_URL}/movie/${movieId}/videos?api_key=${API_KEY}&language=es`);
+            const data = await response.json();
+            const trailer = data.results.find(video => video.type === "Trailer");
+            const trailerDiv = document.getElementById('trailer');
+            trailerDiv.innerHTML = trailer ? `
+                <iframe src="https://www.youtube.com/embed/${trailer.key}" allowfullscreen></iframe>
+            ` : '<p>Tráiler no disponible.</p>';
         }
 
-        // Función de búsqueda
-        function searchMovies() {
-            const query = document.getElementById('search-input').value;
-            if (query.length >= 3) {
-                fetch(`${API_URL}/search/movie?api_key=${API_KEY}&language=es&query=${query}`)
-                    .then(response => response.json())
-                    .then(data => displayMovies(data.results));
-            }
+        // Función para mostrar películas relacionadas
+        async function fetchRelatedMovies(genreId) {
+            const response = await fetch(`${API_URL}/discover/movie?api_key=${API_KEY}&language=es&with_genres=${genreId}`);
+            const data = await response.json();
+            const relatedDiv = document.getElementById('related-movies');
+            relatedDiv.innerHTML = `<h2>Películas relacionadas</h2>`;
+            data.results.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.classList.add('movie-card');
+                movieCard.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}">
+                    <p>${movie.title}</p>
+                `;
+                relatedDiv.appendChild(movieCard);
+            });
         }
 
-        // Función para enviar comentario
-        function submitComment() {
-            const commentInput = document.getElementById('comment-input');
-            const commentText = commentInput.value;
-            if (commentText.trim()) {
-                const commentList = document.getElementById('comments-list');
-                const newComment = document.createElement('div');
-                newComment.classList.add('comment');
-                newComment.innerText = commentText;
-                commentList.appendChild(newComment);
-                commentInput.value = '';
-            }
-        }
+        // Botón regresar
+        backBtn.addEventListener('click', () => {
+            movieDetailsSection.style.display = 'none';
+            contentDiv.style.display = 'flex';
+        });
 
-        // Cargar películas al inicio
+        // Cargar películas populares al inicio
         loadPopularMovies();
     </script>
 </body>
