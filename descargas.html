@@ -3,115 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Descargar Película - Tu Sitio de Películas</title>
-    <link rel="stylesheet" href="styles/styles.css">
+    <title>Detalles de la Película</title>
     <style>
-        /* Estilos para la página de descarga */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
         }
-
-        header {
-            background-color: #333;
-            color: white;
-            text-align: center;
+        #movie-details-section {
             padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin: 20px;
         }
-
-        .content {
-            padding: 20px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .movie-details {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .movie-details img {
-            max-width: 300px;
+        .movie-poster img {
+            width: 300px;
             border-radius: 10px;
         }
-
-        .download-links {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            gap: 15px;
-        }
-
         .download-links a {
-            padding: 10px;
-            background-color: #ff9800;
+            display: inline-block;
+            margin: 10px 5px;
+            padding: 10px 15px;
+            background-color: #222;
             color: white;
-            text-decoration: none;
             border-radius: 5px;
-            font-size: 18px;
+            text-decoration: none;
             transition: background-color 0.3s;
         }
-
         .download-links a:hover {
-            background-color: #e68900;
+            background-color: #ff9800;
         }
-
-        .back-btn {
+        #back-btn {
             display: inline-block;
             margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #333;
+            padding: 10px 15px;
+            background-color: #222;
             color: white;
-            text-decoration: none;
+            border: none;
             border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
         }
-
-        .back-btn:hover {
-            background-color: #444;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .movie-details {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .download-links {
-                align-items: center;
-            }
+        #back-btn:hover {
+            background-color: #ff9800;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Película - Título de la Película</h1>
-    </header>
-
-    <div class="content">
-        <div class="movie-details">
-            <img src="assets/images/movie-poster.jpg" alt="Poster de la película">
-            <div class="movie-description">
-                <h2>Descripción de la Película</h2>
-                <p>Sinopsis de la película...</p>
-                <p><strong>Año de estreno:</strong> 2023</p>
-                <p><strong>Género:</strong> Acción, Aventura</p>
-                <p><strong>Duración:</strong> 120 minutos</p>
-                <p><strong>Calificación:</strong> 8.5/10</p>
+    <div id="movie-details-section">
+        <div class="movie-poster">
+            <img id="movie-poster" src="" alt="">
+        </div>
+        <div class="movie-info">
+            <h2 id="movie-title"></h2>
+            <p id="movie-overview"></p>
+            <p><strong>Fecha de lanzamiento:</strong> <span id="movie-release-date"></span></p>
+            <p><strong>Duración:</strong> <span id="movie-runtime"></span> minutos</p>
+            <p><strong>Calificación:</strong> <span id="movie-rating"></span>/10</p>
+            <div class="download-links">
+                <h3>Descargas:</h3>
+                <a href="#" target="_blank">480p</a>
+                <a href="#" target="_blank">720p</a>
+                <a href="#" target="_blank">1080p</a>
+                <a href="#" target="_blank">4K</a>
             </div>
         </div>
-
-        <div class="download-links">
-            <h3>Enlaces de descarga</h3>
-            <a href="https://www.mediafire.com/file/abcd1234/720p_pelicula.rar" target="_blank">720p (Mediafire)</a>
-            <a href="https://www.mediafire.com/file/abcd5678/1080p_pelicula.rar" target="_blank">1080p (Mediafire)</a>
-            <a href="https://www.mediafire.com/file/abcd91011/4k_pelicula.rar" target="_blank">4K (Mediafire)</a>
-        </div>
-
-        <a href="index.html" class="back-btn">Volver a la página principal</a>
+        <a id="back-btn" href="index.html">Regresar</a>
     </div>
+
+    <script>
+        const API_URL = "https://api.themoviedb.org/3";
+        const API_KEY = "9e9698108533009ffe2584455b931f5a";
+
+        const queryParams = new URLSearchParams(window.location.search);
+        const movieId = queryParams.get("movieId");
+
+        async function showMovieDetails() {
+            const response = await fetch(`${API_URL}/movie/${movieId}?api_key=${API_KEY}&language=es`);
+            const movie = await response.json();
+
+            document.getElementById('movie-poster').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+            document.getElementById('movie-title').innerText = movie.title;
+            document.getElementById('movie-overview').innerText = movie.overview;
+            document.getElementById('movie-release-date').innerText = movie.release_date;
+            document.getElementById('movie-runtime').innerText = movie.runtime;
+            document.getElementById('movie-rating').innerText = movie.vote_average;
+        }
+
+        showMovieDetails();
+    </script>
 </body>
 </html>
