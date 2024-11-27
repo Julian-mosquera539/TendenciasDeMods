@@ -3,59 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Series</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            padding: 0;
-            margin: 0;
-        }
-
-        #content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .series-card {
-            width: 220px;
-            padding: 10px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .series-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .series-card img {
-            width: 100%;
-            border-radius: 10px;
-        }
-
-    </style>
+    <title>Series Populares</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
     <header>
-        <h1>Series</h1>
+        <h1>Series Populares</h1>
     </header>
 
-    <div id="content">
-        <!-- Aquí puedes agregar una lista de series con imágenes o integrarlas desde la API -->
-    </div>
+    <main>
+        <section id="series-container">
+            <!-- Las series se cargarán aquí -->
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Tu Sitio de Películas</p>
+    </footer>
 
     <script>
-        // Aquí iría el código para cargar las series desde la API de TMDb
-    </script>
+        const API_URL = "https://api.themoviedb.org/3";
+        const API_KEY = "9e9698108533009ffe2584455b931f5a"; // Reemplaza con tu API Key
 
+        async function loadSeries() {
+            const response = await fetch(`${API_URL}/tv/popular?api_key=${API_KEY}&language=es`);
+            const data = await response.json();
+            displaySeries(data.results);
+        }
+
+        function displaySeries(series) {
+            const container = document.getElementById('series-container');
+            container.innerHTML = "";
+            series.forEach(serie => {
+                const serieCard = document.createElement('div');
+                serieCard.classList.add('serie-card');
+                serieCard.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w500${serie.poster_path}" alt="${serie.name}">
+                    <h3>${serie.name}</h3>
+                `;
+                serieCard.addEventListener('click', () => {
+                    window.location.href = `descargas.html?movieId=${serie.id}`;
+                });
+                container.appendChild(serieCard);
+            });
+        }
+
+        loadSeries();
+    </script>
 </body>
 </html>
