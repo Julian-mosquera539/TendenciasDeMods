@@ -3,193 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscador de Películas</title>
+    <title>Películas y Series Interactivas</title>
     <style>
-        /* Estilos generales */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f7f7f7;
+            background-color: #f4f4f4;
             color: #333;
         }
-
         header {
-            background-color: #333;
+            background-color: #222;
             color: white;
-            padding: 20px 0;
-            text-align: center;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-        }
-
-        /* Formulario de búsqueda */
-        .search-bar {
-            max-width: 800px;
-            margin: 30px auto;
-            text-align: center;
-        }
-
-        .search-bar input {
-            padding: 10px;
-            width: 70%;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        .search-bar button {
-            padding: 10px 20px;
-            background-color: #ff5722;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        .search-bar button:hover {
-            background-color: #e64a19;
-        }
-
-        /* Sección de categorías */
-        .categories {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin: 20px 0;
-        }
-
-        .category-btn {
-            background-color: #4caf50;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s;
-        }
-
-        .category-btn:hover {
-            background-color: #388e3c;
-        }
-
-        /* Resultados de búsqueda */
-        .movie-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-            padding: 0 20px;
-        }
-
-        .movie-item {
-            background-color: white;
             padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
-
-        .movie-item img {
-            width: 100%;
-            border-radius: 8px;
+        #content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
         }
-
-        .movie-item h3 {
-            margin-top: 10px;
-            font-size: 1.2rem;
-        }
-
-        .movie-item p {
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .movie-item button {
-            background-color: #008CBA;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
+        .movie-card {
+            background-color: white;
+            width: 220px;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
             cursor: pointer;
-            margin-top: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
-        .movie-item button:hover {
-            background-color: #006F8E;
+        .movie-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+        .movie-card img {
+            width: 100%;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Buscador de Películas</h1>
+        <h1>Películas y Series Interactivas</h1>
     </header>
-
-    <div class="search-bar">
-        <input type="text" id="search-input" placeholder="Buscar una película...">
-        <button onclick="searchMovies()">Buscar</button>
-    </div>
-
-    <div class="categories">
-        <button class="category-btn" onclick="filterByCategory('28')">Acción</button>
-        <button class="category-btn" onclick="filterByCategory('35')">Comedia</button>
-        <button class="category-btn" onclick="filterByCategory('18')">Drama</button>
-        <button class="category-btn" onclick="filterByCategory('27')">Terror</button>
-        <button class="category-btn" onclick="filterByCategory('10749')">Románticas</button>
-        <button class="category-btn" onclick="filterByCategory('878')">Ciencia Ficción</button>
-    </div>
-
-    <div id="movie-list" class="movie-list"></div>
+    <div id="content"></div>
 
     <script>
         const API_URL = "https://api.themoviedb.org/3";
         const API_KEY = "9e9698108533009ffe2584455b931f5a";
 
-        // Función para buscar películas
-        async function searchMovies() {
-            const query = document.getElementById('search-input').value;
-            if (!query) return;
+        const contentDiv = document.getElementById('content');
 
-            const response = await fetch(`${API_URL}/search/movie?api_key=${API_KEY}&query=${query}&language=es`);
+        async function loadPopularMovies() {
+            const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es`);
             const data = await response.json();
-            displayMovies(data.results);
-        }
-
-        // Función para filtrar por categoría
-        async function filterByCategory(categoryId) {
-            const response = await fetch(`${API_URL}/discover/movie?api_key=${API_KEY}&with_genres=${categoryId}&language=es`);
-            const data = await response.json();
-            displayMovies(data.results);
-        }
-
-        // Mostrar los resultados de las películas
-        function displayMovies(movies) {
-            const movieList = document.getElementById('movie-list');
-            movieList.innerHTML = "";  // Limpiar la lista de películas
-
-            if (movies.length === 0) {
-                movieList.innerHTML = "<p>No se encontraron resultados.</p>";
-                return;
-            }
-
-            movies.forEach(movie => {
-                const movieElement = document.createElement('div');
-                movieElement.classList.add('movie-item');
-                movieElement.innerHTML = `
+            data.results.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.classList.add('movie-card');
+                movieCard.innerHTML = `
                     <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-                    <h3>${movie.title}</h3>
-                    <p>${movie.overview.substring(0, 100)}...</p>
-                    <button onclick="window.location.href='movie-details.html?movieId=${movie.id}'">Ver detalles</button>
+                    <h4>${movie.title}</h4>
                 `;
-                movieList.appendChild(movieElement);
+                movieCard.addEventListener('click', () => {
+                    window.location.href = `descargas.html?movieId=${movie.id}`;
+                });
+                contentDiv.appendChild(movieCard);
             });
         }
+
+        loadPopularMovies();
     </script>
 </body>
 </html>
