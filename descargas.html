@@ -21,26 +21,17 @@
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             margin: 20px;
+            text-align: center;
         }
 
         .movie-poster img {
             width: 300px;
             border-radius: 10px;
+            cursor: pointer;
         }
 
-        .download-links a {
-            display: inline-block;
-            margin: 10px 5px;
-            padding: 10px 15px;
-            background-color: #222;
-            color: white;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-
-        .download-links a:hover {
-            background-color: #ff9800;
+        .movie-info {
+            margin-top: 20px;
         }
 
         #back-btn {
@@ -77,13 +68,6 @@
                 <p><strong>Fecha de lanzamiento:</strong> <span id="movie-release-date"></span></p>
                 <p><strong>Duración:</strong> <span id="movie-runtime"></span> minutos</p>
                 <p><strong>Calificación:</strong> <span id="movie-rating"></span>/10</p>
-                <div class="download-links">
-                    <h3>Descargas:</h3>
-                    <a href="#" target="_blank">480p</a>
-                    <a href="#" target="_blank">720p</a>
-                    <a href="#" target="_blank">1080p</a>
-                    <a href="#" target="_blank">4K</a>
-                </div>
             </div>
             <a id="back-btn" href="index.html">Regresar</a>
         </div>
@@ -113,14 +97,10 @@
                 document.getElementById('movie-runtime').innerText = movie.runtime;
                 document.getElementById('movie-rating').innerText = movie.vote_average;
 
-                // Lógica para agregar los enlaces de descarga dinámicamente
-                const downloadLinks = document.querySelector('.download-links');
-                downloadLinks.innerHTML += `
-                    <a href="http://example.com/download/${movieId}/480p" target="_blank">480p</a>
-                    <a href="http://example.com/download/${movieId}/720p" target="_blank">720p</a>
-                    <a href="http://example.com/download/${movieId}/1080p" target="_blank">1080p</a>
-                    <a href="http://example.com/download/${movieId}/4k" target="_blank">4K</a>
-                `;
+                // Hacer clic en el póster lleva a la página de descargas
+                document.getElementById('movie-poster').onclick = () => {
+                    window.location.href = `descargas.html?movieId=${movieId}`;
+                };
             } catch (error) {
                 console.error("Error al cargar los detalles de la película:", error);
             }
