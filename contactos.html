@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('https://source.unsplash.com/1600x900/?nature,water') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        header {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 100%;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            font-size: 2.5em;
+            color: #ff9800;
+            margin: 0;
+        }
+        .contact-form {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        .contact-form h2 {
+            text-align: center;
+            font-size: 1.8em;
+            color: #222;
+            margin-bottom: 20px;
+        }
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            background-color: #fff;
+            color: #333;
+        }
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .contact-form button {
+            background-color: #222;
+            color: #fff;
+            padding: 15px 20px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        .contact-form button:hover {
+            background-color: #ff9800;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            background-color: #222;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            width: 200px;
+            margin: 0 auto;
+            font-size: 1.2em;
+            transition: background-color 0.3s;
+        }
+        .back-link:hover {
+            background-color: #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Formulario de Contacto</h1>
+    </header>
+
+    <div class="contact-form">
+        <h2>Envíanos tu mensaje</h2>
+        <form action="mailto:julianmosquera333@gmail.com" method="post" enctype="text/plain">
+            <input type="text" name="name" placeholder="Tu nombre" required>
+            <input type="email" name="email" placeholder="Tu correo" required>
+            <textarea name="message" placeholder="Tu mensaje" required></textarea>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+
+    <a href="index.html" class="back-link">Regresar al inicio</a>
+</body>
+</html>
