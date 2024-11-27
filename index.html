@@ -85,7 +85,6 @@
         <ul>
             <li><a href="index.html">Inicio</a></li>
             <li><a href="series.html">Series</a></li>
-            <li><a href="contacto.html">Contacto</a></li>
         </ul>
     </nav>
 
@@ -111,52 +110,75 @@
         const API_KEY = "9e9698108533009ffe2584455b931f5a";
         const contentDiv = document.getElementById('content');
 
-        // Función para mostrar el indicador de carga
+        // Mostrar el indicador de carga
         function toggleLoading(isLoading) {
             document.getElementById('loading').style.display = isLoading ? 'block' : 'none';
         }
 
         // Cargar películas populares
         async function loadPopularMovies() {
-            toggleLoading(true);
-            const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es`);
-            const data = await response.json();
-            toggleLoading(false);
-            data.results.forEach(movie => {
-                const movieCard = document.createElement('div');
-                movieCard.classList.add('movie-card');
-                movieCard.innerHTML = `
-                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-                    <h4>${movie.title}</h4>
-                `;
-                movieCard.addEventListener('click', () => {
-                    window.location.href = `descargas.html?movieId=${movie.id}`;
+            try {
+                toggleLoading(true);
+                const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es`);
+                const data = await response.json();
+                toggleLoading(false);
+
+                if (data.results.length === 0) {
+                    contentDiv.innerHTML = "<p>No hay películas disponibles.</p>";
+                    return;
+                }
+
+                data.results.forEach(movie => {
+                    const movieCard = document.createElement('div');
+                    movieCard.classList.add('movie-card');
+                    movieCard.innerHTML = `
+                        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                        <h4>${movie.title}</h4>
+                    `;
+                    movieCard.addEventListener('click', () => {
+                        window.location.href = `descargas.html?movieId=${movie.id}`;
+                    });
+                    contentDiv.appendChild(movieCard);
                 });
-                contentDiv.appendChild(movieCard);
-            });
+            } catch (error) {
+                console.error("Error al cargar las películas:", error);
+                toggleLoading(false);
+            }
         }
 
-        // Filtrar por género
+        // Filtrar películas por género
         async function loadMoviesByGenre(genreId) {
-            toggleLoading(true);
-            const response = await fetch(`${API_URL}/discover/movie?api_key=${API_KEY}&language=es&with_genres=${genreId}`);
-            const data = await response.json();
-            toggleLoading(false);
-            contentDiv.innerHTML = ''; // Limpiar el contenido antes de mostrar las películas filtradas
-            data.results.forEach(movie => {
-                const movieCard = document.createElement('div');
-                movieCard.classList.add('movie-card');
-                movieCard.innerHTML = `
-                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-                    <h4>${movie.title}</h4>
-                `;
-                movieCard.addEventListener('click', () => {
-                    window.location.href = `descargas.html?movieId=${movie.id}`;
+            try {
+                toggleLoading(true);
+                const response = await fetch(`${API_URL}/discover/movie?api_key=${API_KEY}&language=es&with_genres=${genreId}`);
+                const data = await response.json();
+                toggleLoading(false);
+
+                contentDiv.innerHTML = ''; // Limpiar contenido previo
+                if (data.results.length === 0) {
+                    contentDiv.innerHTML = "<p>No se encontraron películas para este género.</p>";
+                    return;
+                }
+
+                data.results.forEach(movie => {
+                    const movieCard = document.createElement('div');
+                    movieCard.classList.add('movie-card');
+                    movieCard.innerHTML = `
+                        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                        <h4>${movie.title}</h4>
+                    `;
+                    movieCard.addEventListener('click', () => {
+                        window.location.href = `descargas.html?movieId=${movie.id}`;
+                    });
+                    contentDiv.appendChild(movieCard);
                 });
-                contentDiv.appendChild(movieCard);
-            });
+            } catch (error) {
+                console.error("Error al filtrar las películas:", error);
+                toggleLoading(false);
+            }
         }
 
+        // Cargar películas populares al iniciar
         loadPopularMovies();
     </script>
 </body>
