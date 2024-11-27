@@ -9,18 +9,12 @@
 <body>
     <header>
         <h1>Series Populares</h1>
-        <select id="genre-filter" onchange="filterSeries()">
-            <option value="0">Seleccionar Género</option>
-            <option value="28">Acción</option>
-            <option value="35">Comedia</option>
-            <option value="18">Drama</option>
-            <!-- Agrega más géneros según tus necesidades -->
-        </select>
+        <input type="text" id="search-series" placeholder="Busca una serie..." onkeyup="searchSeries()">
     </header>
 
     <main>
         <section id="series-container">
-            <!-- Las series se cargarán aquí -->
+            <!-- Series se cargarán aquí -->
         </section>
     </main>
 
@@ -30,7 +24,7 @@
 
     <script>
         const API_URL = "https://api.themoviedb.org/3";
-        const API_KEY = "9e9698108533009ffe2584455b931f5a"; // Reemplaza con tu API Key
+        const API_KEY = "TU_API_KEY"; // Reemplaza con tu API Key
 
         async function loadSeries() {
             const response = await fetch(`${API_URL}/tv/popular?api_key=${API_KEY}&language=es`);
@@ -40,24 +34,29 @@
 
         function displaySeries(series) {
             const container = document.getElementById('series-container');
+            container.innerHTML = '';
             series.forEach(tvShow => {
                 const seriesCard = document.createElement('div');
                 seriesCard.classList.add('series-card');
                 seriesCard.innerHTML = `
-                    <img src="https://image.tmdb.org/t/p/w500${tvShow.poster_path}" alt="${tvShow.name}">
+                    <img src="https://image.tmdb.org/t/p/w500${tvShow.poster_path}" alt="${tvShow.name}" style="filter: neon;">
                     <h3>${tvShow.name}</h3>
                 `;
                 container.appendChild(seriesCard);
             });
         }
 
-        function filterSeries() {
-            const genre = document.getElementById('genre-filter').value;
-            const url = genre === "0" ? `${API_URL}/tv/popular?api_key=${API_KEY}&language=es` :
-                `${API_URL}/discover/tv?api_key=${API_KEY}&with_genres=${genre}`;
-            fetch(url)
-                .then(res => res.json())
-                .then(data => displaySeries(data.results));
+        function searchSeries() {
+            const searchQuery = document.getElementById('search-series').value.toLowerCase();
+            const cards = document.querySelectorAll('.series-card');
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                if (title.includes(searchQuery)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
         }
 
         loadSeries();
