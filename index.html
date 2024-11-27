@@ -3,87 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Películas Populares</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Películas y Series Interactivas</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #222;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        nav {
+            text-align: center;
+            margin-top: 10px;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        #content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .movie-card {
+            background-color: white;
+            width: 220px;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .movie-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+        .movie-card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        #loading {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            display: none;
+        }
+        select, button {
+            margin: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Películas Populares</h1>
-        <input type="text" id="search-bar" placeholder="Busca una película..." onkeyup="searchMovies()">
+        <h1>Películas y Series Interactivas</h1>
     </header>
 
-    <main>
-        <section id="movies-container">
-            <!-- Películas se cargarán aquí -->
-        </section>
-    </main>
+    <!-- Navegación -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="series.html">Series</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+    </nav>
 
-    <footer>
-        <p>&copy; 2024 Tu Sitio de Películas</p>
-    </footer>
+    <!-- Filtro de Géneros -->
+    <select id="genre-filter" onchange="loadMoviesByGenre(this.value)">
+        <option value="">Seleccionar Género</option>
+        <option value="28">Acción</option>
+        <option value="35">Comedia</option>
+        <option value="18">Drama</option>
+    </select>
+
+    <!-- Contenedor de Películas -->
+    <div id="content"></div>
+
+    <!-- Indicador de Carga -->
+    <div id="loading">Cargando...</div>
+
+    <!-- Cargar más películas -->
+    <button id="load-more" onclick="loadPopularMovies()">Cargar más películas</button>
 
     <script>
         const API_URL = "https://api.themoviedb.org/3";
-        const API_KEY = "TU_API_KEY"; // Reemplaza con tu API Key
-        let currentPage = 1;
-        let darkMode = localStorage.getItem('darkMode') === 'true';
+        const API_KEY = "9e9698108533009ffe2584455b931f5a";
+        const contentDiv = document.getElementById('content');
 
-        async function loadMovies(page = 1) {
-            const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&page=${page}&language=es`);
-            const data = await response.json();
-            displayMovies(data.results);
+        // Función para mostrar el indicador de carga
+        function toggleLoading(isLoading) {
+            document.getElementById('loading').style.display = isLoading ? 'block' : 'none';
         }
 
-        function displayMovies(movies) {
-            const container = document.getElementById('movies-container');
-            movies.forEach(movie => {
+        // Cargar películas populares
+        async function loadPopularMovies() {
+            toggleLoading(true);
+            const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es`);
+            const data = await response.json();
+            toggleLoading(false);
+            data.results.forEach(movie => {
                 const movieCard = document.createElement('div');
                 movieCard.classList.add('movie-card');
                 movieCard.innerHTML = `
                     <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-                    <h3>${movie.title}</h3>
+                    <h4>${movie.title}</h4>
                 `;
                 movieCard.addEventListener('click', () => {
                     window.location.href = `descargas.html?movieId=${movie.id}`;
                 });
-                container.appendChild(movieCard);
-
-                // Animación al hacer scroll (IntersectionObserver)
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('fade-in');
-                        }
-                    });
-                });
-                observer.observe(movieCard);
+                contentDiv.appendChild(movieCard);
             });
         }
 
-        function searchMovies() {
-            const query = document.getElementById('search-bar').value;
-            if (query) {
-                fetch(`${API_URL}/search/movie?api_key=${API_KEY}&query=${query}&language=es`)
-                    .then(response => response.json())
-                    .then(data => displayMovies(data.results));
-            } else {
-                loadMovies(currentPage);
-            }
+        // Filtrar por género
+        async function loadMoviesByGenre(genreId) {
+            toggleLoading(true);
+            const response = await fetch(`${API_URL}/discover/movie?api_key=${API_KEY}&language=es&with_genres=${genreId}`);
+            const data = await response.json();
+            toggleLoading(false);
+            contentDiv.innerHTML = ''; // Limpiar el contenido antes de mostrar las películas filtradas
+            data.results.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.classList.add('movie-card');
+                movieCard.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                    <h4>${movie.title}</h4>
+                `;
+                movieCard.addEventListener('click', () => {
+                    window.location.href = `descargas.html?movieId=${movie.id}`;
+                });
+                contentDiv.appendChild(movieCard);
+            });
         }
 
-        window.addEventListener('scroll', () => {
-            if (window.scrollY + window.innerHeight >= document.body.offsetHeight) {
-                loadMovies(++currentPage);
-            }
-        });
-
-        // Activar modo oscuro según la preferencia del sistema
-        if (darkMode) {
-            document.body.classList.add('dark-mode');
-        }
-
-        document.body.classList.toggle('dark-mode', darkMode);
-        loadMovies();
+        loadPopularMovies();
     </script>
 </body>
 </html>
