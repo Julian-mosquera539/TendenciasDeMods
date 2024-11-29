@@ -3,87 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Descargar</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        header {
-            background-color: #222;
-            color: white;
-            text-align: center;
-            padding: 15px;
-        }
-        .movie-details {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .movie-details img {
-            width: 100%;
-            border-radius: 10px;
-        }
-        .movie-info {
-            margin-top: 20px;
-        }
-        .movie-info h2 {
-            margin-bottom: 10px;
-        }
-    </style>
+    <title>Descargas</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Descargar Contenido</h1>
+        <h1>Descargas</h1>
+        <button id="dark-mode-toggle">Modo Oscuro</button>
     </header>
-    <div class="movie-details">
-        <img id="movie-poster" alt="Poster de la película o serie">
-        <div class="movie-info">
-            <h2 id="movie-title">Título</h2>
-            <p id="movie-description">Descripción</p>
-            <p><strong>Reparto:</strong> <span id="movie-cast">Cargando...</span></p>
-        </div>
-    </div>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Películas</a></li>
+            <li><a href="series.html">Series</a></li>
+            <li><a href="descargas.html">Descargas</a></li>
+        </ul>
+    </nav>
+
+    <!-- Listado de descargas -->
+    <section id="downloads">
+        <h2>Contenido Descargado</h2>
+        <ul id="download-list">
+            <li>No hay descargas todavía. ¡Empieza a agregar contenido!</li>
+        </ul>
+    </section>
+
+    <!-- Sección para agregar descargas -->
+    <section id="add-download">
+        <h2>Agregar Descargas</h2>
+        <input type="text" id="download-input" placeholder="Título de la película o serie...">
+        <button onclick="addDownload()">Agregar</button>
+    </section>
+
     <script>
-        const API_URL = "https://api.themoviedb.org/3";
-        const API_KEY = "9e9698108533009ffe2584455b931f5a";
+        const downloadList = document.getElementById('download-list');
 
-        const params = new URLSearchParams(window.location.search);
-        const movieId = params.get('movieId') || params.get('seriesId');
-
-        async function loadDetails() {
-            try {
-                const response = await fetch(`${API_URL}/movie/${movieId}?api_key=${API_KEY}&language=es`);
-                const data = await response.json();
-
-                document.getElementById('movie-title').textContent = data.title || data.name;
-                document.getElementById('movie-description').textContent = data.overview;
-                document.getElementById('movie-poster').src = `https://image.tmdb.org/t/p/w500${data.poster_path}`;
-
-                loadCast(movieId);
-            } catch (error) {
-                console.error("Error al cargar detalles:", error);
-            }
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
         }
 
-        async function loadCast(movieId) {
-            try {
-                const response = await fetch(`${API_URL}/movie/${movieId}/credits?api_key=${API_KEY}&language=es`);
-                const data = await response.json();
-                const cast = data.cast.slice(0, 5).map(actor => actor.name).join(', ');
-                document.getElementById('movie-cast').textContent = cast || 'Información no disponible';
-            } catch (error) {
-                console.error("Error al cargar el reparto:", error);
-            }
-        }
+        document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
 
-        loadDetails();
+        function addDownload() {
+            const title = document.getElementById('download-input').value;
+            if (title.trim() === '') return;
+
+            const listItem = document.createElement('li');
+            listItem.textContent = title;
+            downloadList.appendChild(listItem);
+
+            document.getElementById('download-input').value = '';
+        }
     </script>
 </body>
 </html>
