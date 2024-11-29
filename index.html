@@ -53,18 +53,32 @@
             width: 100%;
             border-radius: 10px;
         }
+        .auth-container {
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <header>
         <h1>Bienvenido al Portal de Películas y Series</h1>
     </header>
+    
+    <!-- Sección de autenticación -->
+    <div class="auth-container">
+        <button id="loginButton" class="btn btn-danger">Iniciar sesión con Google</button>
+        <button id="logoutButton" class="btn btn-secondary" style="display:none;">Cerrar sesión</button>
+    </div>
+
     <div id="searchForm" class="container">
         <input id="searchInput" type="text" class="form-control" placeholder="Buscar películas o series...">
         <button id="searchButton" class="btn btn-primary btn-block mt-2">Buscar</button>
     </div>
+
     <div id="results" class="container"></div>
+
     <script>
+        // Configuración de la API de TMDb
         const API_URL = "https://api.themoviedb.org/3";
         const API_KEY = "9e9698108533009ffe2584455b931f5a";
         const resultsDiv = document.getElementById("results");
@@ -78,8 +92,44 @@
             messagingSenderId: "tu-messaging-sender-id",
             appId: "tu-app-id"
         };
+
+        // Inicializa Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+
+        // Detectar cambios de estado de autenticación
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                document.getElementById('loginButton').style.display = 'none';
+                document.getElementById('logoutButton').style.display = 'inline-block';
+                console.log('Usuario autenticado:', user);
+            } else {
+                document.getElementById('loginButton').style.display = 'inline-block';
+                document.getElementById('logoutButton').style.display = 'none';
+                console.log('No hay usuario autenticado');
+            }
+        });
+
+        // Iniciar sesión con Google
+        document.getElementById("loginButton").addEventListener("click", async () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            try {
+                const result = await auth.signInWithPopup(provider);
+                console.log("Usuario autenticado:", result.user);
+            } catch (error) {
+                console.error("Error de autenticación:", error);
+            }
+        });
+
+        // Cerrar sesión
+        document.getElementById("logoutButton").addEventListener("click", async () => {
+            try {
+                await auth.signOut();
+                console.log("Usuario cerrado sesión");
+            } catch (error) {
+                console.error("Error al cerrar sesión:", error);
+            }
+        });
 
         // Buscar películas y series
         document.getElementById("searchButton").addEventListener("click", async () => {
@@ -114,3 +164,4 @@
     </script>
 </body>
 </html>
+
