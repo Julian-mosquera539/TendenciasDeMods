@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f9f9f9;
             color: #333;
         }
 
@@ -56,34 +56,6 @@
             color: #ff9800;
         }
 
-        .search-bar {
-            margin: 20px auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .search-bar input {
-            width: 70%;
-            padding: 10px;
-            border-radius: 5px 0 0 5px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-        }
-
-        .search-bar button {
-            padding: 10px 20px;
-            border: none;
-            background-color: #222;
-            color: white;
-            border-radius: 0 5px 5px 0;
-            cursor: pointer;
-        }
-
-        .search-bar button:hover {
-            background-color: #ff9800;
-        }
-
         .section-title {
             text-align: center;
             margin: 40px 0 20px;
@@ -91,40 +63,71 @@
             color: #222;
         }
 
-        #content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             padding: 0 20px;
         }
 
-        .series-card {
+        .grid-item {
             background-color: white;
-            width: 220px;
-            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
-            cursor: pointer;
+            padding: 15px;
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        .series-card:hover {
+        .grid-item:hover {
             transform: scale(1.05);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
-        .series-card img {
+        .grid-item img {
             width: 100%;
             border-radius: 10px;
         }
 
-        footer {
-            text-align: center;
+        .favorites-section {
+            margin: 40px 20px;
+        }
+
+        .favorites-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .favorites-section li {
+            background-color: white;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .favorites-section li button {
             background-color: #222;
             color: white;
-            padding: 10px 0;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .favorites-section li button:hover {
+            background-color: #ff9800;
+        }
+
+        footer {
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
             margin-top: 40px;
         }
     </style>
@@ -142,14 +145,19 @@
         </ul>
     </nav>
 
-    <div class="search-bar">
-        <input type="text" id="search-series-input" placeholder="Buscar series...">
-        <button onclick="searchSeries()">Buscar</button>
-    </div>
+    <section>
+        <h2 class="section-title">Recomendaciones por Categorías</h2>
+        <div class="grid-container" id="category-recommendations"></div>
+    </section>
 
     <section>
-        <h2 class="section-title">Series Más Vistas</h2>
-        <div id="content"></div>
+        <h2 class="section-title">Populares por País</h2>
+        <div class="grid-container" id="country-popular"></div>
+    </section>
+
+    <section class="favorites-section">
+        <h2 class="section-title">Mis Favoritos</h2>
+        <ul id="favorites-list"></ul>
     </section>
 
     <footer>
@@ -159,48 +167,75 @@
     <script>
         const API_URL = "https://api.themoviedb.org/3";
         const API_KEY = "9e9698108533009ffe2584455b931f5a";
-        const contentDiv = document.getElementById('content');
+
+        const categoryDiv = document.getElementById('category-recommendations');
+        const countryDiv = document.getElementById('country-popular');
+        const favoritesList = document.getElementById('favorites-list');
+        let favorites = [];
 
         async function fetchSeries(endpoint) {
             const response = await fetch(`${API_URL}/${endpoint}?api_key=${API_KEY}&language=es`);
             return response.json();
         }
 
-        function createSeriesCard(series) {
-            const card = document.createElement('div');
-            card.className = 'series-card';
-            card.innerHTML = `
-                <img src="https://image.tmdb.org/t/p/w500${series.poster_path}" alt="${series.name}">
-                <h4>${series.name}</h4>
-            `;
-            card.addEventListener('click', () => {
-                window.location.href = `descargas.html?seriesId=${series.id}`;
+        async function loadCategoryRecommendations() {
+            const genres = [
+                { id: 10759, name: "Acción y Aventura" },
+                { id: 16, name: "Animación" },
+                { id: 35, name: "Comedia" }
+            ];
+
+            genres.forEach(genre => {
+                const categoryCard = document.createElement('div');
+                categoryCard.className = 'grid-item';
+                categoryCard.innerHTML = `
+                    <h4>${genre.name}</h4>
+                    <button onclick="alert('Cargando series de ${genre.name}')">Ver más</button>
+                `;
+                categoryDiv.appendChild(categoryCard);
             });
-            return card;
         }
 
-        async function loadSeries() {
+        async function loadPopularByCountry() {
             const data = await fetchSeries('tv/popular');
-            data.results.forEach(series => {
-                contentDiv.appendChild(createSeriesCard(series));
+            data.results.slice(0, 8).forEach(series => {
+                const countryCard = document.createElement('div');
+                countryCard.className = 'grid-item';
+                countryCard.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w500${series.poster_path}" alt="${series.name}">
+                    <h4>${series.name}</h4>
+                    <button onclick="addToFavorites('${series.name}')">Agregar a Favoritos</button>
+                `;
+                countryDiv.appendChild(countryCard);
             });
         }
 
-        async function searchSeries() {
-            const query = document.getElementById('search-series-input').value;
-            if (!query) return alert('Por favor, introduce una búsqueda válida.');
-            contentDiv.innerHTML = '';
-            const data = await fetchSeries(`search/tv?query=${query}`);
-            if (data.results.length === 0) {
-                contentDiv.innerHTML = '<p>No se encontraron resultados.</p>';
-                return;
+        function addToFavorites(seriesName) {
+            if (!favorites.includes(seriesName)) {
+                favorites.push(seriesName);
+                updateFavoritesList();
             }
-            data.results.forEach(series => {
-                contentDiv.appendChild(createSeriesCard(series));
+        }
+
+        function updateFavoritesList() {
+            favoritesList.innerHTML = '';
+            favorites.forEach(name => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${name}</span>
+                    <button onclick="removeFromFavorites('${name}')">Eliminar</button>
+                `;
+                favoritesList.appendChild(li);
             });
         }
 
-        loadSeries();
+        function removeFromFavorites(seriesName) {
+            favorites = favorites.filter(fav => fav !== seriesName);
+            updateFavoritesList();
+        }
+
+        loadCategoryRecommendations();
+        loadPopularByCountry();
     </script>
 </body>
 </html>
