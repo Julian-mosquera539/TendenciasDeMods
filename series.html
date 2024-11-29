@@ -3,239 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Series - Películas y Series Interactivas</title>
+    <title>Detalles de la Serie</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
             background-color: #f9f9f9;
             color: #333;
+            margin: 0;
+            padding: 0;
         }
 
         header {
-            background-color: #222;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        header h1 {
-            margin: 0;
-        }
-
-        nav {
             background-color: #333;
-            text-align: center;
-            padding: 10px 0;
-        }
-
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        nav ul li {
-            margin: 0 15px;
-        }
-
-        nav ul li a {
             color: white;
-            text-decoration: none;
-            font-size: 16px;
-            transition: color 0.3s;
-        }
-
-        nav ul li a:hover {
-            color: #ff9800;
-        }
-
-        .section-title {
+            padding: 20px;
             text-align: center;
-            margin: 40px 0 20px;
-            font-size: 24px;
-            color: #222;
         }
 
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            padding: 0 20px;
-        }
-
-        .grid-item {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            padding: 15px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .grid-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .grid-item img {
-            width: 100%;
-            border-radius: 10px;
-        }
-
-        .favorites-section {
-            margin: 40px 20px;
-        }
-
-        .favorites-section ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .favorites-section li {
-            background-color: white;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
+        .series-details {
+            padding: 20px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
         }
 
-        .favorites-section li button {
-            background-color: #222;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
+        .series-details img {
+            width: 300px;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .series-info {
+            max-width: 600px;
+            margin-left: 20px;
+        }
+
+        .series-info h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .series-info p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .rating-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+        }
+
+        .stars {
+            display: flex;
             cursor: pointer;
         }
 
-        .favorites-section li button:hover {
-            background-color: #ff9800;
+        .star {
+            font-size: 24px;
+            color: #ccc;
+            transition: color 0.2s ease;
         }
 
-        footer {
-            background-color: #222;
-            color: white;
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 40px;
+        .star:hover {
+            color: gold;
+        }
+
+        .comments {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .comments h3 {
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        .comment {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+        }
+
+        .comment .user {
+            font-weight: bold;
+        }
+
+        .comment p {
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Series Populares</h1>
-    </header>
 
-    <nav>
-        <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="series.html">Series</a></li>
-            <li><a href="descargas.html">Descargas</a></li>
-        </ul>
-    </nav>
+<header>
+    <h1>Detalles de la Serie</h1>
+</header>
 
-    <section>
-        <h2 class="section-title">Recomendaciones por Categorías</h2>
-        <div class="grid-container" id="category-recommendations"></div>
-    </section>
+<div class="series-details">
+    <img src="https://via.placeholder.com/300x450" alt="Serie">
+    <div class="series-info">
+        <h2>Serie Nombre</h2>
+        <p><strong>Género:</strong> Drama, Acción</p>
+        <p><strong>Sinopsis:</strong> Esta es una descripción extensa de la serie. Aquí va el resumen de la trama y más detalles sobre los personajes principales.</p>
+    </div>
+</div>
 
-    <section>
-        <h2 class="section-title">Populares por País</h2>
-        <div class="grid-container" id="country-popular"></div>
-    </section>
+<section class="rating-container">
+    <h4>Valoración de la serie</h4>
+    <div class="stars">
+        <span class="star" onclick="rateSeries(1)">&#9733;</span>
+        <span class="star" onclick="rateSeries(2)">&#9733;</span>
+        <span class="star" onclick="rateSeries(3)">&#9733;</span>
+        <span class="star" onclick="rateSeries(4)">&#9733;</span>
+        <span class="star" onclick="rateSeries(5)">&#9733;</span>
+    </div>
+</section>
 
-    <section class="favorites-section">
-        <h2 class="section-title">Mis Favoritos</h2>
-        <ul id="favorites-list"></ul>
-    </section>
+<section class="comments">
+    <h3>Comentarios</h3>
+    <div class="comment">
+        <div class="user">Usuario1</div>
+        <p>¡Excelente serie! Me mantuvo enganchado desde el principio hasta el final.</p>
+    </div>
+    <div class="comment">
+        <div class="user">Usuario2</div>
+        <p>Muy buena trama, aunque el final me dejó con dudas.</p>
+    </div>
+</section>
 
-    <footer>
-        <p>&copy; 2024 - Películas y Series Interactivas. Todos los derechos reservados.</p>
-    </footer>
+<script>
+    function rateSeries(rating) {
+        alert(`Has calificado con ${rating} estrellas.`);
+    }
+</script>
 
-    <script>
-        const API_URL = "https://api.themoviedb.org/3";
-        const API_KEY = "9e9698108533009ffe2584455b931f5a";
-
-        const categoryDiv = document.getElementById('category-recommendations');
-        const countryDiv = document.getElementById('country-popular');
-        const favoritesList = document.getElementById('favorites-list');
-        let favorites = [];
-
-        async function fetchSeries(endpoint) {
-            const response = await fetch(`${API_URL}/${endpoint}?api_key=${API_KEY}&language=es`);
-            return response.json();
-        }
-
-        async function loadCategoryRecommendations() {
-            const genres = [
-                { id: 10759, name: "Acción y Aventura" },
-                { id: 16, name: "Animación" },
-                { id: 35, name: "Comedia" }
-            ];
-
-            genres.forEach(genre => {
-                const categoryCard = document.createElement('div');
-                categoryCard.className = 'grid-item';
-                categoryCard.innerHTML = `
-                    <h4>${genre.name}</h4>
-                    <button onclick="alert('Cargando series de ${genre.name}')">Ver más</button>
-                `;
-                categoryDiv.appendChild(categoryCard);
-            });
-        }
-
-        async function loadPopularByCountry() {
-            const data = await fetchSeries('tv/popular');
-            data.results.slice(0, 8).forEach(series => {
-                const countryCard = document.createElement('div');
-                countryCard.className = 'grid-item';
-                countryCard.innerHTML = `
-                    <img src="https://image.tmdb.org/t/p/w500${series.poster_path}" alt="${series.name}">
-                    <h4>${series.name}</h4>
-                    <button onclick="addToFavorites('${series.name}')">Agregar a Favoritos</button>
-                `;
-                countryDiv.appendChild(countryCard);
-            });
-        }
-
-        function addToFavorites(seriesName) {
-            if (!favorites.includes(seriesName)) {
-                favorites.push(seriesName);
-                updateFavoritesList();
-            }
-        }
-
-        function updateFavoritesList() {
-            favoritesList.innerHTML = '';
-            favorites.forEach(name => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <span>${name}</span>
-                    <button onclick="removeFromFavorites('${name}')">Eliminar</button>
-                `;
-                favoritesList.appendChild(li);
-            });
-        }
-
-        function removeFromFavorites(seriesName) {
-            favorites = favorites.filter(fav => fav !== seriesName);
-            updateFavoritesList();
-        }
-
-        loadCategoryRecommendations();
-        loadPopularByCountry();
-    </script>
 </body>
 </html>
