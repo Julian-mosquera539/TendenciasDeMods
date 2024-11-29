@@ -3,288 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal de Series</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Películas y Series Interactivas</title>
     <style>
+        /* Estilos generales */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
         }
-
         header {
-            background-color: #333;
+            background-color: #222;
             color: white;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
         }
-
-        h1 {
-            margin: 0;
+        nav {
+            text-align: center;
+            margin-top: 10px;
         }
-
-        .search-container {
-            margin: 20px auto;
-            width: 80%;
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        #content {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .search-container input, .search-container select {
-            padding: 10px;
-            font-size: 16px;
-            width: 48%;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 20px;
             padding: 20px;
-            margin-top: 30px;
         }
-
-        .grid-item {
-            position: relative;
+        .movie-card {
+            background-color: white;
+            width: 220px;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
             cursor: pointer;
-            border-radius: 8px;
-            overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
-        .grid-item:hover {
+        .movie-card:hover {
             transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
         }
-
-        .grid-item img {
+        .movie-card img {
             width: 100%;
-            height: auto;
-            border-radius: 8px;
-            transition: transform 0.3s ease;
+            border-radius: 10px;
         }
-
-        .grid-item h4 {
+        #loading {
             text-align: center;
             font-size: 18px;
-            margin-top: 10px;
-        }
-
-        .rating-container {
             margin-top: 20px;
-            padding: 20px;
-            background-color: #f4f4f4;
-            border-radius: 8px;
+            display: none;
         }
-
-        .stars {
-            display: flex;
-            cursor: pointer;
-        }
-
-        .star {
-            font-size: 24px;
-            color: #ccc;
-            transition: color 0.2s ease;
-        }
-
-        .star:hover {
-            color: gold;
-        }
-
-        .progress-bar {
-            height: 10px;
-            width: 0%;
-            background-color: green;
-            border-radius: 5px;
-        }
-
-        .recommender {
-            margin-top: 50px;
-            background-color: #f4f4f4;
-            padding: 20px;
-            border-radius: 8px;
-        }
-
-        .recommender h2 {
-            text-align: center;
-            font-size: 24px;
-        }
-
-        .recommendation {
-            margin: 10px;
-            display: inline-block;
-            width: 220px;
-            text-align: center;
-        }
-
-        .recommendation img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            transition: transform 0.3s ease;
-        }
-
-        .recommendation:hover img {
-            transform: scale(1.1);
-        }
-
-        .recommendation h3 {
-            margin-top: 10px;
-        }
-
-        .comment-section {
-            margin-top: 30px;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .comment-section h4 {
-            margin-bottom: 10px;
-            font-size: 20px;
-        }
-
-        .comment-section textarea {
-            width: 100%;
-            height: 100px;
+        select, button {
+            margin: 20px;
             padding: 10px;
-            font-size: 16px;
+            border-radius: 5px;
             border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-bottom: 10px;
         }
-
-        .comment-section button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .comment-section button:hover {
-            background-color: #45a049;
-        }
-
     </style>
 </head>
 <body>
+    <header>
+        <h1>Películas y Series Interactivas</h1>
+    </header>
 
-<header>
-    <h1>Bienvenido al Portal de Series</h1>
-</header>
+    <!-- Navegación -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="series.html">Series</a></li>
+        </ul>
+    </nav>
 
-<div class="search-container">
-    <input type="text" id="search-input" placeholder="Buscar series..." oninput="searchSeries()">
-    <select id="genre-filter" onchange="filterByGenre()">
-        <option value="">Filtrar por género</option>
-        <option value="10759">Acción y Aventura</option>
-        <option value="16">Animación</option>
+    <!-- Filtro de Géneros -->
+    <select id="genre-filter" onchange="loadMoviesByGenre(this.value)">
+        <option value="">Seleccionar Género</option>
+        <option value="28">Acción</option>
         <option value="35">Comedia</option>
         <option value="18">Drama</option>
-        <option value="80">Crimen</option>
-        <option value="10765">Ciencia Ficción</option>
     </select>
-</div>
 
-<div class="grid-container">
-    <!-- Las series se agregarán dinámicamente aquí -->
-    <div class="grid-item" data-genres="10759,35">
-        <img src="https://via.placeholder.com/200x300" alt="Serie 1" onclick="goToDescargas('Serie 1')">
-        <h4>Serie 1</h4>
-    </div>
-    <div class="grid-item" data-genres="16">
-        <img src="https://via.placeholder.com/200x300" alt="Serie 2" onclick="goToDescargas('Serie 2')">
-        <h4>Serie 2</h4>
-    </div>
-    <div class="grid-item" data-genres="35,10759">
-        <img src="https://via.placeholder.com/200x300" alt="Serie 3" onclick="goToDescargas('Serie 3')">
-        <h4>Serie 3</h4>
-    </div>
-    <div class="grid-item" data-genres="10765">
-        <img src="https://via.placeholder.com/200x300" alt="Serie 4" onclick="goToDescargas('Serie 4')">
-        <h4>Serie 4</h4>
-    </div>
-</div>
+    <!-- Contenedor de Películas -->
+    <div id="content"></div>
 
-<section class="rating-container">
-    <h4>Valoración de la serie</h4>
-    <div class="stars">
-        <span class="star" onclick="rateSeries(1)">&#9733;</span>
-        <span class="star" onclick="rateSeries(2)">&#9733;</span>
-        <span class="star" onclick="rateSeries(3)">&#9733;</span>
-        <span class="star" onclick="rateSeries(4)">&#9733;</span>
-        <span class="star" onclick="rateSeries(5)">&#9733;</span>
-    </div>
-    <textarea id="comment" placeholder="Deja tu comentario..." rows="4" cols="50"></textarea>
-    <button onclick="submitReview()">Enviar comentario</button>
-</section>
+    <!-- Indicador de Carga -->
+    <div id="loading">Cargando...</div>
 
-<section class="recommender">
-    <h2>Te recomendamos estas series</h2>
-    <div class="recommendation">
-        <img src="https://via.placeholder.com/200x300" alt="Recomendación 1" onclick="goToDescargas('Recomendación 1')">
-        <h3>Recomendación 1</h3>
-    </div>
-    <div class="recommendation">
-        <img src="https://via.placeholder.com/200x300" alt="Recomendación 2" onclick="goToDescargas('Recomendación 2')">
-        <h3>Recomendación 2</h3>
-    </div>
-    <div class="recommendation">
-        <img src="https://via.placeholder.com/200x300" alt="Recomendación 3" onclick="goToDescargas('Recomendación 3')">
-        <h3>Recomendación 3</h3>
-    </div>
-</section>
+    <!-- Cargar más películas -->
+    <button id="load-more" onclick="loadPopularMovies()">Cargar más películas</button>
 
-<script>
-    function goToDescargas(serie) {
-        window.location.href = `descargas.html?serie=${encodeURIComponent(serie)}`;
-    }
+    <script>
+        const API_URL = "https://api.themoviedb.org/3";
+        const API_KEY = "9e9698108533009ffe2584455b931f5a";
+        const contentDiv = document.getElementById('content');
 
-    function searchSeries() {
-        const query = document.getElementById('search-input').value.toLowerCase();
-        const items = document.querySelectorAll('.grid-item');
-        items.forEach(item => {
-            const title = item.querySelector('h4').textContent.toLowerCase();
-            if (title.includes(query)) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
+        // Mostrar el indicador de carga
+        function toggleLoading(isLoading) {
+            document.getElementById('loading').style.display = isLoading ? 'block' : 'none';
+        }
+
+        // Cargar películas populares
+        async function loadPopularMovies() {
+            try {
+                toggleLoading(true);
+                const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es`);
+                const data = await response.json();
+                toggleLoading(false);
+
+                if (data.results.length === 0) {
+                    contentDiv.innerHTML = "<p>No hay películas disponibles.</p>";
+                    return;
+                }
+
+                data.results.forEach(movie => {
+                    const movieCard = document.createElement('div');
+                    movieCard.classList.add('movie-card');
+                    movieCard.innerHTML = `
+                        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                        <h4>${movie.title}</h4>
+                    `;
+                    movieCard.addEventListener('click', () => {
+                        window.location.href = `descargas.html?movieId=${movie.id}`;
+                    });
+                    contentDiv.appendChild(movieCard);
+                });
+            } catch (error) {
+                console.error("Error al cargar las películas:", error);
+                toggleLoading(false);
             }
-        });
-    }
+        }
 
-    function filterByGenre() {
-        const genre = document.getElementById('genre-filter').value;
-        const items = document.querySelectorAll('.grid-item');
-        items.forEach(item => {
-            const genres = item.dataset.genres.split(',');
-            if (genre === '' || genres.includes(genre)) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
+        // Filtrar películas por género
+        async function loadMoviesByGenre(genreId) {
+            try {
+                toggleLoading(true);
+                const response = await fetch(`${API_URL}/discover/movie?api_key=${API_KEY}&language=es&with_genres=${genreId}`);
+                const data = await response.json();
+                toggleLoading(false);
+
+                contentDiv.innerHTML = ''; // Limpiar contenido previo
+                if (data.results.length === 0) {
+                    contentDiv.innerHTML = "<p>No se encontraron películas para este género.</p>";
+                    return;
+                }
+
+                data.results.forEach(movie => {
+                    const movieCard = document.createElement('div');
+                    movieCard.classList.add('movie-card');
+                    movieCard.innerHTML = `
+                        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                        <h4>${movie.title}</h4>
+                    `;
+                    movieCard.addEventListener('click', () => {
+                        window.location.href = `descargas.html?movieId=${movie.id}`;
+                    });
+                    contentDiv.appendChild(movieCard);
+                });
+            } catch (error) {
+                console.error("Error al filtrar las películas:", error);
+                toggleLoading(false);
             }
-        });
-    }
+        }
 
-    function rateSeries(rating) {
-        alert(`Has calificado con ${rating} estrellas.`);
-    }
-
-    function submitReview() {
-        const comment = document.getElementById('comment').value;
-        alert(`Comentario enviado: ${comment}`);
-    }
-</script>
-
+        // Cargar películas populares al iniciar
+        loadPopularMovies();
+    </script>
 </body>
 </html>
