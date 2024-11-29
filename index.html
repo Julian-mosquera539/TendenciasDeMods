@@ -3,211 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - Películas y Series Interactivas</title>
+    <title>Portal de Series</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
-        header {
-            background-color: #222;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        header h1 {
-            margin: 0;
-        }
-
-        nav {
-            background-color: #333;
-            text-align: center;
-            padding: 10px 0;
-        }
-
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        nav ul li {
-            margin: 0 15px;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            transition: color 0.3s;
-        }
-
-        nav ul li a:hover {
-            color: #ff9800;
-        }
-
-        .carousel {
-            width: 100%;
-            overflow: hidden;
-            margin: 20px 0;
-        }
-
-        .carousel img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .section-title {
-            text-align: center;
-            margin: 40px 0 20px;
-            font-size: 24px;
-            color: #222;
-        }
-
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
-            padding: 0 20px;
         }
 
         .grid-item {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            padding: 15px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .grid-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            position: relative;
+            cursor: pointer;
         }
 
         .grid-item img {
             width: 100%;
-            border-radius: 10px;
+            height: auto;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
         }
 
-        footer {
-            background-color: #222;
-            color: white;
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 40px;
+        .grid-item:hover img {
+            transform: scale(1.05);
         }
 
-        footer .social-icons {
+        .search-container {
+            margin-bottom: 20px;
             display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 10px 0;
+            justify-content: space-between;
         }
 
-        footer .social-icons img {
-            width: 30px;
-            height: 30px;
+        .search-container input, .search-container select {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .rating-container {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+        }
+
+        .stars {
+            display: flex;
+            cursor: pointer;
+        }
+
+        .star {
+            font-size: 24px;
+            color: #ccc;
+        }
+
+        .star:hover {
+            color: gold;
+        }
+
+        .progress-bar {
+            height: 10px;
+            width: 0%;
+            background-color: green;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
+
     <header>
-        <h1>Películas y Series Interactivas</h1>
+        <h1>Bienvenido a Portal de Series</h1>
     </header>
 
-    <nav>
-        <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="series.html">Series</a></li>
-            <li><a href="descargas.html">Descargas</a></li>
-        </ul>
-    </nav>
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Buscar series..." oninput="searchSeries()">
+        <select id="genre-filter" onchange="filterByGenre()">
+            <option value="">Filtrar por género</option>
+            <option value="10759">Acción y Aventura</option>
+            <option value="16">Animación</option>
+            <option value="35">Comedia</option>
+        </select>
+    </div>
 
-    <section class="carousel">
-        <img src="https://via.placeholder.com/1200x400?text=Película+1" alt="Destacada 1">
-        <img src="https://via.placeholder.com/1200x400?text=Película+2" alt="Destacada 2">
-    </section>
-
-    <section>
-        <h2 class="section-title">Películas por Género</h2>
-        <div class="grid-container" id="genres"></div>
-    </section>
-
-    <section>
-        <h2 class="section-title">Top 10 Películas</h2>
-        <div class="grid-container" id="top-movies"></div>
-    </section>
-
-    <footer>
-        <p>&copy; 2024 - Películas y Series Interactivas. Todos los derechos reservados.</p>
-        <div class="social-icons">
-            <a href="#"><img src="https://via.placeholder.com/30x30?text=FB" alt="Facebook"></a>
-            <a href="#"><img src="https://via.placeholder.com/30x30?text=IG" alt="Instagram"></a>
-            <a href="#"><img src="https://via.placeholder.com/30x30?text=TW" alt="Twitter"></a>
+    <div class="grid-container">
+        <!-- Las series se agregarán dinámicamente aquí -->
+        <div class="grid-item" data-genres="10759,35">
+            <img src="https://via.placeholder.com/200x300" alt="Serie 1" onclick="goToDescargas('Serie 1')">
+            <h4>Serie 1</h4>
         </div>
-    </footer>
+        <div class="grid-item" data-genres="16">
+            <img src="https://via.placeholder.com/200x300" alt="Serie 2" onclick="goToDescargas('Serie 2')">
+            <h4>Serie 2</h4>
+        </div>
+        <!-- Más series aquí -->
+    </div>
+
+    <section class="rating-container">
+        <h4>Valoración de la serie</h4>
+        <div class="stars">
+            <span class="star" onclick="rateSeries(1)">&#9733;</span>
+            <span class="star" onclick="rateSeries(2)">&#9733;</span>
+            <span class="star" onclick="rateSeries(3)">&#9733;</span>
+            <span class="star" onclick="rateSeries(4)">&#9733;</span>
+            <span class="star" onclick="rateSeries(5)">&#9733;</span>
+        </div>
+        <textarea id="comment" placeholder="Deja tu comentario..." rows="4" cols="50"></textarea>
+        <button onclick="submitReview()">Enviar comentario</button>
+    </section>
 
     <script>
-        const API_URL = "https://api.themoviedb.org/3";
-        const API_KEY = "9e9698108533009ffe2584455b931f5a";
-
-        const genresDiv = document.getElementById('genres');
-        const topMoviesDiv = document.getElementById('top-movies');
-
-        async function fetchMovies(endpoint) {
-            const response = await fetch(`${API_URL}/${endpoint}?api_key=${API_KEY}&language=es`);
-            return response.json();
+        function goToDescargas(serie) {
+            // Redirigir a la página de descargas con el nombre de la serie como parámetro
+            window.location.href = `descargas.html?serie=${encodeURIComponent(serie)}`;
         }
 
-        async function loadGenres() {
-            const genres = [
-                { id: 28, name: "Acción" },
-                { id: 35, name: "Comedia" },
-                { id: 18, name: "Drama" },
-                { id: 27, name: "Terror" }
-            ];
-            genres.forEach(genre => {
-                const genreCard = document.createElement('div');
-                genreCard.className = 'grid-item';
-                genreCard.innerHTML = `
-                    <h4>${genre.name}</h4>
-                    <button onclick="filterByGenre(${genre.id})">Ver más</button>
-                `;
-                genresDiv.appendChild(genreCard);
+        function searchSeries() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const items = document.querySelectorAll('.grid-item');
+
+            items.forEach(item => {
+                const title = item.querySelector('h4').textContent.toLowerCase();
+                if (title.includes(query)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
             });
         }
 
-        async function loadTopMovies() {
-            const data = await fetchMovies('movie/top_rated');
-            data.results.slice(0, 10).forEach(movie => {
-                const movieCard = document.createElement('div');
-                movieCard.className = 'grid-item';
-                movieCard.innerHTML = `
-                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-                    <h4>${movie.title}</h4>
-                `;
-                topMoviesDiv.appendChild(movieCard);
+        function filterByGenre() {
+            const genreId = document.getElementById('genre-filter').value;
+            const items = document.querySelectorAll('.grid-item');
+            
+            items.forEach(item => {
+                if (genreId) {
+                    const genres = item.getAttribute('data-genres').split(',');
+                    if (genres.includes(genreId)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                } else {
+                    item.style.display = 'block';
+                }
             });
         }
 
-        function filterByGenre(genreId) {
-            alert(`Mostrando películas del género con ID: ${genreId}`);
+        let rating = 0;
+
+        function rateSeries(stars) {
+            rating = stars;
+            const starsElem = document.querySelectorAll('.star');
+            starsElem.forEach((star, index) => {
+                if (index < stars) {
+                    star.style.color = 'gold';
+                } else {
+                    star.style.color = '#ccc';
+                }
+            });
         }
 
-        loadGenres();
-        loadTopMovies();
+        function submitReview() {
+            const comment = document.getElementById('comment').value;
+            if (rating === 0 || comment.trim() === "") {
+                alert('Por favor, ingrese una valoración y un comentario.');
+                return;
+            }
+
+            alert(`Gracias por tu comentario: \nValoración: ${rating} estrellas\nComentario: ${comment}`);
+            // Aquí se podría guardar el comentario y la valoración en un backend o almacenamiento local
+        }
     </script>
 </body>
 </html>
