@@ -3,146 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles de la Serie</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Series Populares</title>
     <style>
+        /* Estilos básicos */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
             margin: 0;
             padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
         }
-
         header {
-            background-color: #333;
+            background-color: #222;
             color: white;
-            padding: 20px;
             text-align: center;
+            padding: 15px;
         }
-
-        .series-details {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
+        nav ul {
+            list-style: none;
+            text-align: center;
+            padding: 0;
         }
-
-        .series-details img {
-            width: 300px;
-            height: auto;
-            border-radius: 8px;
+        nav ul li {
+            display: inline-block;
+            margin: 0 15px;
         }
-
-        .series-info {
-            max-width: 600px;
-            margin-left: 20px;
-        }
-
-        .series-info h2 {
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
-
-        .series-info p {
-            font-size: 18px;
-            line-height: 1.6;
-        }
-
-        .rating-container {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #f4f4f4;
-            border-radius: 8px;
-        }
-
-        .stars {
-            display: flex;
-            cursor: pointer;
-        }
-
-        .star {
-            font-size: 24px;
-            color: #ccc;
-            transition: color 0.2s ease;
-        }
-
-        .star:hover {
-            color: gold;
-        }
-
-        .comments {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .comments h3 {
-            margin-bottom: 10px;
-            font-size: 24px;
-        }
-
-        .comment {
-            margin-bottom: 20px;
-            padding: 10px;
-            background-color: #e0e0e0;
-            border-radius: 4px;
-        }
-
-        .comment .user {
+        nav ul li a {
+            color: white;
+            text-decoration: none;
             font-weight: bold;
         }
-
-        .comment p {
+        #content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            gap: 20px;
+        }
+        .series-card {
+            background-color: white;
+            width: 220px;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .series-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+        .series-card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        #loading {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            display: none;
+        }
+        select {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
             font-size: 16px;
         }
     </style>
 </head>
 <body>
+    <header>
+        <h1>Series Populares</h1>
+    </header>
 
-<header>
-    <h1>Detalles de la Serie</h1>
-</header>
+    <!-- Navegación -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="series.html">Series</a></li>
+        </ul>
+    </nav>
 
-<div class="series-details">
-    <img src="https://via.placeholder.com/300x450" alt="Serie">
-    <div class="series-info">
-        <h2>Serie Nombre</h2>
-        <p><strong>Género:</strong> Drama, Acción</p>
-        <p><strong>Sinopsis:</strong> Esta es una descripción extensa de la serie. Aquí va el resumen de la trama y más detalles sobre los personajes principales.</p>
-    </div>
-</div>
+    <!-- Filtro por Género -->
+    <select id="genre-filter" onchange="loadSeriesByGenre(this.value)">
+        <option value="">Seleccionar Género</option>
+        <option value="10759">Acción y Aventura</option>
+        <option value="16">Animación</option>
+        <option value="35">Comedia</option>
+        <option value="18">Drama</option>
+        <option value="10765">Ciencia Ficción</option>
+    </select>
 
-<section class="rating-container">
-    <h4>Valoración de la serie</h4>
-    <div class="stars">
-        <span class="star" onclick="rateSeries(1)">&#9733;</span>
-        <span class="star" onclick="rateSeries(2)">&#9733;</span>
-        <span class="star" onclick="rateSeries(3)">&#9733;</span>
-        <span class="star" onclick="rateSeries(4)">&#9733;</span>
-        <span class="star" onclick="rateSeries(5)">&#9733;</span>
-    </div>
-</section>
+    <!-- Contenedor de Series -->
+    <div id="content"></div>
 
-<section class="comments">
-    <h3>Comentarios</h3>
-    <div class="comment">
-        <div class="user">Usuario1</div>
-        <p>¡Excelente serie! Me mantuvo enganchado desde el principio hasta el final.</p>
-    </div>
-    <div class="comment">
-        <div class="user">Usuario2</div>
-        <p>Muy buena trama, aunque el final me dejó con dudas.</p>
-    </div>
-</section>
+    <!-- Indicador de Carga -->
+    <div id="loading">Cargando...</div>
 
-<script>
-    function rateSeries(rating) {
-        alert(`Has calificado con ${rating} estrellas.`);
-    }
-</script>
+    <script>
+        const API_URL = "https://api.themoviedb.org/3";
+        const API_KEY = "9e9698108533009ffe2584455b931f5a";
+        const contentDiv = document.getElementById('content');
 
+        // Mostrar el indicador de carga
+        function toggleLoading(isLoading) {
+            document.getElementById('loading').style.display = isLoading ? 'block' : 'none';
+        }
+
+        // Cargar series populares
+        async function loadPopularSeries() {
+            try {
+                toggleLoading(true);
+                const response = await fetch(`${API_URL}/tv/popular?api_key=${API_KEY}&language=es`);
+                const data = await response.json();
+                toggleLoading(false);
+
+                if (data.results.length === 0) {
+                    contentDiv.innerHTML = "<p>No hay series disponibles.</p>";
+                    return;
+                }
+
+                data.results.forEach(series => {
+                    const seriesCard = document.createElement('div');
+                    seriesCard.classList.add('series-card');
+                    seriesCard.innerHTML = `
+                        <img src="https://image.tmdb.org/t/p/w500${series.poster_path}" alt="${series.name}">
+                        <h4>${series.name}</h4>
+                    `;
+                    seriesCard.addEventListener('click', () => {
+                        window.location.href = `descargas.html?seriesId=${series.id}`;
+                    });
+                    contentDiv.appendChild(seriesCard);
+                });
+            } catch (error) {
+                console.error("Error al cargar las series:", error);
+                toggleLoading(false);
+            }
+        }
+
+        // Filtrar series por género
+        async function loadSeriesByGenre(genreId) {
+            try {
+                toggleLoading(true);
+                const response = await fetch(`${API_URL}/discover/tv?api_key=${API_KEY}&language=es&with_genres=${genreId}`);
+                const data = await response.json();
+                toggleLoading(false);
+
+                contentDiv.innerHTML = ''; // Limpiar contenido previo
+                if (data.results.length === 0) {
+                    contentDiv.innerHTML = "<p>No se encontraron series para este género.</p>";
+                    return;
+                }
+
+                data.results.forEach(series => {
+                    const seriesCard = document.createElement('div');
+                    seriesCard.classList.add('series-card');
+                    seriesCard.innerHTML = `
+                        <img src="https://image.tmdb.org/t/p/w500${series.poster_path}" alt="${series.name}">
+                        <h4>${series.name}</h4>
+                    `;
+                    seriesCard.addEventListener('click', () => {
+                        window.location.href = `descargas.html?seriesId=${series.id}`;
+                    });
+                    contentDiv.appendChild(seriesCard);
+                });
+            } catch (error) {
+                console.error("Error al filtrar las series:", error);
+                toggleLoading(false);
+            }
+        }
+
+        // Cargar las series populares al iniciar
+        loadPopularSeries();
+    </script>
 </body>
 </html>
