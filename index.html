@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Películas y Series Interactivas</title>
+    <title>Inicio - Películas y Series Interactivas</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -57,45 +57,15 @@
         }
 
         .carousel {
-            margin: 20px auto;
-            width: 90%;
-            max-width: 1200px;
+            width: 100%;
             overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 20px 0;
         }
 
         .carousel img {
             width: 100%;
             height: auto;
-        }
-
-        .search-bar {
-            margin: 20px auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .search-bar input {
-            width: 70%;
-            padding: 10px;
-            border-radius: 5px 0 0 5px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-        }
-
-        .search-bar button {
-            padding: 10px 20px;
-            border: none;
-            background-color: #222;
-            color: white;
-            border-radius: 0 5px 5px 0;
-            cursor: pointer;
-        }
-
-        .search-bar button:hover {
-            background-color: #ff9800;
+            display: block;
         }
 
         .section-title {
@@ -105,41 +75,50 @@
             color: #222;
         }
 
-        #content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             padding: 0 20px;
         }
 
-        .movie-card {
+        .grid-item {
             background-color: white;
-            width: 220px;
-            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
-            cursor: pointer;
+            padding: 15px;
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        .movie-card:hover {
+        .grid-item:hover {
             transform: scale(1.05);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
-        .movie-card img {
+        .grid-item img {
             width: 100%;
             border-radius: 10px;
         }
 
         footer {
-            text-align: center;
             background-color: #222;
             color: white;
-            padding: 10px 0;
+            text-align: center;
+            padding: 20px 0;
             margin-top: 40px;
+        }
+
+        footer .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        footer .social-icons img {
+            width: 30px;
+            height: 30px;
         }
     </style>
 </head>
@@ -156,69 +135,79 @@
         </ul>
     </nav>
 
-    <div class="carousel">
-        <img src="https://via.placeholder.com/1200x400?text=Carrusel+de+Películas" alt="Carrusel de películas">
-    </div>
-
-    <div class="search-bar">
-        <input type="text" id="search-movie-input" placeholder="Buscar películas...">
-        <button onclick="searchMovies()">Buscar</button>
-    </div>
+    <section class="carousel">
+        <img src="https://via.placeholder.com/1200x400?text=Película+1" alt="Destacada 1">
+        <img src="https://via.placeholder.com/1200x400?text=Película+2" alt="Destacada 2">
+    </section>
 
     <section>
-        <h2 class="section-title">Películas Populares</h2>
-        <div id="content"></div>
+        <h2 class="section-title">Películas por Género</h2>
+        <div class="grid-container" id="genres"></div>
+    </section>
+
+    <section>
+        <h2 class="section-title">Top 10 Películas</h2>
+        <div class="grid-container" id="top-movies"></div>
     </section>
 
     <footer>
         <p>&copy; 2024 - Películas y Series Interactivas. Todos los derechos reservados.</p>
+        <div class="social-icons">
+            <a href="#"><img src="https://via.placeholder.com/30x30?text=FB" alt="Facebook"></a>
+            <a href="#"><img src="https://via.placeholder.com/30x30?text=IG" alt="Instagram"></a>
+            <a href="#"><img src="https://via.placeholder.com/30x30?text=TW" alt="Twitter"></a>
+        </div>
     </footer>
 
     <script>
         const API_URL = "https://api.themoviedb.org/3";
         const API_KEY = "9e9698108533009ffe2584455b931f5a";
-        const contentDiv = document.getElementById('content');
+
+        const genresDiv = document.getElementById('genres');
+        const topMoviesDiv = document.getElementById('top-movies');
 
         async function fetchMovies(endpoint) {
             const response = await fetch(`${API_URL}/${endpoint}?api_key=${API_KEY}&language=es`);
             return response.json();
         }
 
-        function createMovieCard(movie) {
-            const card = document.createElement('div');
-            card.className = 'movie-card';
-            card.innerHTML = `
-                <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-                <h4>${movie.title}</h4>
-            `;
-            card.addEventListener('click', () => {
-                window.location.href = `descargas.html?movieId=${movie.id}`;
-            });
-            return card;
-        }
-
-        async function loadMovies() {
-            const data = await fetchMovies('movie/popular');
-            data.results.forEach(movie => {
-                contentDiv.appendChild(createMovieCard(movie));
+        async function loadGenres() {
+            const genres = [
+                { id: 28, name: "Acción" },
+                { id: 35, name: "Comedia" },
+                { id: 18, name: "Drama" },
+                { id: 27, name: "Terror" }
+            ];
+            genres.forEach(genre => {
+                const genreCard = document.createElement('div');
+                genreCard.className = 'grid-item';
+                genreCard.innerHTML = `
+                    <h4>${genre.name}</h4>
+                    <button onclick="filterByGenre(${genre.id})">Ver más</button>
+                `;
+                genresDiv.appendChild(genreCard);
             });
         }
 
-        async function searchMovies() {
-            const query = document.getElementById('search-movie-input').value;
-            if (!query) return alert('Por favor, introduce una búsqueda válida.');
-            contentDiv.innerHTML = '';
-            const data = await fetchMovies(`search/movie?query=${query}`);
-            if (data.results.length === 0) {
-                contentDiv.innerHTML = '<p>No se encontraron resultados.</p>';
-                return;
-            }
-            data.results.forEach(movie => {
-                contentDiv.appendChild(createMovieCard(movie));
+        async function loadTopMovies() {
+            const data = await fetchMovies('movie/top_rated');
+            data.results.slice(0, 10).forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.className = 'grid-item';
+                movieCard.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                    <h4>${movie.title}</h4>
+                `;
+                topMoviesDiv.appendChild(movieCard);
             });
         }
 
-        loadMovies();
+        function filterByGenre(genreId) {
+            alert(`Mostrando películas del género con ID: ${genreId}`);
+        }
+
+        loadGenres();
+        loadTopMovies();
     </script>
 </body>
 </html>
