@@ -6,15 +6,60 @@
     <title>Portal de Series</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .search-container {
+            margin: 20px auto;
+            width: 80%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-container input, .search-container select {
+            padding: 10px;
+            font-size: 16px;
+            width: 48%;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
         .grid-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 20px;
+            padding: 20px;
+            margin-top: 30px;
         }
 
         .grid-item {
             position: relative;
             cursor: pointer;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .grid-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .grid-item img {
@@ -24,24 +69,15 @@
             transition: transform 0.3s ease;
         }
 
-        .grid-item:hover img {
-            transform: scale(1.05);
-        }
-
-        .search-container {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .search-container input, .search-container select {
-            padding: 10px;
-            font-size: 16px;
+        .grid-item h4 {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 10px;
         }
 
         .rating-container {
             margin-top: 20px;
-            padding: 10px;
+            padding: 20px;
             background-color: #f4f4f4;
             border-radius: 8px;
         }
@@ -54,6 +90,7 @@
         .star {
             font-size: 24px;
             color: #ccc;
+            transition: color 0.2s ease;
         }
 
         .star:hover {
@@ -66,112 +103,188 @@
             background-color: green;
             border-radius: 5px;
         }
+
+        .recommender {
+            margin-top: 50px;
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .recommender h2 {
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .recommendation {
+            margin: 10px;
+            display: inline-block;
+            width: 220px;
+            text-align: center;
+        }
+
+        .recommendation img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .recommendation:hover img {
+            transform: scale(1.1);
+        }
+
+        .recommendation h3 {
+            margin-top: 10px;
+        }
+
+        .comment-section {
+            margin-top: 30px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .comment-section h4 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .comment-section textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .comment-section button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .comment-section button:hover {
+            background-color: #45a049;
+        }
+
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Bienvenido a Portal de Series</h1>
-    </header>
+<header>
+    <h1>Bienvenido al Portal de Series</h1>
+</header>
 
-    <div class="search-container">
-        <input type="text" id="search-input" placeholder="Buscar series..." oninput="searchSeries()">
-        <select id="genre-filter" onchange="filterByGenre()">
-            <option value="">Filtrar por género</option>
-            <option value="10759">Acción y Aventura</option>
-            <option value="16">Animación</option>
-            <option value="35">Comedia</option>
-        </select>
+<div class="search-container">
+    <input type="text" id="search-input" placeholder="Buscar series..." oninput="searchSeries()">
+    <select id="genre-filter" onchange="filterByGenre()">
+        <option value="">Filtrar por género</option>
+        <option value="10759">Acción y Aventura</option>
+        <option value="16">Animación</option>
+        <option value="35">Comedia</option>
+        <option value="18">Drama</option>
+        <option value="80">Crimen</option>
+        <option value="10765">Ciencia Ficción</option>
+    </select>
+</div>
+
+<div class="grid-container">
+    <!-- Las series se agregarán dinámicamente aquí -->
+    <div class="grid-item" data-genres="10759,35">
+        <img src="https://via.placeholder.com/200x300" alt="Serie 1" onclick="goToDescargas('Serie 1')">
+        <h4>Serie 1</h4>
     </div>
-
-    <div class="grid-container">
-        <!-- Las series se agregarán dinámicamente aquí -->
-        <div class="grid-item" data-genres="10759,35">
-            <img src="https://via.placeholder.com/200x300" alt="Serie 1" onclick="goToDescargas('Serie 1')">
-            <h4>Serie 1</h4>
-        </div>
-        <div class="grid-item" data-genres="16">
-            <img src="https://via.placeholder.com/200x300" alt="Serie 2" onclick="goToDescargas('Serie 2')">
-            <h4>Serie 2</h4>
-        </div>
-        <!-- Más series aquí -->
+    <div class="grid-item" data-genres="16">
+        <img src="https://via.placeholder.com/200x300" alt="Serie 2" onclick="goToDescargas('Serie 2')">
+        <h4>Serie 2</h4>
     </div>
+    <div class="grid-item" data-genres="35,10759">
+        <img src="https://via.placeholder.com/200x300" alt="Serie 3" onclick="goToDescargas('Serie 3')">
+        <h4>Serie 3</h4>
+    </div>
+    <div class="grid-item" data-genres="10765">
+        <img src="https://via.placeholder.com/200x300" alt="Serie 4" onclick="goToDescargas('Serie 4')">
+        <h4>Serie 4</h4>
+    </div>
+</div>
 
-    <section class="rating-container">
-        <h4>Valoración de la serie</h4>
-        <div class="stars">
-            <span class="star" onclick="rateSeries(1)">&#9733;</span>
-            <span class="star" onclick="rateSeries(2)">&#9733;</span>
-            <span class="star" onclick="rateSeries(3)">&#9733;</span>
-            <span class="star" onclick="rateSeries(4)">&#9733;</span>
-            <span class="star" onclick="rateSeries(5)">&#9733;</span>
-        </div>
-        <textarea id="comment" placeholder="Deja tu comentario..." rows="4" cols="50"></textarea>
-        <button onclick="submitReview()">Enviar comentario</button>
-    </section>
+<section class="rating-container">
+    <h4>Valoración de la serie</h4>
+    <div class="stars">
+        <span class="star" onclick="rateSeries(1)">&#9733;</span>
+        <span class="star" onclick="rateSeries(2)">&#9733;</span>
+        <span class="star" onclick="rateSeries(3)">&#9733;</span>
+        <span class="star" onclick="rateSeries(4)">&#9733;</span>
+        <span class="star" onclick="rateSeries(5)">&#9733;</span>
+    </div>
+    <textarea id="comment" placeholder="Deja tu comentario..." rows="4" cols="50"></textarea>
+    <button onclick="submitReview()">Enviar comentario</button>
+</section>
 
-    <script>
-        function goToDescargas(serie) {
-            // Redirigir a la página de descargas con el nombre de la serie como parámetro
-            window.location.href = `descargas.html?serie=${encodeURIComponent(serie)}`;
-        }
+<section class="recommender">
+    <h2>Te recomendamos estas series</h2>
+    <div class="recommendation">
+        <img src="https://via.placeholder.com/200x300" alt="Recomendación 1" onclick="goToDescargas('Recomendación 1')">
+        <h3>Recomendación 1</h3>
+    </div>
+    <div class="recommendation">
+        <img src="https://via.placeholder.com/200x300" alt="Recomendación 2" onclick="goToDescargas('Recomendación 2')">
+        <h3>Recomendación 2</h3>
+    </div>
+    <div class="recommendation">
+        <img src="https://via.placeholder.com/200x300" alt="Recomendación 3" onclick="goToDescargas('Recomendación 3')">
+        <h3>Recomendación 3</h3>
+    </div>
+</section>
 
-        function searchSeries() {
-            const query = document.getElementById('search-input').value.toLowerCase();
-            const items = document.querySelectorAll('.grid-item');
+<script>
+    function goToDescargas(serie) {
+        window.location.href = `descargas.html?serie=${encodeURIComponent(serie)}`;
+    }
 
-            items.forEach(item => {
-                const title = item.querySelector('h4').textContent.toLowerCase();
-                if (title.includes(query)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
-
-        function filterByGenre() {
-            const genreId = document.getElementById('genre-filter').value;
-            const items = document.querySelectorAll('.grid-item');
-            
-            items.forEach(item => {
-                if (genreId) {
-                    const genres = item.getAttribute('data-genres').split(',');
-                    if (genres.includes(genreId)) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                } else {
-                    item.style.display = 'block';
-                }
-            });
-        }
-
-        let rating = 0;
-
-        function rateSeries(stars) {
-            rating = stars;
-            const starsElem = document.querySelectorAll('.star');
-            starsElem.forEach((star, index) => {
-                if (index < stars) {
-                    star.style.color = 'gold';
-                } else {
-                    star.style.color = '#ccc';
-                }
-            });
-        }
-
-        function submitReview() {
-            const comment = document.getElementById('comment').value;
-            if (rating === 0 || comment.trim() === "") {
-                alert('Por favor, ingrese una valoración y un comentario.');
-                return;
+    function searchSeries() {
+        const query = document.getElementById('search-input').value.toLowerCase();
+        const items = document.querySelectorAll('.grid-item');
+        items.forEach(item => {
+            const title = item.querySelector('h4').textContent.toLowerCase();
+            if (title.includes(query)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
             }
+        });
+    }
 
-            alert(`Gracias por tu comentario: \nValoración: ${rating} estrellas\nComentario: ${comment}`);
-            // Aquí se podría guardar el comentario y la valoración en un backend o almacenamiento local
-        }
-    </script>
+    function filterByGenre() {
+        const genre = document.getElementById('genre-filter').value;
+        const items = document.querySelectorAll('.grid-item');
+        items.forEach(item => {
+            const genres = item.dataset.genres.split(',');
+            if (genre === '' || genres.includes(genre)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    function rateSeries(rating) {
+        alert(`Has calificado con ${rating} estrellas.`);
+    }
+
+    function submitReview() {
+        const comment = document.getElementById('comment').value;
+        alert(`Comentario enviado: ${comment}`);
+    }
+</script>
+
 </body>
 </html>
