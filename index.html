@@ -4,105 +4,231 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Películas y Series Interactivas</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #f4f4f4, #eaeaea);
+            color: #333;
+        }
+
+        header {
+            background: #222;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav {
+            text-align: center;
+            background: #444;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        #search-section {
+            text-align: center;
+            margin: 20px;
+        }
+
+        #search-bar {
+            padding: 10px;
+            width: 300px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        #content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: white;
+            width: 220px;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        #genre-filter, #series-filter {
+            margin: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #222;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        footer {
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Películas y Series</h1>
-        <button id="dark-mode-toggle">Modo Oscuro</button>
+        <h1>Películas y Series Interactivas</h1>
     </header>
 
+    <!-- Navegación -->
     <nav>
         <ul>
-            <li><a href="index.html">Películas</a></li>
+            <li><a href="index.html">Inicio</a></li>
             <li><a href="series.html">Series</a></li>
             <li><a href="descargas.html">Descargas</a></li>
         </ul>
     </nav>
 
-    <!-- Sección de búsqueda -->
-    <div id="search-bar">
-        <input type="text" id="search-input" placeholder="Buscar películas o series...">
-        <button onclick="searchContent()">Buscar</button>
-    </div>
-
-    <!-- Resultados de búsqueda -->
-    <div id="search-results"></div>
-
-    <!-- Categorías -->
-    <section id="categories">
-        <h2>Categorías</h2>
-        <div class="category">
-            <h3>Películas</h3>
-            <div id="movies-category"></div>
-        </div>
-        <div class="category">
-            <h3>Series</h3>
-            <div id="series-category"></div>
-        </div>
+    <!-- Barra de búsqueda -->
+    <section id="search-section">
+        <input id="search-bar" type="text" placeholder="Buscar películas o series...">
+        <button onclick="searchMovies()">Buscar</button>
     </section>
+
+    <!-- Filtros -->
+    <select id="genre-filter" onchange="filterMovies(this.value)">
+        <option value="">Filtrar por género</option>
+        <option value="28">Acción</option>
+        <option value="35">Comedia</option>
+        <option value="18">Drama</option>
+    </select>
+
+    <select id="series-filter" onchange="filterSeries(this.value)">
+        <option value="">Filtrar Series</option>
+        <option value="10759">Series de Acción</option>
+        <option value="16">Animación</option>
+        <option value="35">Comedia</option>
+    </select>
+
+    <!-- Contenedor de contenido -->
+    <div id="content"></div>
+
+    <button id="load-more" onclick="loadMore()">Cargar más contenido</button>
+
+    <footer>
+        &copy; 2024 Tu sitio de Películas y Series
+    </footer>
 
     <script>
         const API_URL = "https://api.themoviedb.org/3";
         const API_KEY = "9e9698108533009ffe2584455b931f5a";
 
-        const searchResults = document.getElementById('search-results');
-        const moviesCategory = document.getElementById('movies-category');
-        const seriesCategory = document.getElementById('series-category');
+        const contentDiv = document.getElementById('content');
 
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-        }
-
-        document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
-
-        async function fetchContent(endpoint) {
-            const response = await fetch(`${API_URL}${endpoint}?api_key=${API_KEY}&language=es`);
+        // Cargar películas populares
+        async function loadPopularMovies() {
+            const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es`);
             const data = await response.json();
-            return data.results;
+            displayContent(data.results, 'Película');
         }
 
-        async function loadCategories() {
-            // Películas
-            const movies = await fetchContent('/movie/popular');
-            movies.forEach(movie => renderCard(movie, moviesCategory));
-
-            // Series
-            const series = await fetchContent('/tv/popular');
-            series.forEach(serie => renderCard(serie, seriesCategory));
+        // Cargar series populares
+        async function loadPopularSeries() {
+            const response = await fetch(`${API_URL}/tv/popular?api_key=${API_KEY}&language=es`);
+            const data = await response.json();
+            displayContent(data.results, 'Serie');
         }
 
-        function renderCard(item, container) {
-            const card = document.createElement('div');
-            card.classList.add('card');
-            card.innerHTML = `
-                <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.title || item.name}">
-                <h4>${item.title || item.name}</h4>
-            `;
-            card.addEventListener('click', () => {
-                window.location.href = 'descargas.html';
-            });
-            container.appendChild(card);
-        }
-
-        async function searchContent() {
-            const query = document.getElementById('search-input').value;
-            const movies = await fetchContent(`/search/movie?query=${query}`);
-            const series = await fetchContent(`/search/tv?query=${query}`);
-            searchResults.innerHTML = '';
-
-            movies.concat(series).forEach(item => {
-                const result = document.createElement('div');
-                result.classList.add('search-result');
-                result.innerHTML = `
-                    <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.title || item.name}">
-                    <h4>${item.title || item.name}</h4>
+        // Mostrar contenido
+        function displayContent(items, type) {
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.name || item.title}">
+                    <h4>${item.name || item.title}</h4>
                 `;
-                searchResults.appendChild(result);
+                card.addEventListener('click', () => {
+                    const url = type === 'Película' ? `descargas.html?movieId=${item.id}` : `series.html?seriesId=${item.id}`;
+                    window.location.href = url;
+                });
+                contentDiv.appendChild(card);
             });
         }
 
-        loadCategories();
+        // Buscar películas o series
+        async function searchMovies() {
+            const query = document.getElementById('search-bar').value;
+            const response = await fetch(`${API_URL}/search/movie?api_key=${API_KEY}&query=${query}&language=es`);
+            const data = await response.json();
+            contentDiv.innerHTML = '';
+            displayContent(data.results, 'Película');
+        }
+
+        // Filtrar por género
+        async function filterMovies(genreId) {
+            const response = await fetch(`${API_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genreId}&language=es`);
+            const data = await response.json();
+            contentDiv.innerHTML = '';
+            displayContent(data.results, 'Película');
+        }
+
+        // Filtrar series
+        async function filterSeries(seriesId) {
+            const response = await fetch(`${API_URL}/discover/tv?api_key=${API_KEY}&with_genres=${seriesId}&language=es`);
+            const data = await response.json();
+            contentDiv.innerHTML = '';
+            displayContent(data.results, 'Serie');
+        }
+
+        // Inicializar con contenido popular
+        loadPopularMovies();
+        loadPopularSeries();
     </script>
 </body>
 </html>
