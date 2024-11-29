@@ -3,88 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Series</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Series - Películas y Series Interactivas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav {
+            background-color: #333;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #ff9800;
+        }
+
+        .search-bar {
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .search-bar input {
+            width: 70%;
+            padding: 10px;
+            border-radius: 5px 0 0 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #222;
+            color: white;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #ff9800;
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 40px 0 20px;
+            font-size: 24px;
+            color: #222;
+        }
+
+        #content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        .series-card {
+            background-color: white;
+            width: 220px;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .series-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .series-card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        footer {
+            text-align: center;
+            background-color: #222;
+            color: white;
+            padding: 10px 0;
+            margin-top: 40px;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Series</h1>
-        <button id="dark-mode-toggle">Modo Oscuro</button>
+        <h1>Series Populares</h1>
     </header>
 
     <nav>
         <ul>
-            <li><a href="index.html">Películas</a></li>
+            <li><a href="index.html">Inicio</a></li>
             <li><a href="series.html">Series</a></li>
             <li><a href="descargas.html">Descargas</a></li>
         </ul>
     </nav>
 
-    <!-- Categorías -->
-    <section id="categories">
-        <h2>Series Populares</h2>
-        <div id="series-list"></div>
+    <div class="search-bar">
+        <input type="text" id="search-series-input" placeholder="Buscar series...">
+        <button onclick="searchSeries()">Buscar</button>
+    </div>
+
+    <section>
+        <h2 class="section-title">Series Más Vistas</h2>
+        <div id="content"></div>
     </section>
 
-    <!-- Géneros -->
-    <section id="genres">
-        <h2>Categorías por Género</h2>
-        <div id="genres-list"></div>
-    </section>
+    <footer>
+        <p>&copy; 2024 - Películas y Series Interactivas. Todos los derechos reservados.</p>
+    </footer>
 
     <script>
         const API_URL = "https://api.themoviedb.org/3";
         const API_KEY = "9e9698108533009ffe2584455b931f5a";
+        const contentDiv = document.getElementById('content');
 
-        const seriesList = document.getElementById('series-list');
-        const genresList = document.getElementById('genres-list');
-
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
+        async function fetchSeries(endpoint) {
+            const response = await fetch(`${API_URL}/${endpoint}?api_key=${API_KEY}&language=es`);
+            return response.json();
         }
 
-        document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
-
-        async function fetchContent(endpoint) {
-            const response = await fetch(`${API_URL}${endpoint}?api_key=${API_KEY}&language=es`);
-            const data = await response.json();
-            return data.results;
+        function createSeriesCard(series) {
+            const card = document.createElement('div');
+            card.className = 'series-card';
+            card.innerHTML = `
+                <img src="https://image.tmdb.org/t/p/w500${series.poster_path}" alt="${series.name}">
+                <h4>${series.name}</h4>
+            `;
+            card.addEventListener('click', () => {
+                window.location.href = `descargas.html?seriesId=${series.id}`;
+            });
+            return card;
         }
 
         async function loadSeries() {
-            const series = await fetchContent('/tv/popular');
-            series.forEach(serie => renderCard(serie, seriesList));
-        }
-
-        async function loadGenres() {
-            const genres = await fetch(`${API_URL}/genre/tv/list?api_key=${API_KEY}&language=es`).then(res => res.json());
-            genres.genres.forEach(genre => {
-                const genreDiv = document.createElement('div');
-                genreDiv.classList.add('genre');
-                genreDiv.innerHTML = `<h4>${genre.name}</h4>`;
-                genreDiv.addEventListener('click', () => filterByGenre(genre.id));
-                genresList.appendChild(genreDiv);
+            const data = await fetchSeries('tv/popular');
+            data.results.forEach(series => {
+                contentDiv.appendChild(createSeriesCard(series));
             });
         }
 
-        async function filterByGenre(genreId) {
-            const series = await fetch(`${API_URL}/discover/tv?api_key=${API_KEY}&with_genres=${genreId}&language=es`).then(res => res.json());
-            seriesList.innerHTML = ''; // Limpia contenido actual
-            series.results.forEach(serie => renderCard(serie, seriesList));
-        }
-
-        function renderCard(item, container) {
-            const card = document.createElement('div');
-            card.classList.add('card');
-            card.innerHTML = `
-                <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.name}">
-                <h4>${item.name}</h4>
-            `;
-            container.appendChild(card);
+        async function searchSeries() {
+            const query = document.getElementById('search-series-input').value;
+            if (!query) return alert('Por favor, introduce una búsqueda válida.');
+            contentDiv.innerHTML = '';
+            const data = await fetchSeries(`search/tv?query=${query}`);
+            if (data.results.length === 0) {
+                contentDiv.innerHTML = '<p>No se encontraron resultados.</p>';
+                return;
+            }
+            data.results.forEach(series => {
+                contentDiv.appendChild(createSeriesCard(series));
+            });
         }
 
         loadSeries();
-        loadGenres();
     </script>
 </body>
 </html>
