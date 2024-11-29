@@ -5,32 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Películas y Series Interactivas</title>
     <style>
-        /* Estilos generales */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(to right, #f4f4f4, #eaeaea);
+            background-color: #f4f4f4;
             color: #333;
         }
 
         header {
-            background: #222;
+            background-color: #222;
             color: white;
-            padding: 15px;
             text-align: center;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
         }
 
         nav {
+            background-color: #333;
             text-align: center;
-            background: #444;
             padding: 10px 0;
         }
 
         nav ul {
             list-style: none;
-            margin: 0;
             padding: 0;
+            margin: 0;
             display: flex;
             justify-content: center;
         }
@@ -42,23 +48,61 @@
         nav ul li a {
             color: white;
             text-decoration: none;
-            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s;
         }
 
         nav ul li a:hover {
-            text-decoration: underline;
+            color: #ff9800;
         }
 
-        #search-section {
-            text-align: center;
-            margin: 20px;
+        .carousel {
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1200px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        #search-bar {
+        .carousel img {
+            width: 100%;
+            height: auto;
+        }
+
+        .search-bar {
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .search-bar input {
+            width: 70%;
             padding: 10px;
-            width: 300px;
-            border-radius: 5px;
+            border-radius: 5px 0 0 5px;
             border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #222;
+            color: white;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #ff9800;
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 40px 0 20px;
+            font-size: 24px;
+            color: #222;
         }
 
         #content {
@@ -66,57 +110,36 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
-            padding: 20px;
+            padding: 0 20px;
         }
 
-        .card {
+        .movie-card {
             background-color: white;
             width: 220px;
-            padding: 10px;
+            padding: 15px;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        .card:hover {
+        .movie-card:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
-        .card img {
+        .movie-card img {
             width: 100%;
             border-radius: 10px;
         }
 
-        #genre-filter, #series-filter {
-            margin: 20px;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        button {
-            margin: 20px;
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-            background-color: #222;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #555;
-        }
-
         footer {
+            text-align: center;
             background-color: #222;
             color: white;
-            text-align: center;
-            padding: 15px;
+            padding: 10px 0;
+            margin-top: 40px;
         }
     </style>
 </head>
@@ -125,7 +148,6 @@
         <h1>Películas y Series Interactivas</h1>
     </header>
 
-    <!-- Navegación -->
     <nav>
         <ul>
             <li><a href="index.html">Inicio</a></li>
@@ -134,101 +156,69 @@
         </ul>
     </nav>
 
-    <!-- Barra de búsqueda -->
-    <section id="search-section">
-        <input id="search-bar" type="text" placeholder="Buscar películas o series...">
+    <div class="carousel">
+        <img src="https://via.placeholder.com/1200x400?text=Carrusel+de+Películas" alt="Carrusel de películas">
+    </div>
+
+    <div class="search-bar">
+        <input type="text" id="search-movie-input" placeholder="Buscar películas...">
         <button onclick="searchMovies()">Buscar</button>
+    </div>
+
+    <section>
+        <h2 class="section-title">Películas Populares</h2>
+        <div id="content"></div>
     </section>
 
-    <!-- Filtros -->
-    <select id="genre-filter" onchange="filterMovies(this.value)">
-        <option value="">Filtrar por género</option>
-        <option value="28">Acción</option>
-        <option value="35">Comedia</option>
-        <option value="18">Drama</option>
-    </select>
-
-    <select id="series-filter" onchange="filterSeries(this.value)">
-        <option value="">Filtrar Series</option>
-        <option value="10759">Series de Acción</option>
-        <option value="16">Animación</option>
-        <option value="35">Comedia</option>
-    </select>
-
-    <!-- Contenedor de contenido -->
-    <div id="content"></div>
-
-    <button id="load-more" onclick="loadMore()">Cargar más contenido</button>
-
     <footer>
-        &copy; 2024 Tu sitio de Películas y Series
+        <p>&copy; 2024 - Películas y Series Interactivas. Todos los derechos reservados.</p>
     </footer>
 
     <script>
         const API_URL = "https://api.themoviedb.org/3";
         const API_KEY = "9e9698108533009ffe2584455b931f5a";
-
         const contentDiv = document.getElementById('content');
 
-        // Cargar películas populares
-        async function loadPopularMovies() {
-            const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es`);
-            const data = await response.json();
-            displayContent(data.results, 'Película');
+        async function fetchMovies(endpoint) {
+            const response = await fetch(`${API_URL}/${endpoint}?api_key=${API_KEY}&language=es`);
+            return response.json();
         }
 
-        // Cargar series populares
-        async function loadPopularSeries() {
-            const response = await fetch(`${API_URL}/tv/popular?api_key=${API_KEY}&language=es`);
-            const data = await response.json();
-            displayContent(data.results, 'Serie');
+        function createMovieCard(movie) {
+            const card = document.createElement('div');
+            card.className = 'movie-card';
+            card.innerHTML = `
+                <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                <h4>${movie.title}</h4>
+            `;
+            card.addEventListener('click', () => {
+                window.location.href = `descargas.html?movieId=${movie.id}`;
+            });
+            return card;
         }
 
-        // Mostrar contenido
-        function displayContent(items, type) {
-            items.forEach(item => {
-                const card = document.createElement('div');
-                card.classList.add('card');
-                card.innerHTML = `
-                    <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.name || item.title}">
-                    <h4>${item.name || item.title}</h4>
-                `;
-                card.addEventListener('click', () => {
-                    const url = type === 'Película' ? `descargas.html?movieId=${item.id}` : `series.html?seriesId=${item.id}`;
-                    window.location.href = url;
-                });
-                contentDiv.appendChild(card);
+        async function loadMovies() {
+            const data = await fetchMovies('movie/popular');
+            data.results.forEach(movie => {
+                contentDiv.appendChild(createMovieCard(movie));
             });
         }
 
-        // Buscar películas o series
         async function searchMovies() {
-            const query = document.getElementById('search-bar').value;
-            const response = await fetch(`${API_URL}/search/movie?api_key=${API_KEY}&query=${query}&language=es`);
-            const data = await response.json();
+            const query = document.getElementById('search-movie-input').value;
+            if (!query) return alert('Por favor, introduce una búsqueda válida.');
             contentDiv.innerHTML = '';
-            displayContent(data.results, 'Película');
+            const data = await fetchMovies(`search/movie?query=${query}`);
+            if (data.results.length === 0) {
+                contentDiv.innerHTML = '<p>No se encontraron resultados.</p>';
+                return;
+            }
+            data.results.forEach(movie => {
+                contentDiv.appendChild(createMovieCard(movie));
+            });
         }
 
-        // Filtrar por género
-        async function filterMovies(genreId) {
-            const response = await fetch(`${API_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genreId}&language=es`);
-            const data = await response.json();
-            contentDiv.innerHTML = '';
-            displayContent(data.results, 'Película');
-        }
-
-        // Filtrar series
-        async function filterSeries(seriesId) {
-            const response = await fetch(`${API_URL}/discover/tv?api_key=${API_KEY}&with_genres=${seriesId}&language=es`);
-            const data = await response.json();
-            contentDiv.innerHTML = '';
-            displayContent(data.results, 'Serie');
-        }
-
-        // Inicializar con contenido popular
-        loadPopularMovies();
-        loadPopularSeries();
+        loadMovies();
     </script>
 </body>
 </html>
