@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>Descargas</h1>
+        <h1>Mis Descargas</h1>
         <button id="dark-mode-toggle">Modo Oscuro</button>
     </header>
 
@@ -20,20 +20,13 @@
         </ul>
     </nav>
 
-    <!-- Listado de descargas -->
-    <section id="downloads">
-        <h2>Contenido Descargado</h2>
-        <ul id="download-list">
-            <li>No hay descargas todavía. ¡Empieza a agregar contenido!</li>
-        </ul>
-    </section>
-
-    <!-- Sección para agregar descargas -->
-    <section id="add-download">
-        <h2>Agregar Descargas</h2>
-        <input type="text" id="download-input" placeholder="Título de la película o serie...">
+    <section>
+        <h2>Agregar a Descargas</h2>
+        <input type="text" id="download-input" placeholder="Nombre del contenido...">
         <button onclick="addDownload()">Agregar</button>
     </section>
+
+    <ul id="download-list"></ul>
 
     <script>
         const downloadList = document.getElementById('download-list');
