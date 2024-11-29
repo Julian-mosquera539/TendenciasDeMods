@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f9f9f9;
             color: #333;
         }
 
@@ -56,46 +56,96 @@
             color: #ff9800;
         }
 
-        .downloads-section {
-            padding: 20px;
+        .section-title {
+            text-align: center;
+            margin: 40px 0 20px;
+            font-size: 24px;
+            color: #222;
         }
 
-        .download-item {
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        .grid-item {
             background-color: white;
-            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .grid-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .grid-item img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .download-item h3 {
-            margin: 0 0 10px;
+        form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
         }
 
-        .download-item p {
-            margin: 10px 0;
-            color: #666;
+        form input, form select, form button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
-        .download-item button {
+        form button {
             background-color: #222;
             color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            border: none;
         }
 
-        .download-item button:hover {
+        form button:hover {
             background-color: #ff9800;
         }
 
+        .progress-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            width: 0;
+            height: 20px;
+            background-color: #ff9800;
+            border-radius: 5px;
+            transition: width 0.5s;
+        }
+
         footer {
-            text-align: center;
             background-color: #222;
             color: white;
-            padding: 10px 0;
+            text-align: center;
+            padding: 20px 0;
             margin-top: 40px;
         }
     </style>
@@ -113,9 +163,31 @@
         </ul>
     </nav>
 
-    <section class="downloads-section" id="downloads-list">
-        <h2>Lista de Descargas</h2>
-        <div id="downloads-content"></div>
+    <section>
+        <h2 class="section-title">Lista de Descargas Populares</h2>
+        <div class="grid-container" id="popular-downloads"></div>
+    </section>
+
+    <section>
+        <h2 class="section-title">Solicitar Descarga</h2>
+        <form id="download-request-form">
+            <label for="movie-title">Título de la Película o Serie</label>
+            <input type="text" id="movie-title" placeholder="Ingrese el título" required>
+            <label for="file-format">Formato</label>
+            <select id="file-format" required>
+                <option value="mp4">MP4</option>
+                <option value="mkv">MKV</option>
+                <option value="avi">AVI</option>
+            </select>
+            <button type="submit">Solicitar Descarga</button>
+        </form>
+    </section>
+
+    <section>
+        <h2 class="section-title">Progreso de Descarga</h2>
+        <div class="progress-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
     </section>
 
     <footer>
@@ -123,49 +195,43 @@
     </footer>
 
     <script>
-        const API_URL = "https://api.themoviedb.org/3";
-        const API_KEY = "9e9698108533009ffe2584455b931f5a";
-        const downloadsDiv = document.getElementById('downloads-content');
+        const popularDownloadsDiv = document.getElementById('popular-downloads');
+        const downloadForm = document.getElementById('download-request-form');
+        const progressBar = document.getElementById('progress-bar');
 
-        function getQueryParams() {
-            const params = new URLSearchParams(window.location.search);
-            return {
-                movieId: params.get('movieId'),
-                seriesId: params.get('seriesId'),
-            };
+        async function loadPopularDownloads() {
+            const movies = [
+                { title: "Película 1", image: "https://via.placeholder.com/300x400?text=Película+1" },
+                { title: "Película 2", image: "https://via.placeholder.com/300x400?text=Película+2" },
+                { title: "Serie 1", image: "https://via.placeholder.com/300x400?text=Serie+1" }
+            ];
+
+            movies.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.className = 'grid-item';
+                movieCard.innerHTML = `
+                    <img src="${movie.image}" alt="${movie.title}">
+                    <h4>${movie.title}</h4>
+                `;
+                popularDownloadsDiv.appendChild(movieCard);
+            });
         }
 
-        async function fetchDetails(id, type) {
-            const response = await fetch(`${API_URL}/${type}/${id}?api_key=${API_KEY}&language=es`);
-            return response.json();
-        }
+        downloadForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            progressBar.style.width = "0%";
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressBar.style.width = `${progress}%`;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    alert('¡Descarga completa!');
+                }
+            }, 500);
+        });
 
-        async function loadDownloadDetails() {
-            const { movieId, seriesId } = getQueryParams();
-            if (movieId) {
-                const movieDetails = await fetchDetails(movieId, 'movie');
-                displayDownloadItem(movieDetails, 'Película');
-            } else if (seriesId) {
-                const seriesDetails = await fetchDetails(seriesId, 'tv');
-                displayDownloadItem(seriesDetails, 'Serie');
-            } else {
-                downloadsDiv.innerHTML = '<p>No hay elementos para descargar.</p>';
-            }
-        }
-
-        function displayDownloadItem(item, type) {
-            const downloadCard = document.createElement('div');
-            downloadCard.className = 'download-item';
-            downloadCard.innerHTML = `
-                <h3>${item.title || item.name} (${type})</h3>
-                <p>${item.overview || 'Sin descripción disponible.'}</p>
-                <p><strong>Fecha de lanzamiento:</strong> ${item.release_date || item.first_air_date}</p>
-                <button onclick="alert('Descarga iniciada para ${item.title || item.name}')">Descargar</button>
-            `;
-            downloadsDiv.appendChild(downloadCard);
-        }
-
-        loadDownloadDetails();
+        loadPopularDownloads();
     </script>
 </body>
 </html>
