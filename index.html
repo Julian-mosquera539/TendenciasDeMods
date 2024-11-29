@@ -3,52 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Películas y Series Interactivas</title>
+    <title>Inicio</title>
+    <!-- Integrando Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
-        /* Estilos generales */
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f9f9f9;
             color: #333;
         }
         header {
             background-color: #222;
             color: white;
+            text-align: center;
             padding: 15px;
-            text-align: center;
         }
-        nav {
-            text-align: center;
-            margin-top: 10px;
+        #searchForm {
+            margin: 20px auto;
+            max-width: 600px;
         }
-        nav ul {
-            list-style-type: none;
-            padding: 0;
+        #searchInput {
+            width: 100%;
+            padding: 10px;
         }
-        nav ul li {
-            display: inline;
-            margin: 0 15px;
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        #content {
+        #results {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
-            padding: 20px;
         }
         .movie-card {
             background-color: white;
             width: 220px;
             padding: 10px;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -61,125 +53,64 @@
             width: 100%;
             border-radius: 10px;
         }
-        #loading {
-            text-align: center;
-            font-size: 18px;
-            margin-top: 20px;
-            display: none;
-        }
-        select, button {
-            margin: 20px;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Películas y Series Interactivas</h1>
+        <h1>Bienvenido al Portal de Películas y Series</h1>
     </header>
-
-    <!-- Navegación -->
-    <nav>
-        <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="series.html">Series</a></li>
-        </ul>
-    </nav>
-
-    <!-- Filtro de Géneros -->
-    <select id="genre-filter" onchange="loadMoviesByGenre(this.value)">
-        <option value="">Seleccionar Género</option>
-        <option value="28">Acción</option>
-        <option value="35">Comedia</option>
-        <option value="18">Drama</option>
-    </select>
-
-    <!-- Contenedor de Películas -->
-    <div id="content"></div>
-
-    <!-- Indicador de Carga -->
-    <div id="loading">Cargando...</div>
-
-    <!-- Cargar más películas -->
-    <button id="load-more" onclick="loadPopularMovies()">Cargar más películas</button>
-
+    <div id="searchForm" class="container">
+        <input id="searchInput" type="text" class="form-control" placeholder="Buscar películas o series...">
+        <button id="searchButton" class="btn btn-primary btn-block mt-2">Buscar</button>
+    </div>
+    <div id="results" class="container"></div>
     <script>
         const API_URL = "https://api.themoviedb.org/3";
         const API_KEY = "9e9698108533009ffe2584455b931f5a";
-        const contentDiv = document.getElementById('content');
+        const resultsDiv = document.getElementById("results");
 
-        // Mostrar el indicador de carga
-        function toggleLoading(isLoading) {
-            document.getElementById('loading').style.display = isLoading ? 'block' : 'none';
-        }
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY",
+            authDomain: "tu-auth-domain.firebaseapp.com",
+            projectId: "tu-project-id",
+            storageBucket: "tu-storage-bucket.appspot.com",
+            messagingSenderId: "tu-messaging-sender-id",
+            appId: "tu-app-id"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
 
-        // Cargar películas populares
-        async function loadPopularMovies() {
-            try {
-                toggleLoading(true);
-                const response = await fetch(`${API_URL}/movie/popular?api_key=${API_KEY}&language=es`);
-                const data = await response.json();
-                toggleLoading(false);
-
-                if (data.results.length === 0) {
-                    contentDiv.innerHTML = "<p>No hay películas disponibles.</p>";
-                    return;
-                }
-
-                data.results.forEach(movie => {
-                    const movieCard = document.createElement('div');
-                    movieCard.classList.add('movie-card');
-                    movieCard.innerHTML = `
-                        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-                        <h4>${movie.title}</h4>
-                    `;
-                    movieCard.addEventListener('click', () => {
-                        window.location.href = `descargas.html?movieId=${movie.id}`;
-                    });
-                    contentDiv.appendChild(movieCard);
-                });
-            } catch (error) {
-                console.error("Error al cargar las películas:", error);
-                toggleLoading(false);
+        // Buscar películas y series
+        document.getElementById("searchButton").addEventListener("click", async () => {
+            const query = document.getElementById("searchInput").value;
+            if (query) {
+                const response = await axios.get(`${API_URL}/search/multi?api_key=${API_KEY}&language=es&query=${query}`);
+                displayResults(response.data.results);
             }
-        }
+        });
 
-        // Filtrar películas por género
-        async function loadMoviesByGenre(genreId) {
-            try {
-                toggleLoading(true);
-                const response = await fetch(`${API_URL}/discover/movie?api_key=${API_KEY}&language=es&with_genres=${genreId}`);
-                const data = await response.json();
-                toggleLoading(false);
-
-                contentDiv.innerHTML = ''; // Limpiar contenido previo
-                if (data.results.length === 0) {
-                    contentDiv.innerHTML = "<p>No se encontraron películas para este género.</p>";
-                    return;
-                }
-
-                data.results.forEach(movie => {
-                    const movieCard = document.createElement('div');
-                    movieCard.classList.add('movie-card');
-                    movieCard.innerHTML = `
-                        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-                        <h4>${movie.title}</h4>
-                    `;
-                    movieCard.addEventListener('click', () => {
-                        window.location.href = `descargas.html?movieId=${movie.id}`;
-                    });
-                    contentDiv.appendChild(movieCard);
-                });
-            } catch (error) {
-                console.error("Error al filtrar las películas:", error);
-                toggleLoading(false);
+        // Mostrar resultados
+        function displayResults(results) {
+            resultsDiv.innerHTML = "";
+            if (results.length === 0) {
+                resultsDiv.innerHTML = "<p>No se encontraron resultados.</p>";
+                return;
             }
-        }
 
-        // Cargar películas populares al iniciar
-        loadPopularMovies();
+            results.forEach(result => {
+                const card = document.createElement("div");
+                card.classList.add("movie-card");
+                card.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w500${result.poster_path}" alt="${result.title || result.name}">
+                    <h5>${result.title || result.name}</h5>
+                `;
+                card.addEventListener("click", () => {
+                    window.location.href = `descargas.html?movieId=${result.id}`;
+                });
+                resultsDiv.appendChild(card);
+            });
+        }
     </script>
 </body>
 </html>
