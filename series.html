@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Series Interactivas</title>
+    <title>Series</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Series Interactivas</h1>
+        <h1>Series</h1>
         <button id="dark-mode-toggle">Modo Oscuro</button>
     </header>
 
@@ -20,41 +20,24 @@
         </ul>
     </nav>
 
-    <!-- Sección de búsqueda -->
-    <div id="search-bar">
-        <input type="text" id="search-input" placeholder="Buscar series...">
-        <button onclick="searchSeries()">Buscar</button>
-    </div>
-
-    <!-- Resultados de búsqueda -->
-    <div id="search-results"></div>
-
-    <!-- Contenido principal -->
-    <section id="content">
+    <!-- Categorías -->
+    <section id="categories">
         <h2>Series Populares</h2>
+        <div id="series-list"></div>
     </section>
 
-    <!-- Modal de detalles -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeModal()">X</button>
-            <img id="modal-poster" alt="Poster">
-            <h2 id="modal-title">Título</h2>
-            <p id="modal-overview">Descripción</p>
-            <p><strong>Reparto:</strong> <span id="modal-cast">Cargando...</span></p>
-        </div>
-    </div>
+    <!-- Géneros -->
+    <section id="genres">
+        <h2>Categorías por Género</h2>
+        <div id="genres-list"></div>
+    </section>
 
     <script>
         const API_URL = "https://api.themoviedb.org/3";
         const API_KEY = "9e9698108533009ffe2584455b931f5a";
 
-        const contentDiv = document.getElementById('content');
-        const searchResults = document.getElementById('search-results');
-        const modal = document.getElementById('modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalOverview = document.getElementById('modal-overview');
-        const modalPoster = document.getElementById('modal-poster');
+        const seriesList = document.getElementById('series-list');
+        const genresList = document.getElementById('genres-list');
 
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
@@ -62,48 +45,46 @@
 
         document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
 
-        async function fetchSeries(endpoint) {
+        async function fetchContent(endpoint) {
             const response = await fetch(`${API_URL}${endpoint}?api_key=${API_KEY}&language=es`);
             const data = await response.json();
             return data.results;
         }
 
-        async function loadPopularSeries() {
-            const series = await fetchSeries('/tv/popular');
-            series.forEach(renderCard);
+        async function loadSeries() {
+            const series = await fetchContent('/tv/popular');
+            series.forEach(serie => renderCard(serie, seriesList));
         }
 
-        async function searchSeries() {
-            const query = document.getElementById('search-input').value;
-            const series = await fetchSeries(`/search/tv?query=${query}`);
-            searchResults.innerHTML = '';
-            series.forEach(renderCard);
+        async function loadGenres() {
+            const genres = await fetch(`${API_URL}/genre/tv/list?api_key=${API_KEY}&language=es`).then(res => res.json());
+            genres.genres.forEach(genre => {
+                const genreDiv = document.createElement('div');
+                genreDiv.classList.add('genre');
+                genreDiv.innerHTML = `<h4>${genre.name}</h4>`;
+                genreDiv.addEventListener('click', () => filterByGenre(genre.id));
+                genresList.appendChild(genreDiv);
+            });
         }
 
-        function renderCard(serie) {
+        async function filterByGenre(genreId) {
+            const series = await fetch(`${API_URL}/discover/tv?api_key=${API_KEY}&with_genres=${genreId}&language=es`).then(res => res.json());
+            seriesList.innerHTML = ''; // Limpia contenido actual
+            series.results.forEach(serie => renderCard(serie, seriesList));
+        }
+
+        function renderCard(item, container) {
             const card = document.createElement('div');
             card.classList.add('card');
             card.innerHTML = `
-                <img src="https://image.tmdb.org/t/p/w500${serie.poster_path}" alt="${serie.name}">
-                <h4>${serie.name}</h4>
+                <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.name}">
+                <h4>${item.name}</h4>
             `;
-            card.addEventListener('click', () => showModal(serie.id));
-            contentDiv.appendChild(card);
+            container.appendChild(card);
         }
 
-        async function showModal(id) {
-            const serie = await fetch(`${API_URL}/tv/${id}?api_key=${API_KEY}&language=es`).then(res => res.json());
-            modalTitle.textContent = serie.name;
-            modalOverview.textContent = serie.overview;
-            modalPoster.src = `https://image.tmdb.org/t/p/w500${serie.poster_path}`;
-            modal.style.display = 'flex';
-        }
-
-        function closeModal() {
-            modal.style.display = 'none';
-        }
-
-        loadPopularSeries();
+        loadSeries();
+        loadGenres();
     </script>
 </body>
 </html>
