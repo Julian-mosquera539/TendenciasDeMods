@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descargar</title>
+    <!-- Integrando Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
             background-color: #f9f9f9;
             color: #333;
         }
@@ -36,107 +37,52 @@
         .movie-info h2 {
             margin-bottom: 10px;
         }
-        .download-links {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .download-links a {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #2d87f0;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 5px;
-        }
-        .download-links a:hover {
-            background-color: #1f6eb7;
-        }
     </style>
 </head>
 <body>
     <header>
         <h1>Descargar Contenido</h1>
     </header>
-
     <div class="movie-details">
         <img id="movie-poster" alt="Poster de la película o serie">
         <div class="movie-info">
             <h2 id="movie-title">Título</h2>
             <p id="movie-description">Descripción</p>
             <p><strong>Reparto:</strong> <span id="movie-cast">Cargando...</span></p>
-        </div>
-        <div class="download-links" id="download-links">
-            <!-- Los enlaces de descarga se cargarán aquí -->
+            <p><strong>Valoración:</strong> <span id="movie-rating">Cargando...</span></p>
         </div>
     </div>
-
     <script>
         const API_URL = "https://api.themoviedb.org/3";
         const API_KEY = "9e9698108533009ffe2584455b931f5a";
 
-        // Obtén el ID de la película o serie desde la URL
         const params = new URLSearchParams(window.location.search);
         const movieId = params.get('movieId') || params.get('seriesId');
 
-        // Cargar los detalles de la película o serie
         async function loadDetails() {
             try {
-                // Intentamos cargar los detalles de la película
-                const response = await fetch(`${API_URL}/movie/${movieId}?api_key=${API_KEY}&language=es`);
-                const data = await response.json();
+                const response = await axios.get(`${API_URL}/movie/${movieId}?api_key=${API_KEY}&language=es`);
+                const data = response.data;
+                document.getElementById('movie-title').textContent = data.title || data.name;
+                document.getElementById('movie-description').textContent = data.overview;
+                document.getElementById('movie-poster').src = `https://image.tmdb.org/t/p/w500${data.poster_path}`;
+                document.getElementById('movie-rating').textContent = data.vote_average;
 
-                // Si no se encuentra la película, intentamos cargar como serie
-                if (data.status_code === 34) {
-                    const responseSeries = await fetch(`${API_URL}/tv/${movieId}?api_key=${API_KEY}&language=es`);
-                    const dataSeries = await responseSeries.json();
-                    document.getElementById('movie-title').textContent = dataSeries.name;
-                    document.getElementById('movie-description').textContent = dataSeries.overview;
-                    document.getElementById('movie-poster').src = `https://image.tmdb.org/t/p/w500${dataSeries.poster_path}`;
-                } else {
-                    document.getElementById('movie-title').textContent = data.title;
-                    document.getElementById('movie-description').textContent = data.overview;
-                    document.getElementById('movie-poster').src = `https://image.tmdb.org/t/p/w500${data.poster_path}`;
-                }
-
-                // Cargar el reparto
                 loadCast(movieId);
-                // Cargar los enlaces de descarga
-                loadDownloadLinks();
             } catch (error) {
                 console.error("Error al cargar detalles:", error);
             }
         }
 
-        // Cargar el reparto de la película o serie
         async function loadCast(movieId) {
             try {
-                const response = await fetch(`${API_URL}/movie/${movieId}/credits?api_key=${API_KEY}&language=es`);
-                const data = await response.json();
+                const response = await axios.get(`${API_URL}/movie/${movieId}/credits?api_key=${API_KEY}&language=es`);
+                const data = response.data;
                 const cast = data.cast.slice(0, 5).map(actor => actor.name).join(', ');
                 document.getElementById('movie-cast').textContent = cast || 'Información no disponible';
             } catch (error) {
                 console.error("Error al cargar el reparto:", error);
             }
-        }
-
-        // Cargar enlaces de descarga (simulados)
-        function loadDownloadLinks() {
-            const downloadDiv = document.getElementById('download-links');
-            
-            // Simulación de enlaces de descarga (podrías reemplazarlos con enlaces reales)
-            const downloadOptions = [
-                { quality: "1080p", link: "#1080p" },
-                { quality: "720p", link: "#720p" },
-                { quality: "480p", link: "#480p" }
-            ];
-
-            downloadOptions.forEach(option => {
-                const link = document.createElement('a');
-                link.href = option.link;
-                link.textContent = `Descargar en calidad ${option.quality}`;
-                downloadDiv.appendChild(link);
-            });
         }
 
         loadDetails();
